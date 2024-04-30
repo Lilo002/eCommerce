@@ -3,11 +3,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Main } from '../pages/main/page';
 import { LoginPage } from '../pages/login/page';
 import { RegistrationPage } from '../pages/registration/page';
-import { Catalog } from '../pages/catalog/page';
-import { Product } from '../pages/product/page';
-import { Profile } from '../pages/profile/page';
-import { Busket } from '../pages/basket/page';
-import { About } from '../pages/about/page';
+import { CatalogPage } from '../pages/catalog/page';
+import { ProductPage } from '../pages/product/page';
+import { ProfilePage } from '../pages/profile/page';
+import { BusketPage } from '../pages/basket/page';
+import { AboutPage } from '../pages/about/page';
 
 export const router = createBrowserRouter([
   {
@@ -25,22 +25,22 @@ export const router = createBrowserRouter([
   },
   {
     path: '/catalog',
-    element: <Catalog/>
+    element: <CatalogPage/>
   },
   {
     path: '/product',
-    element: <Product/>
+    element: <ProductPage/>
   },
   {
     path: '/profile',
-    element: <Profile/>
+    element: <ProfilePage/>
   },
   {
     path: '/busket',
-    element: <Busket/>
+    element: <BusketPage/>
   },
   {
     path: '/baout',
-    element: <About/>
+    element: <AboutPage/>
   }
 ]);
