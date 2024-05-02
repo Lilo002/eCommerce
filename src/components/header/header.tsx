@@ -1,29 +1,24 @@
-import { Link } from "react-router-dom"
 import './_header.scss';
+import { Link } from "react-router-dom"
+import { ROUTES } from "../../shared/constants";
 
 export const Header = () => {
-  return <nav className="header">
+  return <header className="header">
     <div>
-      <Link to="/">LOGO</Link>
+      <Link to={ROUTES.MAIN}>LOGO</Link>
     </div>
-    <ul className="header-menu-list">
-      <li>
-        <Link to="/">Main</Link>      
-      </li>
-      <li>
-        <Link to="/catalog">Catalog</Link>      
-      </li>
-      <li>
-        <Link to="/about">About Us</Link>      
-      </li>
-    </ul>
+    <nav className="header-menu-list">
+      <Link to={ROUTES.MAIN}>Main</Link>      
+      <Link to={ROUTES.CATALOG}>Catalog</Link>      
+      <Link to={ROUTES.ABOUT}>About Us</Link>      
+    </nav>
     <div className="header-menu-btn">
       <button>
-        <Link to='/login'>Log In</Link>
+        <Link to={ROUTES.LOGIN}>Log In</Link>
       </button>
       <button>
-        <Link to='/registration'>Registration</Link>
+        <Link to={ROUTES.REGISTRATION}>Registration</Link>
       </button>
     </div>
-  </nav>
+  </header>
 }
