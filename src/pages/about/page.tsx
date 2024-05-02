@@ -1,3 +1,8 @@
+import { Header } from "../../components/header/header"
+
 export const AboutPage = () => {
-  return <div>About</div>
+  return <div>
+    <Header/>
+    About
+  </div>
 }

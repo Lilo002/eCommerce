@@ -1,3 +1,3 @@
-export const BusketPage = () => {
-  return <div>Busket</div>
+export const BasketPage = () => {
+  return <div>Basket</div>
 }
