@@ -1,3 +1,8 @@
+import { Header } from "../../components/header"
+
 export const CatalogPage = () => {
-  return <div>Catalog</div>
+  return <div>
+    <Header />
+    Catalog
+  </div>
 }

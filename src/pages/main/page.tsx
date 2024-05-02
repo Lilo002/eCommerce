@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom"
+import { Header } from "../../components/header"
 
 export const Main = () => {
   return <div>
+    <Header />
     <h1>Main page</h1>
     <button>
       <Link to='/login'>to login</Link>

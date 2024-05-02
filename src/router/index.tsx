@@ -6,7 +6,7 @@ import { RegistrationPage } from '../pages/registration/page';
 import { CatalogPage } from '../pages/catalog/page';
 import { ProductPage } from '../pages/product/page';
 import { ProfilePage } from '../pages/profile/page';
-import { BusketPage } from '../pages/basket/page';
+import { BasketPage } from '../pages/basket/page';
 import { AboutPage } from '../pages/about/page';
 
 export const router = createBrowserRouter([
@@ -36,11 +36,11 @@ export const router = createBrowserRouter([
     element: <ProfilePage/>
   },
   {
-    path: '/busket',
-    element: <BusketPage/>
+    path: '/basket',
+    element: <BasketPage/>
   },
   {
-    path: '/baout',
+    path: '/about',
     element: <AboutPage/>
   }
 ]);
