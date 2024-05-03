@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ClientResponse, Project } from "@commercetools/platform-sdk";
 import { getAnonymousApiRoot, getLoginApiRoot } from "../sdk/client/ClientBuilder";
-import { authenticateCustomer, getProject } from "../sdk/api";
+import { LoginCustomerDraft, authenticateCustomer, getProject } from "../sdk/api";
 
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
@@ -9,7 +9,7 @@ export const useSession = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = ({email, password}: {email: string; password: string}) => {
+  const login = ({email, password}: LoginCustomerDraft) => {
     authenticateCustomer(apiRoot, {email, password})
       .then(() => {
         setApiRoot(getLoginApiRoot({email, password}))

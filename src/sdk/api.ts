@@ -24,7 +24,7 @@ export interface AddressDraft {
 
 export const getProject = (apiRoot: ByProjectKeyRequestBuilder) =>  apiRoot.get().execute();
 
-export const authenticateCustomer = async (apiRoot: ByProjectKeyRequestBuilder, {email, password}: { email: string, password: string}): Promise<ClientResponse<CustomerSignInResult>> => {
+export const authenticateCustomer = async (apiRoot: ByProjectKeyRequestBuilder, {email, password}: LoginCustomerDraft): Promise<ClientResponse<CustomerSignInResult>> => {
 
   return apiRoot
     .login()

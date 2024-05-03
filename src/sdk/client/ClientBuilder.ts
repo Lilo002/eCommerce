@@ -8,6 +8,7 @@ import {
 import {
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk'
+import { LoginCustomerDraft } from '../api';
 
 export const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY || ''
 
@@ -16,7 +17,7 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch,
 }
 
-const createPasswordClient = ({ email, password }: {email: string; password: string}): Client => {
+const createPasswordClient = ({ email, password }: LoginCustomerDraft): Client => {
   const passwordAuthOptions: PasswordAuthMiddlewareOptions = {
     host: 'https://auth.europe-west1.gcp.commercetools.com',
     projectKey,
