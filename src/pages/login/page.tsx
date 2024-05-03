@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../shared/constants"
 import { FormEvent, useContext, useState } from "react"
+import { sessionContext } from "../../context/sessionContext"
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {session} = useContext(sessionContext);
 
   const onEmailChange = (value: string) => {
     setEmail(value);
@@ -16,6 +18,7 @@ export const LoginPage = () => {
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    session?.login({email, password});
   }
 
   return <div>
