@@ -10,10 +10,13 @@ export const useSession = () => {
   const [password, setPassword] = useState('');
 
   const login = ({email, password}: {email: string; password: string}) => {
-    authenticateCustomer(apiRoot, {email, password}).then(data => console.log(data))
-    setApiRoot(getLoginApiRoot({email, password}))
-    setEmail(email);
-    setPassword(password);
+    authenticateCustomer(apiRoot, {email, password})
+      .then(() => {
+        setApiRoot(getLoginApiRoot({email, password}))
+        setEmail(email);
+        setPassword(password);
+      })
+      .catch(console.error);
   }
 
   const logout = () => {
@@ -29,6 +32,7 @@ export const useSession = () => {
 
   return {
     isAuth: Boolean(auth),
+    isLogin: Boolean(email),
     auth,
     login,
     logout,

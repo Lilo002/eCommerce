@@ -10,4 +10,5 @@ export const sessionContext = createContext<{session: {
       password: string;
   }) => void;
   logout: () => void;
+  isLogin: boolean;
 }  | null}>({session: null})

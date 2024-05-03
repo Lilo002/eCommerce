@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ROUTES } from "../../shared/constants"
 import { FormEvent, useContext, useState } from "react"
 import { sessionContext } from "../../context/sessionContext"
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {session} = useContext(sessionContext);
@@ -19,6 +20,9 @@ export const LoginPage = () => {
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     session?.login({email, password});
+    if (session?.isLogin) {
+      navigate(ROUTES.MAIN);
+    }
   }
 
   return <div>

@@ -17,9 +17,15 @@ export const Header = () => {
       <Link to={ROUTES.ABOUT}>About Us</Link>      
     </nav>
     <div className="header-menu-btn">
-      <button>
-        <Link to={ROUTES.LOGIN}>Log In</Link>
-      </button>
+      {
+        session?.isLogin
+          ? <button onClick={() => session?.logout()}>
+              <Link to={ROUTES.LOGIN}>Log out</Link>
+            </button>
+          : <button>
+              <Link to={ROUTES.LOGIN}>Log in</Link>
+            </button>
+      }
       <button>
         <Link to={ROUTES.REGISTRATION}>Registration</Link>
       </button>
