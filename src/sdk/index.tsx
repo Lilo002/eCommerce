@@ -1,17 +1,36 @@
-import { ClientResponse, CustomerDraft, CustomerSignInResult} from "@commercetools/platform-sdk";
-import { getApiRoot } from "./client";
+import { ClientResponse, CustomerSignInResult} from "@commercetools/platform-sdk";
+import { ByProjectKeyRequestBuilder } from "@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder";
 
-export const getCustomers = async () => {
-  const project = await getApiRoot()
+export const getCustomers = async (apiRoot: ByProjectKeyRequestBuilder) => {
+  const project = await apiRoot
     .customers()
     .get()
     .execute();
   return project.body;
 }
 
+export interface CustomerDraft {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  addresses: AddressDraft[];
+}
 
+export interface LoginCustomerDraft {
+  email: string;
+  password: string;
+}
 
-export const createCustomer = ({
+export interface AddressDraft {
+  streetName: string;
+  city: string;
+  country: string;
+  postalCode: string;
+}
+
+export const createCustomer = (apiRoot: ByProjectKeyRequestBuilder) => ({
   email,
   password,
   firstName,
@@ -19,7 +38,7 @@ export const createCustomer = ({
   dateOfBirth,
   addresses}: CustomerDraft): Promise<ClientResponse<CustomerSignInResult>> => {
 
-    return getApiRoot()
+    return apiRoot
       .customers()
       .post({
         body: {

@@ -1,1 +1,1 @@
-export { getApiRoot } from './ClientBuilder'
+export { getAnonymousApiRoot, getLoginApiRoot } from './ClientBuilder'
