@@ -1,11 +1,15 @@
 import './_header.scss';
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../shared/constants";
+import { sessionContext } from '../../context/sessionContext';
+import { useContext } from 'react';
 
 export const Header = () => {
+  const {session} = useContext(sessionContext);
+
   return <header className="header">
     <div>
-      <Link to={ROUTES.MAIN}>LOGO</Link>
+      <Link to={ROUTES.MAIN}>{session?.auth?.name}</Link>
     </div>
     <nav className="header-menu-list">
       <Link to={ROUTES.MAIN}>Main</Link>      
