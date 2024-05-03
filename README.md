@@ -13,6 +13,7 @@ Our eCommerce application is online board game store. If you're a board game fan
 - Eslint
 - Prettier
 - Husky
+- Jest
 
 ### Run the project:
 
@@ -49,3 +50,4 @@ Have fun!!!
 - lint: for running ESLint
 - ci:format: for running Prettier check
 - format: for running Prettier format
+- test: for running test
