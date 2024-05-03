@@ -58,6 +58,20 @@ export const createAnonymousClient = (): Client => {
     .withHttpMiddleware(httpMiddlewareOptions)
     .build();
 };
+
+/* export const getApiRoot = () => {
+  //получить данные из хранилища
+  function getCustomerData() {
+    return null;
+  }
+
+  const customerData = getCustomerData();
+
+  return customerData
+    ? createApiBuilderFromCtpClient(createPasswordClient(customerData)).withProjectKey({projectKey})
+    : createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({projectKey})
+} */
+
 export const getAnonymousApiRoot = () => {
   return createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({projectKey})
 }
