@@ -13,7 +13,7 @@ module.exports = {
     'airbnb-typescript',
     'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts', 'jest.config.ts'],
   parser: '@typescript-eslint/parser',
   overrides: [
     {
@@ -29,7 +29,7 @@ module.exports = {
           'error',
           {
             groups: [
-              ['^react', '^\\w', '^@hookform', '^@radix-ui'],
+              ['^react', '^\\w', '^@hookworm', '^@radix-ui'],
               ['^\\u0000'],
               ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
               ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
