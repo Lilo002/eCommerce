@@ -19,7 +19,7 @@ export const LoginPage = () => {
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    session?.login({email, password});
+    session?.login({email, password}).catch(console.error);
     if (session?.isLogin) {
       navigate(ROUTES.MAIN);
     }

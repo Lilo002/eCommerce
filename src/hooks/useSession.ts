@@ -9,14 +9,13 @@ export const useSession = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = ({email, password}: LoginCustomerDraft) => {
-    authenticateCustomer(apiRoot, {email, password})
+  const login = async ({email, password}: LoginCustomerDraft): Promise<void | Error> => {
+    return authenticateCustomer(apiRoot, {email, password})
       .then(() => {
         setApiRoot(getLoginApiRoot({email, password}))
         setEmail(email);
         setPassword(password);
       })
-      .catch(console.error);
   }
 
   const logout = () => {

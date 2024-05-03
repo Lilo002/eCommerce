@@ -6,7 +6,7 @@ import { LoginCustomerDraft } from "../sdk/api";
 export const sessionContext = createContext<{session: {
   isAuth: boolean;
   auth: Project | null;
-  login: ({ email, password }: LoginCustomerDraft) => void;
+  login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
   logout: () => void;
   isLogin: boolean;
 }  | null}>({session: null})
