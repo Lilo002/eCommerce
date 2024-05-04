@@ -49,6 +49,7 @@ Have fun!!!
 - dev: run development mode
 - build: build production mode
 - lint: for running ESLint
+- fix: for running Eslint fix
 - ci:format: for running Prettier check
 - format: for running Prettier format
 - test: for running test

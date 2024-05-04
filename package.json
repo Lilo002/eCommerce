@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "ci:format": "prettier --check .",
     "prepare": "husky",
-    "test": "jest"
+    "test": "jest",
+    "fix": "eslint . --fix"
   },
   "dependencies": {
     "@commercetools/platform-sdk": "^4.2.0",
