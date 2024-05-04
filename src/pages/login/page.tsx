@@ -1,9 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../shared/constants';
 import { FormEvent, useContext, useState } from 'react';
-import { sessionContext } from '../../context/sessionContext';
+import { Link, useNavigate } from 'react-router-dom';
 
-export const LoginPage = () => {
+import { sessionContext } from '../../context/sessionContext';
+import { ROUTES } from '../../shared/constants';
+
+export function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +20,7 @@ export const LoginPage = () => {
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    session?.login({ email, password }).catch(console.error);
+    session?.login({ email, password });
     if (session?.isLogin) {
       navigate(ROUTES.MAIN);
     }
@@ -28,10 +29,10 @@ export const LoginPage = () => {
   return (
     <div>
       <h1>Login page</h1>
-      <button>
+      <button type="button">
         <Link to={ROUTES.MAIN}>to main</Link>
       </button>
-      <button>
+      <button type="button">
         <Link to={ROUTES.REGISTRATION}>to Registration</Link>
       </button>
       <form onSubmit={(e) => onFormSubmit(e)}>
@@ -53,4 +54,4 @@ export const LoginPage = () => {
       </form>
     </div>
   );
-};
+}

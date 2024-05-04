@@ -15,8 +15,8 @@ export const createCustomer =
     lastName,
     dateOfBirth,
     addresses,
-  }: CustomerDraft): Promise<ClientResponse<CustomerSignInResult>> => {
-    return apiRoot
+  }: CustomerDraft): Promise<ClientResponse<CustomerSignInResult>> =>
+    apiRoot
       .customers()
       .post({
         body: {
@@ -29,7 +29,6 @@ export const createCustomer =
         } as CustomerDraft,
       })
       .execute();
-  };
 
 export const customer: CustomerDraft = {
   email: 'lfgdgb@mil.com',

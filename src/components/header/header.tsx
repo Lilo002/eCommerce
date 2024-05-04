@@ -1,8 +1,10 @@
-import './_header.scss';
-import { Link } from 'react-router-dom';
-import { ROUTES } from '../../shared/constants';
-import { sessionContext } from '../../context/sessionContext';
 import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+
+import { sessionContext } from '../../context/sessionContext';
+import { ROUTES } from '../../shared/constants';
+
+import './_header.scss';
 
 export const Header = () => {
   const { session } = useContext(sessionContext);
@@ -19,15 +21,15 @@ export const Header = () => {
       </nav>
       <div className="header-menu-btn">
         {session?.isLogin ? (
-          <button onClick={() => session?.logout()}>
+          <button type="button" onClick={() => session?.logout()}>
             <Link to={ROUTES.LOGIN}>Log out</Link>
           </button>
         ) : (
-          <button>
+          <button type="button">
             <Link to={ROUTES.LOGIN}>Log in</Link>
           </button>
         )}
-        <button>
+        <button type="button">
           <Link to={ROUTES.REGISTRATION}>Registration</Link>
         </button>
       </div>

@@ -1,5 +1,6 @@
-import { Project } from '@commercetools/platform-sdk';
 import { createContext } from 'react';
+import { Project } from '@commercetools/platform-sdk';
+
 import { LoginCustomerDraft } from '../sdk/api';
 
 // export const anonymousContext = createContext<{user: Project | null}>({user: null})

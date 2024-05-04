@@ -1,26 +1,23 @@
 import { useEffect, useState } from 'react';
 import { ClientResponse, Project } from '@commercetools/platform-sdk';
+
+import { authenticateCustomer, getProject, LoginCustomerDraft } from '../sdk/api';
 import { getAnonymousApiRoot, getLoginApiRoot } from '../sdk/client/ClientBuilder';
-import { LoginCustomerDraft, authenticateCustomer, getProject } from '../sdk/api';
 
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [auth, setAuth] = useState<Project | null>(null);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [isLogin, setLogin] = useState(false);
 
-  const login = async ({ email, password }: LoginCustomerDraft): Promise<void | Error> => {
-    return authenticateCustomer(apiRoot, { email, password }).then(() => {
+  const login = async ({ email, password }: LoginCustomerDraft): Promise<void | Error> =>
+    authenticateCustomer(apiRoot, { email, password }).then(() => {
       setApiRoot(getLoginApiRoot({ email, password }));
-      setEmail(email);
-      setPassword(password);
+      setLogin(true);
     });
-  };
 
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
-    setEmail('');
-    setPassword('');
+    setLogin(false);
     setAuth(null);
   };
 
@@ -30,7 +27,7 @@ export const useSession = () => {
 
   return {
     isAuth: Boolean(auth),
-    isLogin: Boolean(email),
+    isLogin,
     auth,
     login,
     logout,

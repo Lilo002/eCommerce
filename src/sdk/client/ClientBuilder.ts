@@ -1,11 +1,12 @@
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import {
+  AnonymousAuthMiddlewareOptions,
+  Client,
   ClientBuilder,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
-  AnonymousAuthMiddlewareOptions,
-  Client,
 } from '@commercetools/sdk-client-v2';
-import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+
 import { LoginCustomerDraft } from '../api';
 
 export const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY || '';
@@ -71,10 +72,8 @@ export const createAnonymousClient = (): Client => {
     : createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({projectKey})
 } */
 
-export const getAnonymousApiRoot = () => {
-  return createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({ projectKey });
-};
+export const getAnonymousApiRoot = () =>
+  createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({ projectKey });
 
-export const getLoginApiRoot = (customerData: { email: string; password: string }) => {
-  return createApiBuilderFromCtpClient(createPasswordClient(customerData)).withProjectKey({ projectKey });
-};
+export const getLoginApiRoot = (customerData: { email: string; password: string }) =>
+  createApiBuilderFromCtpClient(createPasswordClient(customerData)).withProjectKey({ projectKey });

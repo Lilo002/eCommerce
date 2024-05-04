@@ -1,10 +1,10 @@
 import { Header } from '../../components/header/header';
 
-export const AboutPage = () => {
+export function AboutPage() {
   return (
     <div>
       <Header />
       About
     </div>
   );
-};
+}
