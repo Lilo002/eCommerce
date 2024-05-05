@@ -1,9 +1,12 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
+
+import './_page.scss';
+import { Header } from '../../components/header/header';
 
 const emailRules = [
   { required: true, message: 'Please input your email' },
@@ -51,24 +54,35 @@ export function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>Login page</h1>
-
-      <Form onFinish={onFormSubmit}>
-        <Form.Item name="email" label="Email" rules={emailRules} validateFirst>
+    <>
+      <Header />
+      <Form
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 16 }}
+        className="login-form"
+        onFinish={onFormSubmit}
+        autoComplete="off"
+      >
+        <div className="login-info">
+          <span className="login-title">Sign In</span>
+          <Link to={ROUTES.REGISTRATION} className="login-registration">
+            New to Lidilu? Create new account
+          </Link>
+        </div>
+        <Form.Item name="email" label="Email" rules={emailRules} validateFirst hasFeedback>
           <Input value={email} onChange={(e) => onEmailChange(e.target.value)} />
         </Form.Item>
 
-        <Form.Item name="password" label="Password" rules={passwordRules} validateFirst>
+        <Form.Item name="password" label="Password" rules={passwordRules} validateFirst hasFeedback>
           <Input.Password value={password} onChange={(e) => onPasswordChange(e.target.value)} />
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
           <Button type="primary" htmlType="submit">
-            Submit
+            SIGN IN
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </>
   );
 }
