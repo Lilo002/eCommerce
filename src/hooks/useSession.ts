@@ -19,6 +19,7 @@ export const useSession = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
     setAuth(null);
+    localStorage.removeItem('lidilu-customerData');
   };
 
   useEffect(() => {
