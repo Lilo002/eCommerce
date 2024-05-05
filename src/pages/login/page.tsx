@@ -1,13 +1,13 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 
 import { Header } from '../../components/header/header';
 import { sessionContext } from '../../context/sessionContext';
+import { LoginCustomerDraft } from '../../sdk/api';
 import { ROUTES } from '../../shared/constants';
 
 import './_page.scss';
-import { LoginCustomerDraft } from '../../sdk/api';
 
 const emailRules = [
   { required: true, message: 'Please input your email' },
@@ -31,9 +31,11 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const { session } = useContext(sessionContext);
 
-  if (session?.isLogin) {
-    navigate(ROUTES.MAIN);
-  }
+  useEffect(() => {
+    if (session?.isLogin) {
+      navigate(ROUTES.MAIN);
+    }
+  });
 
   const onEmailChange = (value: string) => {
     setEmail(value);
@@ -58,6 +60,7 @@ export function LoginPage() {
       .then(() => {
         saveCustomerData({ email, password });
         cleanInputs();
+        navigate(ROUTES.MAIN);
       })
       .catch((error: Error) => {
         message.error(`Login error: ${error.message}`);
