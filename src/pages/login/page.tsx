@@ -1,8 +1,26 @@
-import { FormEvent, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Button, Form, Input } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
+import { LoginCustomerDraft } from '../../sdk/api';
 import { ROUTES } from '../../shared/constants';
+
+const emailRules = [
+  { required: true, message: 'Please input your email' },
+  { pattern: /^[\w.]+@[\w.]+\.\w+$/, message: 'Invalid email format' },
+  { pattern: /^\S+$/, message: 'Email must not contain leading or trailing whitespace' },
+];
+
+const passwordRules = [
+  { required: true, message: 'Please input your password' },
+  { min: 8, message: 'Password must be at least 8 characters' },
+  {
+    pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]?)[A-Za-z\d!@#$%^&*]+$/,
+    message: 'Password must contain uppercase letters, lowercase letters, digits and special characters',
+  },
+  { pattern: /^\S+$/, message: 'Password must not contain leading or trailing whitespace' },
+];
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -18,9 +36,8 @@ export function LoginPage() {
     setPassword(value);
   };
 
-  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    session?.login({ email, password });
+  const onFormSubmit = (value: LoginCustomerDraft) => {
+    session?.login(value);
     if (session?.isLogin) {
       navigate(ROUTES.MAIN);
     }
@@ -35,23 +52,21 @@ export function LoginPage() {
       <button type="button">
         <Link to={ROUTES.REGISTRATION}>to Registration</Link>
       </button>
-      <form onSubmit={(e) => onFormSubmit(e)}>
-        <input
-          type="text"
-          placeholder="email"
-          name="email"
-          value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="password"
-          name="password"
-          value={password}
-          onChange={(e) => onPasswordChange(e.target.value)}
-        />
-        <button type="submit">login</button>
-      </form>
+      <Form onFinish={onFormSubmit}>
+        <Form.Item name="email" label="Email" rules={emailRules}>
+          <Input value={email} onChange={(e) => onEmailChange(e.target.value)} />
+        </Form.Item>
+
+        <Form.Item name="password" label="Password" rules={passwordRules}>
+          <Input.Password value={password} onChange={(e) => onPasswordChange(e.target.value)} />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }
