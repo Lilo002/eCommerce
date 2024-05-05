@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { LoginCustomerDraft } from '../../sdk/api';
@@ -36,8 +36,10 @@ export function LoginPage() {
     setPassword(value);
   };
 
-  const onFormSubmit = (value: LoginCustomerDraft) => {
-    session?.login(value);
+  const onFormSubmit = () => {
+    session?.login({ email, password }).catch((error: Error) => {
+      message.error(`Login error: ${error.message}`);
+    });
     if (session?.isLogin) {
       navigate(ROUTES.MAIN);
     }
