@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 
@@ -31,7 +31,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const { session } = useContext(sessionContext);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (session?.isLogin) {
       navigate(ROUTES.MAIN);
     }
