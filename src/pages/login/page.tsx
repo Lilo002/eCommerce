@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
-import { LoginCustomerDraft } from '../../sdk/api';
 import { ROUTES } from '../../shared/constants';
 
 const emailRules = [
@@ -48,12 +47,7 @@ export function LoginPage() {
   return (
     <div>
       <h1>Login page</h1>
-      <button type="button">
-        <Link to={ROUTES.MAIN}>to main</Link>
-      </button>
-      <button type="button">
-        <Link to={ROUTES.REGISTRATION}>to Registration</Link>
-      </button>
+
       <Form onFinish={onFormSubmit}>
         <Form.Item name="email" label="Email" rules={emailRules}>
           <Input value={email} onChange={(e) => onEmailChange(e.target.value)} />
