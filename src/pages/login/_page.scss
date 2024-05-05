@@ -10,7 +10,7 @@
     align-items: center;
     padding: 18px;
     margin-bottom: 30px;
-    background-color: #1677ffce;
+    background-color: #f47721;
   }
   &-title {
     text-align: center;
@@ -21,6 +21,9 @@
   &-registration {
     font-size: 20px;
     color: white;
+  }
+  &-content {
+    padding: 20px;
   }
   &-btn {
     margin: 0 auto;
