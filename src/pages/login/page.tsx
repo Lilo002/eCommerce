@@ -55,11 +55,11 @@ export function LoginPage() {
       <h1>Login page</h1>
 
       <Form onFinish={onFormSubmit}>
-        <Form.Item name="email" label="Email" rules={emailRules}>
+        <Form.Item name="email" label="Email" rules={emailRules} validateFirst>
           <Input value={email} onChange={(e) => onEmailChange(e.target.value)} />
         </Form.Item>
 
-        <Form.Item name="password" label="Password" rules={passwordRules}>
+        <Form.Item name="password" label="Password" rules={passwordRules} validateFirst>
           <Input.Password value={password} onChange={(e) => onPasswordChange(e.target.value)} />
         </Form.Item>
 
