@@ -84,7 +84,7 @@ export function LoginPage() {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
-            <Button type="primary" htmlType="submit" style={{ backgroundColor: '#f47721' }}>
+            <Button type="primary" htmlType="submit">
               SIGN IN
             </Button>
           </Form.Item>
