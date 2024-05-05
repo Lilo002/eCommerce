@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
@@ -35,10 +35,16 @@ export function LoginPage() {
     setPassword(value);
   };
 
+  const cleanInputs = () => {
+    setEmail('');
+    setPassword('');
+  };
+
   const onFormSubmit = () => {
     session?.login({ email, password }).catch((error: Error) => {
       message.error(`Login error: ${error.message}`);
     });
+    cleanInputs();
     if (session?.isLogin) {
       navigate(ROUTES.MAIN);
     }
