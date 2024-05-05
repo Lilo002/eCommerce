@@ -7,6 +7,7 @@ import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
 import './_page.scss';
+import { LoginCustomerDraft } from '../../sdk/api';
 
 const emailRules = [
   { required: true, message: 'Please input your email' },
@@ -30,6 +31,10 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const { session } = useContext(sessionContext);
 
+  if (session?.isLogin) {
+    navigate(ROUTES.MAIN);
+  }
+
   const onEmailChange = (value: string) => {
     setEmail(value);
   };
@@ -43,14 +48,20 @@ export function LoginPage() {
     setPassword('');
   };
 
+  const saveCustomerData = (customerData: LoginCustomerDraft) => {
+    localStorage.setItem('lidilu-customerData', JSON.stringify(customerData));
+  };
+
   const onFormSubmit = () => {
-    session?.login({ email, password }).catch((error: Error) => {
-      message.error(`Login error: ${error.message}`);
-    });
-    cleanInputs();
-    if (session?.isLogin) {
-      navigate(ROUTES.MAIN);
-    }
+    session
+      ?.login({ email, password })
+      .then(() => {
+        saveCustomerData({ email, password });
+        cleanInputs();
+      })
+      .catch((error: Error) => {
+        message.error(`Login error: ${error.message}`);
+      });
   };
 
   return (
