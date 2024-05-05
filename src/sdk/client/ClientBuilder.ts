@@ -10,6 +10,8 @@ import {
 import { LoginCustomerDraft } from '../api';
 
 export const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY || '';
+export const clientId = import.meta.env.VITE_CTP_CLIENT_ID || '';
+export const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET || '';
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: 'https://api.europe-west1.gcp.commercetools.com',
@@ -21,8 +23,8 @@ const createPasswordClient = ({ email, password }: LoginCustomerDraft): Client =
     host: 'https://auth.europe-west1.gcp.commercetools.com',
     projectKey,
     credentials: {
-      clientId: import.meta.env.VITE_CTP_CLIENT_ID,
-      clientSecret: import.meta.env.VITE_CTP_CLIENT_SECRET,
+      clientId,
+      clientSecret,
       user: {
         username: email,
         password,
@@ -44,8 +46,8 @@ export const createAnonymousClient = (): Client => {
     host: 'https://auth.europe-west1.gcp.commercetools.com',
     projectKey,
     credentials: {
-      clientId: import.meta.env.VITE_CTP_CLIENT_ID,
-      clientSecret: import.meta.env.VITE_CTP_CLIENT_SECRET,
+      clientId,
+      clientSecret,
       anonymousId: crypto.randomUUID(),
     },
     scopes: [`manage_project:${projectKey}`],
@@ -58,19 +60,6 @@ export const createAnonymousClient = (): Client => {
     .withHttpMiddleware(httpMiddlewareOptions)
     .build();
 };
-
-/* export const getApiRoot = () => {
-  //получить данные из хранилища
-  function getCustomerData() {
-    return null;
-  }
-
-  const customerData = getCustomerData();
-
-  return customerData
-    ? createApiBuilderFromCtpClient(createPasswordClient(customerData)).withProjectKey({projectKey})
-    : createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({projectKey})
-} */
 
 export const getAnonymousApiRoot = () =>
   createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({ projectKey });
