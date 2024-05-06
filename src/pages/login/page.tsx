@@ -69,7 +69,7 @@ export function LoginPage() {
 
   return (
     <>
-      <Header isMainPage={false} />
+      <Header />
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ offset: 0, span: 24 }}
