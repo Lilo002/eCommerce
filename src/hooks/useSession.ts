@@ -9,14 +9,6 @@ export const useSession = () => {
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
-  useEffect(() => {
-    const data = localStorage.getItem('lidilu-customerData');
-
-    if (data) {
-      setLogin(true);
-    }
-  }, []);
-
   const login = async ({ email, password }: LoginCustomerDraft): Promise<void | Error> =>
     authenticateCustomer(apiRoot, { email, password }).then(() => {
       setApiRoot(getLoginApiRoot({ email, password }));
@@ -27,7 +19,6 @@ export const useSession = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
     setAuth(null);
-    localStorage.removeItem('lidilu-customerData');
   };
 
   useEffect(() => {

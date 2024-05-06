@@ -4,7 +4,6 @@ import { Button, Form, Input, message } from 'antd';
 
 import { Header } from '../../components/header/header';
 import { sessionContext } from '../../context/sessionContext';
-import { LoginCustomerDraft } from '../../sdk/api';
 import { ROUTES } from '../../shared/constants';
 
 import { emailRules, passwordRules } from './model';
@@ -36,15 +35,10 @@ export function LoginPage() {
     setPassword('');
   };
 
-  const saveCustomerData = (customerData: LoginCustomerDraft) => {
-    localStorage.setItem('lidilu-customerData', JSON.stringify(customerData));
-  };
-
   const onFormSubmit = () => {
     session
       ?.login({ email, password })
       .then(() => {
-        saveCustomerData({ email, password });
         cleanInputs();
         navigate(ROUTES.MAIN);
       })
