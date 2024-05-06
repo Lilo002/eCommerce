@@ -22,7 +22,7 @@ export const Header = () => {
       <div className="header-menu-btn">
         {session?.isLogin ? (
           <button type="button" onClick={() => session?.logout()}>
-            <Link to={ROUTES.LOGIN}>Log out</Link>
+            Log out
           </button>
         ) : (
           <button type="button">

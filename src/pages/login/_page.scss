@@ -1,0 +1,31 @@
+.login {
+  &-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 50px 0;
+  }
+  &-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    margin-bottom: 30px;
+    background-color: #1677ff;
+  }
+  &-title {
+    text-align: center;
+    font-size: 22px;
+    text-align: left;
+    color: white;
+  }
+  &-registration {
+    font-size: 20px;
+    color: white;
+  }
+  &-content {
+    padding: 20px;
+  }
+  &-btn {
+    margin: 0 auto;
+  }
+}
