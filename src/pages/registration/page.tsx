@@ -123,12 +123,13 @@ export function RegistrationPage() {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name="shippingPostalCode" label="Postal code" rules={shippingPostalCodeRules}>
-            <MaskedInput
-              mask={shippingCountry.mask}
-              value={shippingCountry.postalCode}
-              defaultValue={shippingCountry.postalCode}
-            />
+          <Form.Item
+            name="shippingPostalCode"
+            label="Postal code"
+            rules={shippingPostalCodeRules}
+            initialValue={shippingCountry.postalCode}
+          >
+            <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
           </Form.Item>
           <Form.Item name="shippingStreet" label="Street" rules={validation.streetRules}>
             <Input style={{ width: '100%' }} />
@@ -160,12 +161,13 @@ export function RegistrationPage() {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name="billingPostalCode" label="Postal code" rules={billingPostalCodeRules}>
-              <MaskedInput
-                mask={billingCountry.mask}
-                value={billingCountry.postalCode}
-                defaultValue={billingCountry.postalCode}
-              />
+            <Form.Item
+              name="billingPostalCode"
+              label="Postal code"
+              rules={billingPostalCodeRules}
+              initialValue={billingCountry.postalCode}
+            >
+              <MaskedInput mask={billingCountry.mask} value={billingCountry.postalCode} />
             </Form.Item>
             <Form.Item name="billingStreet" label="Street" rules={validation.streetRules}>
               <Input style={{ width: '100%' }} />
