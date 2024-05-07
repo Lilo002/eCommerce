@@ -19,6 +19,7 @@ const countries = [
 ];
 
 export function RegistrationPage() {
+  const [registrationForm] = Form.useForm();
   // shipping adress
   const [shippingCountry, setShippingCountry] = useState(countries[0]);
   const [shippingPostalCodeRules, setShippingPostalCodeRules] = useState([
@@ -59,8 +60,14 @@ export function RegistrationPage() {
   };
 
   // const cleanInputs = () => {
-  //   setEmail('');
-  //   setPassword('');
+  //   registrationForm.resetFields();
+  //   setShippingCountry(countries[0]);
+  //   setShippingPostalCodeRules([{ pattern: countries[0].pattern, message: validation.messageForPostalCodeError }]);
+  //   setBillingCountry(countries[0]);
+  //   setBillingPostalCodeRules([{ pattern: countries[0].pattern, message: validation.messageForPostalCodeError }]);
+  //   setShippingAdressAsBillingAdress(true);
+  //   setDefaultShippingAdress(true);
+  //   setDefaultBillingAdress(true);
   // };
 
   // const onFormSubmit = () => {
@@ -77,6 +84,7 @@ export function RegistrationPage() {
 
   return (
     <Form
+      form={registrationForm}
       labelCol={{ span: 5 }}
       wrapperCol={{ offset: 0, span: 24 }}
       className="registration-form"
