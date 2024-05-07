@@ -7,5 +7,5 @@ export const ROUTES = {
   PROFILE: '/profile',
   BASKET: '/basket',
   ABOUT: '/about',
-  NOTFOUND: '/*',
+  NOT_FOUND: '/*',
 };
