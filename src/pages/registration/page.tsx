@@ -22,24 +22,16 @@ export function RegistrationPage() {
   const [registrationForm] = Form.useForm();
   // shipping adress
   const [shippingCountry, setShippingCountry] = useState(countries[0]);
-  const [shippingPostalCodeRules, setShippingPostalCodeRules] = useState([
-    { pattern: countries[0].pattern, message: validation.messageForPostalCodeError },
-  ]);
 
   const changeShippingCountry = (index: number) => {
     setShippingCountry(countries[index]);
-    setShippingPostalCodeRules([{ pattern: countries[index].pattern, message: validation.messageForPostalCodeError }]);
   };
 
   // billing adress
   const [billingCountry, setBillingCountry] = useState(countries[0]);
-  const [billingPostalCodeRules, setBillingPostalCodeRules] = useState([
-    { pattern: countries[0].pattern, message: validation.messageForPostalCodeError },
-  ]);
 
   const changeBillingCountry = (index: number) => {
     setBillingCountry(countries[index]);
-    setBillingPostalCodeRules([{ pattern: countries[index].pattern, message: validation.messageForPostalCodeError }]);
   };
 
   // checkboxes
@@ -145,7 +137,7 @@ export function RegistrationPage() {
             <Form.Item
               name="shippingPostalCode"
               label="Postal code"
-              rules={shippingPostalCodeRules}
+              rules={[{ pattern: shippingCountry.pattern, message: validation.messageForPostalCodeError }]}
               initialValue={shippingCountry.postalCode}
             >
               <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
@@ -188,7 +180,7 @@ export function RegistrationPage() {
               <Form.Item
                 name="billingPostalCode"
                 label="Postal code"
-                rules={billingPostalCodeRules}
+                rules={[{ pattern: billingCountry.pattern, message: validation.messageForPostalCodeError }]}
                 initialValue={billingCountry.postalCode}
               >
                 <MaskedInput mask={billingCountry.mask} value={billingCountry.postalCode} />
