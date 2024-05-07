@@ -19,6 +19,7 @@ const countries = [
 ];
 
 export function RegistrationPage() {
+  // shipping adress
   const [shippingCountry, setShippingCountry] = useState(countries[0]);
   const [shippingPostalCodeRules, setShippingPostalCodeRules] = useState([
     { pattern: countries[0].pattern, message: validation.messageForPostalCodeError },
@@ -29,6 +30,7 @@ export function RegistrationPage() {
     setShippingPostalCodeRules([{ pattern: countries[index].pattern, message: validation.messageForPostalCodeError }]);
   };
 
+  // billing adress
   const [billingCountry, setBillingCountry] = useState(countries[0]);
   const [billingPostalCodeRules, setBillingPostalCodeRules] = useState([
     { pattern: countries[0].pattern, message: validation.messageForPostalCodeError },
@@ -39,11 +41,39 @@ export function RegistrationPage() {
     setBillingPostalCodeRules([{ pattern: countries[index].pattern, message: validation.messageForPostalCodeError }]);
   };
 
-  const [checkedDefaulBillingAdress, setDefaulBillingAdress] = useState(true);
+  // checkboxes
+  const [shippingAdressAsBilingAdress, setShippingAdressAsBillingAdress] = useState(true);
+  const [defaulShippingAdress, setDefaultShippingAdress] = useState(true);
+  const [defaulBillingAdress, setDefaultBillingAdress] = useState(true);
 
   const toggleBillingAdress: CheckboxProps['onChange'] = (e) => {
-    setDefaulBillingAdress(e.target.checked);
+    setShippingAdressAsBillingAdress(e.target.checked);
   };
+
+  const changeDefaultShippingAdress: CheckboxProps['onChange'] = (e) => {
+    setDefaultShippingAdress(e.target.checked);
+  };
+
+  const changeDefaultBillingAdress: CheckboxProps['onChange'] = (e) => {
+    setDefaultBillingAdress(e.target.checked);
+  };
+
+  // const cleanInputs = () => {
+  //   setEmail('');
+  //   setPassword('');
+  // };
+
+  // const onFormSubmit = () => {
+  //   session
+  //     ?.login({ email, password })
+  //     .then(() => {
+  //       cleanInputs();
+  //       navigate(ROUTES.MAIN);
+  //     })
+  //     .catch((error: Error) => {
+  //       message.error(`Login error: ${error.message}`);
+  //     });
+  // };
 
   return (
     <Form
@@ -92,12 +122,14 @@ export function RegistrationPage() {
           <Input.Password style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item name="defaultAdress" valuePropName="checked">
-          <Checkbox defaultChecked>Set as default address</Checkbox>
+        <Form.Item name="defaultShippingAdress">
+          <Checkbox checked={defaulShippingAdress} onChange={changeDefaultShippingAdress}>
+            Set as default shipping address
+          </Checkbox>
         </Form.Item>
 
-        <Form.Item name="defaultBillingAdress">
-          <Checkbox checked={checkedDefaulBillingAdress} onChange={toggleBillingAdress}>
+        <Form.Item name="setAsBillingdress">
+          <Checkbox checked={shippingAdressAsBilingAdress} onChange={toggleBillingAdress}>
             Set as billing address
           </Checkbox>
         </Form.Item>
@@ -139,8 +171,13 @@ export function RegistrationPage() {
           </Form.Item>
         </div>
 
-        <div className="billing-adress" style={{ display: checkedDefaulBillingAdress ? 'none' : 'block' }}>
+        <div className="billing-adress" style={{ display: shippingAdressAsBilingAdress ? 'none' : 'block' }}>
           <p>Billing adress: </p>
+          <Form.Item name="defaultBillingAdress">
+            <Checkbox checked={defaulBillingAdress} onChange={changeDefaultBillingAdress}>
+              Set as default billing address
+            </Checkbox>
+          </Form.Item>
           <div className="billing-adress-content">
             <Form.Item
               name="billingCountry"
