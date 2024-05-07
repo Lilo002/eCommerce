@@ -1,0 +1,31 @@
+.registration {
+  &-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px 0;
+    .ant-form-item {
+      margin-bottom: 24px;
+    }
+  }
+  &-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    margin-bottom: 20px;
+    background-color: #1677ff;
+  }
+  &-title {
+    text-align: center;
+    font-size: 22px;
+    text-align: left;
+    color: white;
+  }
+  &-login {
+    font-size: 20px;
+    color: white;
+  }
+  &-content {
+    padding: 0 20px;
+  }
+}
