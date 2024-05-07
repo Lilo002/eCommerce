@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { CheckboxProps } from 'antd';
 import { Button, Checkbox, DatePicker, Form, Input, Select } from 'antd';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import MaskedInput from 'antd-mask-input';
 
 import { Header } from '../../components/header/header';
