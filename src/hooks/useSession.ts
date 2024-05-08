@@ -22,13 +22,11 @@ export const useSession = () => {
     lastName,
     dateOfBirth,
     addresses,
-  }: CustomerDraft): Promise<void | Error> => {
-    console.log(addresses);
-    return createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then((res) => {
+  }: CustomerDraft): Promise<void | Error> =>
+    createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then((res) => {
       console.log(res);
       login({ email, password });
     });
-  };
 
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());

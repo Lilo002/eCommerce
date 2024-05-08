@@ -29,14 +29,24 @@ export interface RegistationInformation {
 
 const getCountryCode = (country: string): string => CountriesCodes[country];
 
-const getAdressesFromRegistration = (info: RegistationInformation): AddressDraft[] => [
-  {
+const getAdressesFromRegistration = (info: RegistationInformation): AddressDraft[] => {
+  const addresses: AddressDraft[] = [];
+  addresses.push({
     streetName: info.shippingStreet,
     city: info.shippingCity,
     country: getCountryCode(info.shippingCountry),
     postalCode: info.shippingPostalCode,
-  },
-];
+  });
+  if (!info.setAsBillingdress) {
+    addresses.push({
+      streetName: info.billingStreet || '',
+      city: info.billingCity || '',
+      country: getCountryCode(info.billingCountry || ''),
+      postalCode: info.billingPostalCode || '',
+    });
+  }
+  return addresses;
+};
 
 const getDateOfBirth = (data: DataIsObject): string => {
   const month = (data.$M + 1).toString().padStart(2, '0');

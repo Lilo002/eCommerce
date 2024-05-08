@@ -41,9 +41,8 @@ export const authenticateCustomer = async (
 export const createCustomer = (
   apiRoot: ByProjectKeyRequestBuilder,
   { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
-): Promise<ClientResponse<CustomerSignInResult>> => {
-  console.log(email, password, firstName, lastName, dateOfBirth, addresses);
-  return apiRoot
+): Promise<ClientResponse<CustomerSignInResult>> =>
+  apiRoot
     .customers()
     .post({
       body: {
@@ -56,4 +55,3 @@ export const createCustomer = (
       } as CustomerDraft,
     })
     .execute();
-};

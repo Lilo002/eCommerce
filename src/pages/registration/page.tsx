@@ -96,7 +96,6 @@ export function RegistrationPage() {
 
   const handlerFormSubmit = () => {
     const info = getInformationFromForm();
-    console.log(info);
     const newCustomer = prepareRegisterInfoToRequest(info);
     session
       ?.register({
@@ -220,8 +219,8 @@ export function RegistrationPage() {
                   rules={validation.countryRules}
                 >
                   <Select className="full-width" onChange={handleChangeBillingCountry}>
-                    {countries.map((country, index) => (
-                      <Select.Option value={index} key={country.country}>
+                    {countries.map((country) => (
+                      <Select.Option value={country.country} key={country.country}>
                         {country.country}
                       </Select.Option>
                     ))}

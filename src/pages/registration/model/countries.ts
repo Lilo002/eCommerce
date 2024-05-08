@@ -1,6 +1,6 @@
 enum COUNTRY {
   Belarus = 'Belarus',
-  Canada = 'Canada',
+  Germany = 'Germany',
   Poland = 'Poland',
   US = 'Unates States',
 }
@@ -11,7 +11,7 @@ type CountryCode = {
 
 export const CountriesCodes: CountryCode = {
   [COUNTRY.Belarus]: 'BY',
-  [COUNTRY.Canada]: 'CA',
+  [COUNTRY.Germany]: 'DE',
   [COUNTRY.Poland]: 'PL',
   [COUNTRY.US]: 'US',
 };
@@ -25,7 +25,7 @@ export type CountryType = {
 
 export const countries: CountryType[] = [
   { country: COUNTRY.Belarus, mask: '00-00-00', postalCode: '11-11-11', pattern: /^\d{2}-\d{2}-\d{2}$/ },
-  { country: COUNTRY.Canada, mask: 'A0A 0A0', postalCode: 'A1A 1A1', pattern: /^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/ },
+  { country: COUNTRY.Germany, mask: '00000', postalCode: '11111', pattern: /^\d{5}$/ },
   { country: COUNTRY.Poland, mask: '00-000', postalCode: '11-111', pattern: /^\d{2}-\d{3}$/ },
   { country: COUNTRY.US, mask: '00000', postalCode: '11111', pattern: /^\d{5}$/ },
 ];
