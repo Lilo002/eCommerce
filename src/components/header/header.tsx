@@ -29,9 +29,11 @@ export const Header = () => {
             <Link to={ROUTES.LOGIN}>Log in</Link>
           </button>
         )}
-        <button type="button">
-          <Link to={ROUTES.REGISTRATION}>Registration</Link>
-        </button>
+        {session?.isLogin ? null : (
+          <button type="button">
+            <Link to={ROUTES.REGISTRATION}>Registration</Link>
+          </button>
+        )}
       </div>
     </header>
   );
