@@ -29,7 +29,7 @@ export const Header = () => {
             <Link to={ROUTES.LOGIN}>Log in</Link>
           </button>
         )}
-        {session?.isLogin ? null : (
+        {!session?.isLogin && (
           <button type="button">
             <Link to={ROUTES.REGISTRATION}>Registration</Link>
           </button>
