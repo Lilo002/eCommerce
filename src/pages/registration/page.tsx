@@ -27,11 +27,19 @@ export function RegistrationPage() {
     setShippingCountry(countries[index]);
   };
 
+  const handleChangeShippingCountry = (index: number) => {
+    changeShippingCountry(index);
+  };
+
   // billing adress
   const [billingCountry, setBillingCountry] = useState(countries[0]);
 
   const changeBillingCountry = (index: number) => {
     setBillingCountry(countries[index]);
+  };
+
+  const handleChangeBillingCountry = (index: number) => {
+    changeBillingCountry(index);
   };
 
   // checkboxes
@@ -76,9 +84,8 @@ export function RegistrationPage() {
             validateFirst
             hasFeedback
           >
-            <Input style={{ width: '100%' }} />
+            <Input className="full-width" />
           </Form.Item>
-
           <Form.Item
             name="lastName"
             label="Last Name"
@@ -86,33 +93,27 @@ export function RegistrationPage() {
             validateFirst
             hasFeedback
           >
-            <Input style={{ width: '100%' }} />
+            <Input className="full-width" />
           </Form.Item>
-
           <Form.Item name="dateOfBirth" label="Date of birth" rules={validation.ageRules}>
             <DatePicker />
           </Form.Item>
-
           <Form.Item name="email" label="Email" rules={validation.emailRules} validateFirst hasFeedback>
-            <Input style={{ width: '100%' }} />
+            <Input className="full-width" />
           </Form.Item>
-
           <Form.Item name="password" label="Password" rules={validation.passwordRules} validateFirst hasFeedback>
-            <Input.Password style={{ width: '100%' }} />
+            <Input.Password className="full-width" />
           </Form.Item>
-
           <Form.Item name="defaultShippingAdress">
             <Checkbox checked={defaulShippingAdress} onChange={changeDefaultShippingAdress}>
               Set as default {shippingAdressAsBilingAdress ? 'shipping/billing' : 'shipping'} address
             </Checkbox>
           </Form.Item>
-
           <Form.Item name="setAsBillingdress">
             <Checkbox checked={shippingAdressAsBilingAdress} onChange={toggleBillingAdress}>
               Set as billing address
             </Checkbox>
           </Form.Item>
-
           <p>Shipping adress: </p>
           <div className="shipping-adress-content">
             <Form.Item
@@ -121,12 +122,7 @@ export function RegistrationPage() {
               initialValue={shippingCountry.country}
               rules={validation.countryRules}
             >
-              <Select
-                style={{ width: '100%' }}
-                onChange={(value) => {
-                  changeShippingCountry(value);
-                }}
-              >
+              <Select className="full-width" onChange={handleChangeShippingCountry}>
                 {countries.map((country, index) => (
                   <Select.Option value={index} key={country.country}>
                     {country.country}
@@ -143,57 +139,53 @@ export function RegistrationPage() {
               <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
             </Form.Item>
             <Form.Item name="shippingStreet" label="Street" rules={validation.streetRules}>
-              <Input style={{ width: '100%' }} />
+              <Input className="full-width" />
             </Form.Item>
             <Form.Item name="shippingCity" label="City" rules={validation.textRules('City')}>
-              <Input style={{ width: '100%' }} />
+              <Input className="full-width" />
             </Form.Item>
           </div>
 
-          <div className="billing-adress" style={{ display: shippingAdressAsBilingAdress ? 'none' : 'block' }}>
-            <p>Billing adress: </p>
-            <Form.Item name="defaultBillingAdress">
-              <Checkbox checked={defaulBillingAdress} onChange={changeDefaultBillingAdress}>
-                Set as default billing address
-              </Checkbox>
-            </Form.Item>
-            <div className="billing-adress-content">
-              <Form.Item
-                name="billingCountry"
-                label="Country"
-                initialValue={billingCountry.country}
-                rules={validation.countryRules}
-              >
-                <Select
-                  style={{ width: '100%' }}
-                  onChange={(value) => {
-                    changeBillingCountry(value);
-                  }}
+          {!shippingAdressAsBilingAdress && (
+            <div className="billing-adress">
+              <p>Billing adress: </p>
+              <Form.Item name="defaultBillingAdress">
+                <Checkbox checked={defaulBillingAdress} onChange={changeDefaultBillingAdress}>
+                  Set as default billing address
+                </Checkbox>
+              </Form.Item>
+              <div className="billing-adress-content">
+                <Form.Item
+                  name="billingCountry"
+                  label="Country"
+                  initialValue={billingCountry.country}
+                  rules={validation.countryRules}
                 >
-                  {countries.map((country, index) => (
-                    <Select.Option value={index} key={country.country}>
-                      {country.country}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="billingPostalCode"
-                label="Postal code"
-                rules={[{ pattern: billingCountry.pattern, message: validation.messageForPostalCodeError }]}
-                initialValue={billingCountry.postalCode}
-              >
-                <MaskedInput mask={billingCountry.mask} value={billingCountry.postalCode} />
-              </Form.Item>
-              <Form.Item name="billingStreet" label="Street" rules={validation.streetRules}>
-                <Input style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item name="billibgCity" label="City" rules={validation.textRules('City')}>
-                <Input style={{ width: '100%' }} />
-              </Form.Item>
+                  <Select className="full-width" onChange={handleChangeBillingCountry}>
+                    {countries.map((country, index) => (
+                      <Select.Option value={index} key={country.country}>
+                        {country.country}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="billingPostalCode"
+                  label="Postal code"
+                  rules={[{ pattern: billingCountry.pattern, message: validation.messageForPostalCodeError }]}
+                  initialValue={billingCountry.postalCode}
+                >
+                  <MaskedInput mask={billingCountry.mask} value={billingCountry.postalCode} />
+                </Form.Item>
+                <Form.Item name="billingStreet" label="Street" rules={validation.streetRules}>
+                  <Input className="full-width" />
+                </Form.Item>
+                <Form.Item name="billingCity" label="City" rules={validation.textRules('City')}>
+                  <Input className="full-width" />
+                </Form.Item>
+              </div>
             </div>
-          </div>
-
+          )}
           <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
             <Button type="primary" htmlType="submit">
               CREATE ACCOUNT
