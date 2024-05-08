@@ -103,7 +103,7 @@ export function RegistrationPage() {
 
           <Form.Item name="defaultShippingAdress">
             <Checkbox checked={defaulShippingAdress} onChange={changeDefaultShippingAdress}>
-              Set as default shipping address
+              Set as default {shippingAdressAsBilingAdress ? 'shipping/billing' : 'shipping'} address
             </Checkbox>
           </Form.Item>
 
