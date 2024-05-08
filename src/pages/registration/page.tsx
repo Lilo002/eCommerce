@@ -1,45 +1,49 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import type { CheckboxProps } from 'antd';
-import { Button, Checkbox, DatePicker, Form, Input, Select } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, message, Select } from 'antd';
 import MaskedInput from 'antd-mask-input';
 
 import { Header } from '../../components/header/header';
+import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
+import { countries, CountryType } from './model/countries';
+import { prepareRegisterInfoToRequest, RegistationInformation } from './model/dataToRequest';
 import * as validation from './model/validation';
 
 import './_page.scss';
 
-const countries = [
-  { country: 'Belarus', mask: '00-00-00', postalCode: '11-11-11', pattern: /^\d{2}-\d{2}-\d{2}$/ },
-  { country: 'Canada', mask: 'A0A 0A0', postalCode: 'A1A 1A1', pattern: /^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/ },
-  { country: 'Poland', mask: '00-000', postalCode: '11-111', pattern: /^\d{2}-\d{3}$/ },
-  { country: 'US', mask: '00000', postalCode: '11111', pattern: /^\d{5}$/ },
-];
-
 export function RegistrationPage() {
+  const navigate = useNavigate();
+  const { session } = useContext(sessionContext);
   const [registrationForm] = Form.useForm();
   // shipping adress
   const [shippingCountry, setShippingCountry] = useState(countries[0]);
 
-  const changeShippingCountry = (index: number) => {
-    setShippingCountry(countries[index]);
+  const changeShippingCountry = (selectedCountry: CountryType) => {
+    setShippingCountry(selectedCountry);
   };
 
-  const handleChangeShippingCountry = (index: number) => {
-    changeShippingCountry(index);
+  const handleChangeShippingCountry = (value: string) => {
+    const selectedCountry = countries.find((country) => country.country === value);
+    if (selectedCountry) {
+      changeShippingCountry(selectedCountry);
+    }
   };
 
   // billing adress
   const [billingCountry, setBillingCountry] = useState(countries[0]);
 
-  const changeBillingCountry = (index: number) => {
-    setBillingCountry(countries[index]);
+  const changeBillingCountry = (selectedCountry: CountryType) => {
+    setBillingCountry(selectedCountry);
   };
 
-  const handleChangeBillingCountry = (index: number) => {
-    changeBillingCountry(index);
+  const handleChangeBillingCountry = (value: string) => {
+    const selectedCountry = countries.find((country) => country.country === value);
+    if (selectedCountry) {
+      changeBillingCountry(selectedCountry);
+    }
   };
 
   // checkboxes
@@ -59,11 +63,65 @@ export function RegistrationPage() {
     setDefaultBillingAdress(e.target.checked);
   };
 
+  const getInformationFromForm = (): RegistationInformation => {
+    const info = registrationForm.getFieldsValue();
+    return {
+      firstName: info.firstName,
+      lastName: info.lastName,
+      dateOfBirth: info.dateOfBirth,
+      email: info.email,
+      password: info.password,
+      defaultShippingAdress: defaulShippingAdress,
+      setAsBillingdress: shippingAdressAsBilingAdress,
+      shippingCountry: info.shippingCountry,
+      shippingPostalCode: info.shippingPostalCode,
+      shippingStreet: info.shippingStreet,
+      shippingCity: info.shippingCity,
+      defaultBillingAdress: defaulBillingAdress,
+      billingCountry: info.billingCountry,
+      billingPostalCode: info.billingPostalCode,
+      billingStreet: info.billingStreet,
+      billingCity: info.billingCity,
+    };
+  };
+
+  const cleanInputs = () => {
+    registrationForm.resetFields();
+    setShippingCountry(countries[0]);
+    setBillingCountry(countries[0]);
+    setShippingAdressAsBillingAdress(true);
+    setDefaultShippingAdress(true);
+    setDefaultBillingAdress(true);
+  };
+
+  const handlerFormSubmit = () => {
+    const info = getInformationFromForm();
+    console.log(info);
+    const newCustomer = prepareRegisterInfoToRequest(info);
+    session
+      ?.register({
+        email: newCustomer.email,
+        password: newCustomer.password,
+        firstName: newCustomer.firstName,
+        lastName: newCustomer.lastName,
+        dateOfBirth: newCustomer.dateOfBirth,
+        addresses: newCustomer.addresses,
+      })
+      .then(() => {
+        cleanInputs();
+        navigate(ROUTES.MAIN);
+      })
+      .catch((error: Error) => {
+        message.error(`Registration error: ${error.message}`);
+      });
+  };
+
   return (
     <>
       <Header />
       <Form
         form={registrationForm}
+        onFinish={handlerFormSubmit}
         labelCol={{ span: 5 }}
         wrapperCol={{ offset: 0, span: 24 }}
         className="registration-form"
@@ -88,7 +146,7 @@ export function RegistrationPage() {
           </Form.Item>
           <Form.Item
             name="lastName"
-            label="Last Name"
+            label="Last name"
             rules={validation.textRules('Last name')}
             validateFirst
             hasFeedback
@@ -123,8 +181,8 @@ export function RegistrationPage() {
               rules={validation.countryRules}
             >
               <Select className="full-width" onChange={handleChangeShippingCountry}>
-                {countries.map((country, index) => (
-                  <Select.Option value={index} key={country.country}>
+                {countries.map((country) => (
+                  <Select.Option value={country.country} key={country.country}>
                     {country.country}
                   </Select.Option>
                 ))}

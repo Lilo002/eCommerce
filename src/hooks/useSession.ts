@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ClientResponse, Project } from '@commercetools/platform-sdk';
 
-import { authenticateCustomer, getProject, LoginCustomerDraft } from '../sdk/api';
+import { authenticateCustomer, createCustomer, CustomerDraft, getProject, LoginCustomerDraft } from '../sdk/api';
 import { getAnonymousApiRoot, getLoginApiRoot } from '../sdk/client/ClientBuilder';
 
 export const useSession = () => {
@@ -14,6 +14,21 @@ export const useSession = () => {
       setApiRoot(getLoginApiRoot({ email, password }));
       setLogin(true);
     });
+
+  const register = ({
+    email,
+    password,
+    firstName,
+    lastName,
+    dateOfBirth,
+    addresses,
+  }: CustomerDraft): Promise<void | Error> => {
+    console.log(addresses);
+    return createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then((res) => {
+      console.log(res);
+      login({ email, password });
+    });
+  };
 
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
@@ -31,5 +46,6 @@ export const useSession = () => {
     auth,
     login,
     logout,
+    register,
   };
 };

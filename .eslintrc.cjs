@@ -58,5 +58,6 @@ module.exports = {
     'react/jsx-no-constructed-context-values': 'off',
     'import/prefer-default-export': 'off',
     'react/function-component-definition': 'off',
+    'no-console': 'off',
   },
 };
