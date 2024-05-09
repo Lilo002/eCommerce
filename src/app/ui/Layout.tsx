@@ -1,12 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from 'antd';
 
+import { Footer } from '../../components/footer/footer';
 import { Header } from '../../components/header/header';
 import { routes } from '../../router';
 
 import './_layout.scss';
 
-const { Footer, Content } = Layout;
+const { Content } = Layout;
 
 export const MyLayout = () => (
   <div>
@@ -19,7 +20,7 @@ export const MyLayout = () => (
           ))}
         </Routes>
       </Content>
-      <Footer className="footer">Footer</Footer>
+      <Footer />
     </Layout>
   </div>
 );
