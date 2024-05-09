@@ -1,5 +1,3 @@
-import { createBrowserRouter } from 'react-router-dom';
-
 import { AboutPage } from '../pages/about/page';
 import { BasketPage } from '../pages/basket/page';
 import { CatalogPage } from '../pages/catalog/page';
@@ -11,7 +9,7 @@ import { ProfilePage } from '../pages/profile/page';
 import { RegistrationPage } from '../pages/registration/page';
 import { ROUTES } from '../shared/constants';
 
-export const router = createBrowserRouter([
+export const routes = [
   {
     path: ROUTES.MAIN,
     element: <Main />,
@@ -49,4 +47,4 @@ export const router = createBrowserRouter([
     path: ROUTES.NOT_FOUND,
     element: <NotFoundPage />,
   },
-]);
+];

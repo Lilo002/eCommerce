@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
-import './_header.scss';
+import './ui/_header.scss';
 
 export const Header = () => {
   const { session } = useContext(sessionContext);

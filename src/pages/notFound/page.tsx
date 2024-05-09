@@ -3,7 +3,7 @@ import { Button, Result } from 'antd';
 
 import { ROUTES } from '../../shared/constants';
 
-import './UI/_notFound.scss';
+import './ui/_notFound.scss';
 
 export function NotFoundPage() {
   return (
