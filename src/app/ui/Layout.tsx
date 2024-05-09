@@ -10,17 +10,15 @@ import './_layout.scss';
 const { Content } = Layout;
 
 export const MyLayout = () => (
-  <div>
-    <Layout className="layout">
-      <Header />
-      <Content className="content">
-        <Routes>
-          {routes.map((rout) => (
-            <Route path={rout.path} element={rout.element} />
-          ))}
-        </Routes>
-      </Content>
-      <Footer />
-    </Layout>
-  </div>
+  <Layout className="layout">
+    <Header />
+    <Content className="content">
+      <Routes>
+        {routes.map((rout) => (
+          <Route path={rout.path} element={rout.element} />
+        ))}
+      </Routes>
+    </Content>
+    <Footer />
+  </Layout>
 );
