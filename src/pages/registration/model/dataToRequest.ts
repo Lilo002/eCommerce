@@ -1,6 +1,6 @@
 import { AddressDraft, CustomerDraft } from '../../../sdk/api';
 
-import { CountriesCodes } from './countries';
+import { countries, CountriesCodes } from './countries';
 
 interface DataIsObject {
   $D: number;
@@ -16,12 +16,12 @@ export interface RegistationInformation {
   password: string;
   defaultShippingAdress: boolean;
   setAsBillingdress: boolean;
-  shippingCountry: string;
+  shippingCountry: number;
   shippingPostalCode: string;
   shippingStreet: string;
   shippingCity: string;
-  defaultBillingAdress?: boolean;
-  billingCountry?: string;
+  defaultBillingAdress: boolean;
+  billingCountry: number;
   billingPostalCode?: string;
   billingStreet?: string;
   billingCity?: string;
@@ -34,14 +34,22 @@ const getAdressesFromRegistration = (info: RegistationInformation): AddressDraft
   addresses.push({
     streetName: info.shippingStreet,
     city: info.shippingCity,
-    country: getCountryCode(info.shippingCountry),
+    country: getCountryCode(countries[info.shippingCountry].country),
     postalCode: info.shippingPostalCode,
   });
+  if (info.setAsBillingdress) {
+    addresses.push({
+      streetName: info.shippingStreet,
+      city: info.shippingCity,
+      country: getCountryCode(countries[info.shippingCountry].country),
+      postalCode: info.shippingPostalCode,
+    });
+  }
   if (!info.setAsBillingdress) {
     addresses.push({
       streetName: info.billingStreet || '',
       city: info.billingCity || '',
-      country: getCountryCode(info.billingCountry || ''),
+      country: getCountryCode(countries[info.billingCountry].country),
       postalCode: info.billingPostalCode || '',
     });
   }

@@ -8,7 +8,7 @@ import { Header } from '../../components/header/header';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
-import { countries, CountryType } from './model/countries';
+import { countries } from './model/countries';
 import { prepareRegisterInfoToRequest, RegistationInformation } from './model/dataToRequest';
 import * as validation from './model/validation';
 
@@ -21,29 +21,23 @@ export function RegistrationPage() {
   // shipping adress
   const [shippingCountry, setShippingCountry] = useState(countries[0]);
 
-  const changeShippingCountry = (selectedCountry: CountryType) => {
-    setShippingCountry(selectedCountry);
+  const changeShippingCountry = (index: number) => {
+    setShippingCountry(countries[index]);
   };
 
-  const handleChangeShippingCountry = (value: string) => {
-    const selectedCountry = countries.find((country) => country.country === value);
-    if (selectedCountry) {
-      changeShippingCountry(selectedCountry);
-    }
+  const handleChangeShippingCountry = (index: number) => {
+    changeShippingCountry(index);
   };
 
   // billing adress
   const [billingCountry, setBillingCountry] = useState(countries[0]);
 
-  const changeBillingCountry = (selectedCountry: CountryType) => {
-    setBillingCountry(selectedCountry);
+  const changeBillingCountry = (index: number) => {
+    setBillingCountry(countries[index]);
   };
 
-  const handleChangeBillingCountry = (value: string) => {
-    const selectedCountry = countries.find((country) => country.country === value);
-    if (selectedCountry) {
-      changeBillingCountry(selectedCountry);
-    }
+  const handleChangeBillingCountry = (index: number) => {
+    changeBillingCountry(index);
   };
 
   // checkboxes
@@ -63,6 +57,16 @@ export function RegistrationPage() {
     setDefaultBillingAdress(e.target.checked);
   };
 
+  const isDefaultBillingAdress = (): boolean => {
+    if (!shippingAdressAsBilingAdress) {
+      return defaulBillingAdress;
+    }
+    if (!defaulShippingAdress && shippingAdressAsBilingAdress) {
+      return false;
+    }
+    return true;
+  };
+
   const getInformationFromForm = (): RegistationInformation => {
     const info = registrationForm.getFieldsValue();
     return {
@@ -77,7 +81,7 @@ export function RegistrationPage() {
       shippingPostalCode: info.shippingPostalCode,
       shippingStreet: info.shippingStreet,
       shippingCity: info.shippingCity,
-      defaultBillingAdress: defaulBillingAdress,
+      defaultBillingAdress: isDefaultBillingAdress(),
       billingCountry: info.billingCountry,
       billingPostalCode: info.billingPostalCode,
       billingStreet: info.billingStreet,
@@ -98,14 +102,18 @@ export function RegistrationPage() {
     const info = getInformationFromForm();
     const newCustomer = prepareRegisterInfoToRequest(info);
     session
-      ?.register({
-        email: newCustomer.email,
-        password: newCustomer.password,
-        firstName: newCustomer.firstName,
-        lastName: newCustomer.lastName,
-        dateOfBirth: newCustomer.dateOfBirth,
-        addresses: newCustomer.addresses,
-      })
+      ?.register(
+        {
+          email: newCustomer.email,
+          password: newCustomer.password,
+          firstName: newCustomer.firstName,
+          lastName: newCustomer.lastName,
+          dateOfBirth: newCustomer.dateOfBirth,
+          addresses: newCustomer.addresses,
+        },
+        info.defaultShippingAdress,
+        info.defaultBillingAdress,
+      )
       .then(() => {
         cleanInputs();
         navigate(ROUTES.MAIN);
@@ -173,15 +181,10 @@ export function RegistrationPage() {
           </Form.Item>
           <p>Shipping adress: </p>
           <div className="shipping-adress-content">
-            <Form.Item
-              name="shippingCountry"
-              label="Country"
-              initialValue={shippingCountry.country}
-              rules={validation.countryRules}
-            >
+            <Form.Item name="shippingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
               <Select className="full-width" onChange={handleChangeShippingCountry}>
-                {countries.map((country) => (
-                  <Select.Option value={country.country} key={country.country}>
+                {countries.map((country, index) => (
+                  <Select.Option value={index} key={country.country}>
                     {country.country}
                   </Select.Option>
                 ))}
@@ -212,15 +215,10 @@ export function RegistrationPage() {
                 </Checkbox>
               </Form.Item>
               <div className="billing-adress-content">
-                <Form.Item
-                  name="billingCountry"
-                  label="Country"
-                  initialValue={billingCountry.country}
-                  rules={validation.countryRules}
-                >
+                <Form.Item name="billingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
                   <Select className="full-width" onChange={handleChangeBillingCountry}>
-                    {countries.map((country) => (
-                      <Select.Option value={country.country} key={country.country}>
+                    {countries.map((country, index) => (
+                      <Select.Option value={index} key={country.country}>
                         {country.country}
                       </Select.Option>
                     ))}

@@ -1,4 +1,13 @@
-import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
+import {
+  Address,
+  ClientResponse,
+  Customer,
+  CustomerAddBillingAddressIdAction,
+  CustomerAddShippingAddressIdAction,
+  CustomerSetDefaultBillingAddressAction,
+  CustomerSetDefaultShippingAddressAction,
+  CustomerSignInResult,
+} from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 export interface CustomerDraft {
@@ -53,5 +62,48 @@ export const createCustomer = (
         dateOfBirth,
         addresses,
       } as CustomerDraft,
+    })
+    .execute();
+
+const getCustomerUpdateActions = (
+  shippingId: string,
+  billingId: string,
+  setAsDefaultShippingAdress: boolean,
+  setAsDefaultBillingAdress: boolean,
+): [
+  CustomerSetDefaultShippingAddressAction | CustomerAddShippingAddressIdAction,
+  CustomerSetDefaultBillingAddressAction | CustomerAddBillingAddressIdAction,
+] => [
+  {
+    action: setAsDefaultShippingAdress ? 'setDefaultShippingAddress' : 'addShippingAddressId',
+    addressId: shippingId,
+  },
+  {
+    action: setAsDefaultBillingAdress ? 'setDefaultBillingAddress' : 'addBillingAddressId',
+    addressId: billingId,
+  },
+];
+
+export const customerUpdate = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  id: string,
+  version: number,
+  addresses: Address[],
+  setAsDefaultShippingAdress: boolean,
+  setAsDefaultBillingAdress: boolean,
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: getCustomerUpdateActions(
+          addresses[0].id || '',
+          addresses[1].id || '',
+          setAsDefaultShippingAdress,
+          setAsDefaultBillingAdress,
+        ),
+      },
     })
     .execute();

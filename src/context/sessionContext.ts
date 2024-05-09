@@ -11,13 +11,10 @@ export const sessionContext = createContext<{
     login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
     logout: () => void;
     isLogin: boolean;
-    register: ({
-      email,
-      password,
-      firstName,
-      lastName,
-      dateOfBirth,
-      addresses,
-    }: CustomerDraft) => Promise<void | Error>;
+    register: (
+      { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
+      setAsDefaultShippingAdress: boolean,
+      setAsDefaultBillingAdress: boolean,
+    ) => Promise<void | Error>;
   } | null;
 }>({ session: null });
