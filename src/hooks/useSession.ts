@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
-import { ClientResponse, Project } from '@commercetools/platform-sdk';
+import { Address, ClientResponse, Project } from '@commercetools/platform-sdk';
 
-import { authenticateCustomer, getProject, LoginCustomerDraft } from '../sdk/api';
+import {
+  authenticateCustomer,
+  createCustomer,
+  CustomerDraft,
+  customerUpdate,
+  getProject,
+  LoginCustomerDraft,
+} from '../sdk/api';
 import { getAnonymousApiRoot, getLoginApiRoot } from '../sdk/client/ClientBuilder';
 
 export const useSession = () => {
@@ -13,6 +20,29 @@ export const useSession = () => {
     authenticateCustomer(apiRoot, { email, password }).then(() => {
       setApiRoot(getLoginApiRoot({ email, password }));
       setLogin(true);
+    });
+
+  const updateAdresses = (
+    id: string,
+    version: number,
+    adressesResponse: Address[],
+    setAsDefaultShippingAdress: boolean,
+    setAsDefaultBillingAdress: boolean,
+  ): void | Error => {
+    customerUpdate(apiRoot, id, version, adressesResponse, setAsDefaultShippingAdress, setAsDefaultBillingAdress);
+  };
+
+  const register = (
+    { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
+    setAsDefaultShippingAdress: boolean,
+    setAsDefaultBillingAdress: boolean,
+  ): Promise<void | Error> =>
+    createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then((res) => {
+      const { id, version } = res.body.customer;
+      const adressesResponse = res.body.customer.addresses;
+      login({ email, password }).then(() =>
+        updateAdresses(id, version, adressesResponse, setAsDefaultShippingAdress, setAsDefaultBillingAdress),
+      );
     });
 
   const logout = () => {
@@ -31,5 +61,6 @@ export const useSession = () => {
     auth,
     login,
     logout,
+    register,
   };
 };
