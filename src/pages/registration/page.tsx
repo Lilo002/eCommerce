@@ -4,7 +4,6 @@ import type { CheckboxProps } from 'antd';
 import { Button, Checkbox, DatePicker, Form, Input, message, Select } from 'antd';
 import MaskedInput from 'antd-mask-input';
 
-import { Header } from '../../components/header/header';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
@@ -136,8 +135,6 @@ export function RegistrationPage() {
   };
 
   return (
-    <>
-      <Header />
       <Form
         form={registrationForm}
         onFinish={handlerFormSubmit}
@@ -155,13 +152,18 @@ export function RegistrationPage() {
         </div>
         <div className="registration-content">
           <Form.Item
-            name="firstName"
-            label="First name:"
-            rules={validation.textRules('First name')}
-            validateFirst
-            hasFeedback
+            name="shippingCountry"
+            label="Country"
+            initialValue={shippingCountry.country}
+            rules={validation.countryRules}
           >
-            <Input className="full-width" />
+            <Select className="full-width" onChange={handleChangeShippingCountry}>
+              {countries.map((country, index) => (
+                <Select.Option value={index} key={country.country}>
+                  {country.country}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item
             name="lastName"
@@ -170,12 +172,9 @@ export function RegistrationPage() {
             validateFirst
             hasFeedback
           >
-            <Input className="full-width" />
+            <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
           </Form.Item>
-          <Form.Item name="dateOfBirth" label="Date of birth" rules={validation.ageRules}>
-            <DatePicker />
-          </Form.Item>
-          <Form.Item name="email" label="Email" rules={validation.emailRules} validateFirst hasFeedback>
+          <Form.Item name="shippingStreet" label="Street" rules={validation.streetRules}>
             <Input className="full-width" />
           </Form.Item>
           <Form.Item name="password" label="Password" rules={validation.passwordRules} validateFirst hasFeedback>
@@ -252,14 +251,14 @@ export function RegistrationPage() {
                 </Form.Item>
               </div>
             </div>
-          )}
-          <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              CREATE ACCOUNT
-            </Button>
-          </Form.Item>
-        </div>
-      </Form>
-    </>
+          </div>
+        )}
+        <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            CREATE ACCOUNT
+          </Button>
+        </Form.Item>
+      </div>
+    </Form>
   );
 }
