@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
-import './_header.scss';
+import './ui/_header.scss';
 
 export const Header = () => {
   const { session } = useContext(sessionContext);
@@ -29,9 +29,11 @@ export const Header = () => {
             <Link to={ROUTES.LOGIN}>Log in</Link>
           </button>
         )}
-        <button type="button">
-          <Link to={ROUTES.REGISTRATION}>Registration</Link>
-        </button>
+        {!session?.isLogin && (
+          <button type="button">
+            <Link to={ROUTES.REGISTRATION}>Registration</Link>
+          </button>
+        )}
       </div>
     </header>
   );
