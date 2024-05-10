@@ -42,8 +42,8 @@ export function RegistrationPage() {
 
   // checkboxes
   const [shippingAdressAsBilingAdress, setShippingAdressAsBillingAdress] = useState(true);
-  const [defaulShippingAdress, setDefaultShippingAdress] = useState(true);
-  const [defaulBillingAdress, setDefaultBillingAdress] = useState(true);
+  const [defaultShippingAdress, setDefaultShippingAdress] = useState(true);
+  const [defaultBillingAdress, setDefaultBillingAdress] = useState(true);
 
   const toggleBillingAdress: CheckboxProps['onChange'] = (e) => {
     setShippingAdressAsBillingAdress(e.target.checked);
@@ -59,33 +59,45 @@ export function RegistrationPage() {
 
   const isDefaultBillingAdress = (): boolean => {
     if (!shippingAdressAsBilingAdress) {
-      return defaulBillingAdress;
+      return defaultBillingAdress;
     }
-    if (!defaulShippingAdress && shippingAdressAsBilingAdress) {
+    if (!defaultShippingAdress && shippingAdressAsBilingAdress) {
       return false;
     }
     return true;
   };
 
   const getInformationFromForm = (): RegistationInformation => {
-    const info = registrationForm.getFieldsValue();
+    const {
+      firstName,
+      lastName,
+      dateOfBirth,
+      email,
+      password,
+      shippingPostalCode,
+      shippingStreet,
+      shippingCity,
+      billingPostalCode,
+      billingStreet,
+      billingCity,
+    } = registrationForm.getFieldsValue();
     return {
-      firstName: info.firstName,
-      lastName: info.lastName,
-      dateOfBirth: info.dateOfBirth,
-      email: info.email,
-      password: info.password,
-      defaultShippingAdress: defaulShippingAdress,
-      setAsBillingdress: shippingAdressAsBilingAdress,
-      shippingCountry: info.shippingCountry,
-      shippingPostalCode: info.shippingPostalCode,
-      shippingStreet: info.shippingStreet,
-      shippingCity: info.shippingCity,
+      firstName,
+      lastName,
+      dateOfBirth,
+      email,
+      password,
+      defaultShippingAdress,
+      setAsBillingAdress: shippingAdressAsBilingAdress,
+      shippingCountry: shippingCountry.country,
+      shippingPostalCode,
+      shippingStreet,
+      shippingCity,
       defaultBillingAdress: isDefaultBillingAdress(),
-      billingCountry: info.billingCountry,
-      billingPostalCode: info.billingPostalCode,
-      billingStreet: info.billingStreet,
-      billingCity: info.billingCity,
+      billingCountry: billingCountry.country,
+      billingPostalCode,
+      billingStreet,
+      billingCity,
     };
   };
 
@@ -100,16 +112,16 @@ export function RegistrationPage() {
 
   const handlerFormSubmit = () => {
     const info = getInformationFromForm();
-    const newCustomer = prepareRegisterInfoToRequest(info);
+    const { email, password, firstName, lastName, dateOfBirth, addresses } = prepareRegisterInfoToRequest(info);
     session
       ?.register(
         {
-          email: newCustomer.email,
-          password: newCustomer.password,
-          firstName: newCustomer.firstName,
-          lastName: newCustomer.lastName,
-          dateOfBirth: newCustomer.dateOfBirth,
-          addresses: newCustomer.addresses,
+          email,
+          password,
+          firstName,
+          lastName,
+          dateOfBirth,
+          addresses,
         },
         info.defaultShippingAdress,
         info.defaultBillingAdress,
@@ -170,7 +182,7 @@ export function RegistrationPage() {
             <Input.Password className="full-width" />
           </Form.Item>
           <Form.Item name="defaultShippingAdress">
-            <Checkbox checked={defaulShippingAdress} onChange={changeDefaultShippingAdress}>
+            <Checkbox checked={defaultShippingAdress} onChange={changeDefaultShippingAdress}>
               Set as default {shippingAdressAsBilingAdress ? 'shipping/billing' : 'shipping'} address
             </Checkbox>
           </Form.Item>
@@ -210,7 +222,7 @@ export function RegistrationPage() {
             <div className="billing-adress">
               <p>Billing adress: </p>
               <Form.Item name="defaultBillingAdress">
-                <Checkbox checked={defaulBillingAdress} onChange={changeDefaultBillingAdress}>
+                <Checkbox checked={defaultBillingAdress} onChange={changeDefaultBillingAdress}>
                   Set as default billing address
                 </Checkbox>
               </Form.Item>

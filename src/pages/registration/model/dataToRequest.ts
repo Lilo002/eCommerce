@@ -1,6 +1,6 @@
 import { AddressDraft, CustomerDraft } from '../../../sdk/api';
 
-import { countries, CountriesCodes } from './countries';
+import { CountriesCodes, COUNTRY } from './countries';
 
 interface DataIsObject {
   $D: number;
@@ -15,13 +15,13 @@ export interface RegistationInformation {
   email: string;
   password: string;
   defaultShippingAdress: boolean;
-  setAsBillingdress: boolean;
-  shippingCountry: number;
+  setAsBillingAdress: boolean;
+  shippingCountry: COUNTRY;
   shippingPostalCode: string;
   shippingStreet: string;
   shippingCity: string;
   defaultBillingAdress: boolean;
-  billingCountry: number;
+  billingCountry: COUNTRY;
   billingPostalCode?: string;
   billingStreet?: string;
   billingCity?: string;
@@ -34,22 +34,22 @@ const getAdressesFromRegistration = (info: RegistationInformation): AddressDraft
   addresses.push({
     streetName: info.shippingStreet,
     city: info.shippingCity,
-    country: getCountryCode(countries[info.shippingCountry].country),
+    country: getCountryCode(info.shippingCountry),
     postalCode: info.shippingPostalCode,
   });
-  if (info.setAsBillingdress) {
+  if (info.setAsBillingAdress) {
     addresses.push({
       streetName: info.shippingStreet,
       city: info.shippingCity,
-      country: getCountryCode(countries[info.shippingCountry].country),
+      country: getCountryCode(info.shippingCountry),
       postalCode: info.shippingPostalCode,
     });
   }
-  if (!info.setAsBillingdress) {
+  if (!info.setAsBillingAdress) {
     addresses.push({
       streetName: info.billingStreet || '',
       city: info.billingCity || '',
-      country: getCountryCode(countries[info.billingCountry].country),
+      country: getCountryCode(info.billingCountry),
       postalCode: info.billingPostalCode || '',
     });
   }
