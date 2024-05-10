@@ -4,7 +4,6 @@ import type { CheckboxProps } from 'antd';
 import { Button, Checkbox, DatePicker, Form, Input, message, Select } from 'antd';
 import MaskedInput from 'antd-mask-input';
 
-import { Header } from '../../components/header/header';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
@@ -136,130 +135,127 @@ export function RegistrationPage() {
   };
 
   return (
-    <>
-      <Header />
-      <Form
-        form={registrationForm}
-        onFinish={handlerFormSubmit}
-        labelCol={{ span: 5 }}
-        wrapperCol={{ offset: 0, span: 24 }}
-        className="registration-form"
-        autoComplete="off"
-        layout="vertical"
-      >
-        <div className="registration-info">
-          <span className="registration-title">Registration</span>
-          <Link to={ROUTES.LOGIN} className="registration-login">
-            Already have an account? Sign In
-          </Link>
+    <Form
+      form={registrationForm}
+      onFinish={handlerFormSubmit}
+      labelCol={{ span: 5 }}
+      wrapperCol={{ offset: 0, span: 24 }}
+      className="registration-form"
+      autoComplete="off"
+      layout="vertical"
+    >
+      <div className="registration-info">
+        <span className="registration-title">Registration</span>
+        <Link to={ROUTES.LOGIN} className="registration-login">
+          Already have an account? Sign In
+        </Link>
+      </div>
+      <div className="registration-content">
+        <Form.Item
+          name="firstName"
+          label="First name:"
+          rules={validation.textRules('First name')}
+          validateFirst
+          hasFeedback
+        >
+          <Input className="full-width" />
+        </Form.Item>
+        <Form.Item
+          name="lastName"
+          label="Last name"
+          rules={validation.textRules('Last name')}
+          validateFirst
+          hasFeedback
+        >
+          <Input className="full-width" />
+        </Form.Item>
+        <Form.Item name="dateOfBirth" label="Date of birth" rules={validation.ageRules}>
+          <DatePicker />
+        </Form.Item>
+        <Form.Item name="email" label="Email" rules={validation.emailRules} validateFirst hasFeedback>
+          <Input className="full-width" />
+        </Form.Item>
+        <Form.Item name="password" label="Password" rules={validation.passwordRules} validateFirst hasFeedback>
+          <Input.Password className="full-width" />
+        </Form.Item>
+        <Form.Item name="defaultShippingAdress">
+          <Checkbox checked={defaultShippingAdress} onChange={changeDefaultShippingAdress}>
+            Set as default {shippingAdressAsBilingAdress ? 'shipping/billing' : 'shipping'} address
+          </Checkbox>
+        </Form.Item>
+        <Form.Item name="setAsBillingdress">
+          <Checkbox checked={shippingAdressAsBilingAdress} onChange={toggleBillingAdress}>
+            Set as billing address
+          </Checkbox>
+        </Form.Item>
+        <p>Shipping adress: </p>
+        <div className="shipping-adress-content">
+          <Form.Item name="shippingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
+            <Select className="full-width" onChange={handleChangeShippingCountry}>
+              {countries.map((country, index) => (
+                <Select.Option value={index} key={country.country}>
+                  {country.country}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="shippingPostalCode"
+            label="Postal code"
+            rules={[{ pattern: shippingCountry.pattern, message: validation.messageForPostalCodeError }]}
+            initialValue={shippingCountry.postalCode}
+          >
+            <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
+          </Form.Item>
+          <Form.Item name="shippingStreet" label="Street" rules={validation.streetRules}>
+            <Input className="full-width" />
+          </Form.Item>
+          <Form.Item name="shippingCity" label="City" rules={validation.textRules('City')}>
+            <Input className="full-width" />
+          </Form.Item>
         </div>
-        <div className="registration-content">
-          <Form.Item
-            name="firstName"
-            label="First name:"
-            rules={validation.textRules('First name')}
-            validateFirst
-            hasFeedback
-          >
-            <Input className="full-width" />
-          </Form.Item>
-          <Form.Item
-            name="lastName"
-            label="Last name"
-            rules={validation.textRules('Last name')}
-            validateFirst
-            hasFeedback
-          >
-            <Input className="full-width" />
-          </Form.Item>
-          <Form.Item name="dateOfBirth" label="Date of birth" rules={validation.ageRules}>
-            <DatePicker />
-          </Form.Item>
-          <Form.Item name="email" label="Email" rules={validation.emailRules} validateFirst hasFeedback>
-            <Input className="full-width" />
-          </Form.Item>
-          <Form.Item name="password" label="Password" rules={validation.passwordRules} validateFirst hasFeedback>
-            <Input.Password className="full-width" />
-          </Form.Item>
-          <Form.Item name="defaultShippingAdress">
-            <Checkbox checked={defaultShippingAdress} onChange={changeDefaultShippingAdress}>
-              Set as default {shippingAdressAsBilingAdress ? 'shipping/billing' : 'shipping'} address
-            </Checkbox>
-          </Form.Item>
-          <Form.Item name="setAsBillingdress">
-            <Checkbox checked={shippingAdressAsBilingAdress} onChange={toggleBillingAdress}>
-              Set as billing address
-            </Checkbox>
-          </Form.Item>
-          <p>Shipping adress: </p>
-          <div className="shipping-adress-content">
-            <Form.Item name="shippingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
-              <Select className="full-width" onChange={handleChangeShippingCountry}>
-                {countries.map((country, index) => (
-                  <Select.Option value={index} key={country.country}>
-                    {country.country}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name="shippingPostalCode"
-              label="Postal code"
-              rules={[{ pattern: shippingCountry.pattern, message: validation.messageForPostalCodeError }]}
-              initialValue={shippingCountry.postalCode}
-            >
-              <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
-            </Form.Item>
-            <Form.Item name="shippingStreet" label="Street" rules={validation.streetRules}>
-              <Input className="full-width" />
-            </Form.Item>
-            <Form.Item name="shippingCity" label="City" rules={validation.textRules('City')}>
-              <Input className="full-width" />
-            </Form.Item>
-          </div>
 
-          {!shippingAdressAsBilingAdress && (
-            <div className="billing-adress">
-              <p>Billing adress: </p>
-              <Form.Item name="defaultBillingAdress">
-                <Checkbox checked={defaultBillingAdress} onChange={changeDefaultBillingAdress}>
-                  Set as default billing address
-                </Checkbox>
+        {!shippingAdressAsBilingAdress && (
+          <div className="billing-adress">
+            <p>Billing adress: </p>
+            <Form.Item name="defaultBillingAdress">
+              <Checkbox checked={defaultBillingAdress} onChange={changeDefaultBillingAdress}>
+                Set as default billing address
+              </Checkbox>
+            </Form.Item>
+            <div className="billing-adress-content">
+              <Form.Item name="billingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
+                <Select className="full-width" onChange={handleChangeBillingCountry}>
+                  {countries.map((country, index) => (
+                    <Select.Option value={index} key={country.country}>
+                      {country.country}
+                    </Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
-              <div className="billing-adress-content">
-                <Form.Item name="billingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
-                  <Select className="full-width" onChange={handleChangeBillingCountry}>
-                    {countries.map((country, index) => (
-                      <Select.Option value={index} key={country.country}>
-                        {country.country}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name="billingPostalCode"
-                  label="Postal code"
-                  rules={[{ pattern: billingCountry.pattern, message: validation.messageForPostalCodeError }]}
-                  initialValue={billingCountry.postalCode}
-                >
-                  <MaskedInput mask={billingCountry.mask} value={billingCountry.postalCode} />
-                </Form.Item>
-                <Form.Item name="billingStreet" label="Street" rules={validation.streetRules}>
-                  <Input className="full-width" />
-                </Form.Item>
-                <Form.Item name="billingCity" label="City" rules={validation.textRules('City')}>
-                  <Input className="full-width" />
-                </Form.Item>
-              </div>
+              <Form.Item
+                name="billingPostalCode"
+                label="Postal code"
+                rules={[{ pattern: billingCountry.pattern, message: validation.messageForPostalCodeError }]}
+                initialValue={billingCountry.postalCode}
+              >
+                <MaskedInput mask={billingCountry.mask} value={billingCountry.postalCode} />
+              </Form.Item>
+              <Form.Item name="billingStreet" label="Street" rules={validation.streetRules}>
+                <Input className="full-width" />
+              </Form.Item>
+              <Form.Item name="billingCity" label="City" rules={validation.textRules('City')}>
+                <Input className="full-width" />
+              </Form.Item>
             </div>
-          )}
-          <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              CREATE ACCOUNT
-            </Button>
-          </Form.Item>
-        </div>
-      </Form>
-    </>
+          </div>
+        )}
+        <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            CREATE ACCOUNT
+          </Button>
+        </Form.Item>
+      </div>
+    </Form>
   );
 }
