@@ -52,7 +52,8 @@ export const createCustomer = (
   { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
 ): Promise<ClientResponse<CustomerSignInResult>> =>
   apiRoot
-    .customers()
+    .me()
+    .signup()
     .post({
       body: {
         email,
