@@ -89,7 +89,7 @@ const getCustomerUpdateActions = (
 export const getCustomerByEmail = (apiRoot: ByProjectKeyRequestBuilder, email: string) =>
   apiRoot
     .customers()
-    .get({ queryArgs: { where: `email=${email}` } })
+    .get({ queryArgs: { where: `email="${email}"` } })
     .execute();
 
 export const customerUpdate = (

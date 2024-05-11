@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Address, ClientResponse, Project } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
+import { message } from 'antd';
 
 import {
   authenticateCustomer,
@@ -18,11 +19,23 @@ export const useSession = () => {
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
-  const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
-    authenticateCustomer(apiRoot, { email, password }).then(() => {
-      setApiRoot(getLoginApiRoot({ email, password }));
-      setLogin(true);
+  const checkIsCustomerExist = (email: string): void => {
+    getCustomerByEmail(apiRoot, email).then(({ body }) => {
+      if (body.results.length > 0) {
+        message.error(`Incorrect password. Please, try again!`);
+      } else {
+        message.error(`User with the given email does not exist.`);
+      }
     });
+  };
+
+  const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
+    authenticateCustomer(apiRoot, { email, password })
+      .then(() => {
+        setApiRoot(getLoginApiRoot({ email, password }));
+        setLogin(true);
+      })
+      .catch(() => checkIsCustomerExist(email));
 
   const updateAddresses = (
     newApiRoot: ByProjectKeyRequestBuilder,
@@ -39,9 +52,9 @@ export const useSession = () => {
     setAsDefaultShippingAddress: boolean,
     setAsDefaultBillingAddress: boolean,
   ): Promise<void | Error> =>
-    createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then((res) => {
-      const { version } = res.body.customer;
-      const addressesResponse = res.body.customer.addresses;
+    createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then(({ body }) => {
+      const { version } = body.customer;
+      const addressesResponse = body.customer.addresses;
       const newApiRoot = getLoginApiRoot({ email, password });
       setApiRoot(newApiRoot);
       setLogin(true);
@@ -60,8 +73,6 @@ export const useSession = () => {
     setLogin(false);
     setAuth(null);
   };
-
-  const checkIsCustomerExist = (email: string) => getCustomerByEmail(apiRoot, email);
 
   useEffect(() => {
     getProject(apiRoot).then((data: ClientResponse<Project>) => setAuth(data.body));
