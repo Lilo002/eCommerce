@@ -7,6 +7,7 @@ import {
   createCustomer,
   CustomerDraft,
   customerUpdate,
+  getCustomerByEmail,
   getProject,
   LoginCustomerDraft,
 } from '../sdk/api';
@@ -17,7 +18,7 @@ export const useSession = () => {
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
-  const login = async ({ email, password }: LoginCustomerDraft): Promise<void> =>
+  const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
     authenticateCustomer(apiRoot, { email, password }).then(() => {
       setApiRoot(getLoginApiRoot({ email, password }));
       setLogin(true);
@@ -59,6 +60,8 @@ export const useSession = () => {
     setLogin(false);
     setAuth(null);
   };
+
+  const checkIsCustomerExist = (email: string) => getCustomerByEmail(apiRoot, email);
 
   useEffect(() => {
     getProject(apiRoot).then((data: ClientResponse<Project>) => setAuth(data.body));
