@@ -19,15 +19,8 @@ export const useSession = () => {
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
-  const checkIsCustomerExist = (email: string): void => {
-    getCustomerByEmail(apiRoot, email).then(({ body }) => {
-      if (body.results.length > 0) {
-        message.error(`Incorrect password. Please, try again!`);
-      } else {
-        message.error(`Customer with the given email does not exist.`);
-      }
-    });
-  };
+  const checkCustomerExistsByEmail = (email: string): Promise<boolean> =>
+    getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
 
   const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
     authenticateCustomer(apiRoot, { email, password })
@@ -35,7 +28,15 @@ export const useSession = () => {
         setApiRoot(getLoginApiRoot({ email, password }));
         setLogin(true);
       })
-      .catch(() => checkIsCustomerExist(email));
+      .catch(() =>
+        checkCustomerExistsByEmail(email).then((isExist) => {
+          if (isExist) {
+            message.error(`Incorrect password. Please, try again!`);
+          } else {
+            message.error(`Customer with the given email does not exist.`);
+          }
+        }),
+      );
 
   const updateAddresses = (
     newApiRoot: ByProjectKeyRequestBuilder,
@@ -56,6 +57,7 @@ export const useSession = () => {
       const { version } = body.customer;
       const addressesResponse = body.customer.addresses;
       const newApiRoot = getLoginApiRoot({ email, password });
+
       setApiRoot(newApiRoot);
       setLogin(true);
 
