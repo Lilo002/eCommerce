@@ -1,20 +1,52 @@
+@import '../../../shared/style/variables';
+
 .header {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  line-height: 64px;
-}
-
-// .header-logo{
-
-// }
-
-.header-menu-list {
-  display: flex;
-  gap: 10px;
-}
-
-.header-menu-btn {
-  display: flex;
-  gap: 10px;
+  flex-direction: column;
+  font-family: $font-family;
+  font-weight: 700;
+  font-size: 16px;
+  &-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    &-user {
+      display: flex;
+      gap: 10px;
+    }
+  }
+  &-menu {
+    display: flex;
+    justify-content: center;
+    background-color: $black-color;
+    color: $white-color;
+    &-list {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+    }
+    &-item {
+      font-size: inherit;
+      color: $white-color !important;
+      @media screen and (hover: hover) {
+        &:hover {
+          color: $orange-color !important;
+        }
+      }
+    }
+  }
+  .header-btn {
+    font-weight: inherit;
+    color: $black-color;
+    font-size: 18px;
+    @media screen and (hover: hover) {
+      &:hover {
+        color: $orange-color !important;
+      }
+    }
+  }
 }
