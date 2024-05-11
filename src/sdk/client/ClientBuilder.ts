@@ -12,6 +12,7 @@ import { LoginCustomerDraft } from '../api';
 export const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY || '';
 export const clientId = import.meta.env.VITE_CTP_CLIENT_ID || '';
 export const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET || '';
+export const host = import.meta.env.VITE_CTP_AUTH_URL || '';
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: 'https://api.europe-west1.gcp.commercetools.com',
@@ -20,7 +21,7 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
 
 const createPasswordClient = ({ email, password }: LoginCustomerDraft): Client => {
   const passwordAuthOptions: PasswordAuthMiddlewareOptions = {
-    host: 'https://auth.europe-west1.gcp.commercetools.com',
+    host,
     projectKey,
     credentials: {
       clientId,
@@ -43,7 +44,7 @@ const createPasswordClient = ({ email, password }: LoginCustomerDraft): Client =
 
 export const createAnonymousClient = (): Client => {
   const anonymousAuthOptions: AnonymousAuthMiddlewareOptions = {
-    host: 'https://auth.europe-west1.gcp.commercetools.com',
+    host,
     projectKey,
     credentials: {
       clientId,

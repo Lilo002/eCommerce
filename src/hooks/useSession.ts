@@ -17,23 +17,20 @@ export const useSession = () => {
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
-  const login = async ({ email, password }: LoginCustomerDraft): Promise<ByProjectKeyRequestBuilder> =>
+  const login = async ({ email, password }: LoginCustomerDraft): Promise<void> =>
     authenticateCustomer(apiRoot, { email, password }).then(() => {
-      const newApiRoot = getLoginApiRoot({ email, password });
-      setApiRoot(newApiRoot);
+      setApiRoot(getLoginApiRoot({ email, password }));
       setLogin(true);
-      return newApiRoot;
     });
 
   const updateAddresses = (
     newApiRoot: ByProjectKeyRequestBuilder,
-    id: string,
     version: number,
     addressesResponse: Address[],
     setAsDefaultShippingAddress: boolean,
     setAsDefaultBillingAddress: boolean,
   ): void | Error => {
-    customerUpdate(newApiRoot, id, version, addressesResponse, setAsDefaultShippingAddress, setAsDefaultBillingAddress);
+    customerUpdate(newApiRoot, version, addressesResponse, setAsDefaultShippingAddress, setAsDefaultBillingAddress);
   };
 
   const register = (
@@ -42,17 +39,18 @@ export const useSession = () => {
     setAsDefaultBillingAddress: boolean,
   ): Promise<void | Error> =>
     createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then((res) => {
-      const { id, version } = res.body.customer;
+      const { version } = res.body.customer;
       const addressesResponse = res.body.customer.addresses;
-      login({ email, password }).then((newApiRoot) =>
-        updateAddresses(
-          newApiRoot,
-          id,
-          version,
-          addressesResponse,
-          setAsDefaultShippingAddress,
-          setAsDefaultBillingAddress,
-        ),
+      const newApiRoot = getLoginApiRoot({ email, password });
+      setApiRoot(newApiRoot);
+      setLogin(true);
+
+      return updateAddresses(
+        newApiRoot,
+        version,
+        addressesResponse,
+        setAsDefaultShippingAddress,
+        setAsDefaultBillingAddress,
       );
     });
 
