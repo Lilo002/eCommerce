@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { CheckboxProps } from 'antd';
 import { Button, Checkbox, DatePicker, Form, Input, message, Select } from 'antd';
-import MaskedInput from 'antd-mask-input';
+import { MaskedInput } from 'antd-mask-input';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -129,9 +129,7 @@ export function RegistrationPage() {
         cleanInputs();
         navigate(ROUTES.MAIN);
       })
-      .catch((error: Error) => {
-        message.error(`Registration error: ${error.message}`);
-      });
+      .catch(() => message.error('Customer with the given email already exists'));
   };
 
   return (

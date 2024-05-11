@@ -1,6 +1,6 @@
 import { useContext, useLayoutEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -35,15 +35,10 @@ export function LoginPage() {
   };
 
   const onFormSubmit = () => {
-    session
-      ?.login({ email, password })
-      .then(() => {
-        cleanInputs();
-        navigate(ROUTES.MAIN);
-      })
-      .catch((error: Error) => {
-        message.error(`Login error: ${error.message}`);
-      });
+    session?.login({ email, password }).then(() => {
+      cleanInputs();
+      navigate(ROUTES.MAIN);
+    });
   };
 
   return (
