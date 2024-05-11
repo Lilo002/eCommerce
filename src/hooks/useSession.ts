@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Address, ClientResponse, Project } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
   authenticateCustomer,
@@ -16,32 +17,40 @@ export const useSession = () => {
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
-  const login = async ({ email, password }: LoginCustomerDraft): Promise<void | Error> =>
+  const login = async ({ email, password }: LoginCustomerDraft): Promise<void> =>
     authenticateCustomer(apiRoot, { email, password }).then(() => {
       setApiRoot(getLoginApiRoot({ email, password }));
       setLogin(true);
     });
 
-  const updateAdresses = (
-    id: string,
+  const updateAddresses = (
+    newApiRoot: ByProjectKeyRequestBuilder,
     version: number,
-    adressesResponse: Address[],
-    setAsDefaultShippingAdress: boolean,
-    setAsDefaultBillingAdress: boolean,
+    addressesResponse: Address[],
+    setAsDefaultShippingAddress: boolean,
+    setAsDefaultBillingAddress: boolean,
   ): void | Error => {
-    customerUpdate(apiRoot, id, version, adressesResponse, setAsDefaultShippingAdress, setAsDefaultBillingAdress);
+    customerUpdate(newApiRoot, version, addressesResponse, setAsDefaultShippingAddress, setAsDefaultBillingAddress);
   };
 
   const register = (
     { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
-    setAsDefaultShippingAdress: boolean,
-    setAsDefaultBillingAdress: boolean,
+    setAsDefaultShippingAddress: boolean,
+    setAsDefaultBillingAddress: boolean,
   ): Promise<void | Error> =>
     createCustomer(apiRoot, { email, password, firstName, lastName, dateOfBirth, addresses }).then((res) => {
-      const { id, version } = res.body.customer;
-      const adressesResponse = res.body.customer.addresses;
-      login({ email, password }).then(() =>
-        updateAdresses(id, version, adressesResponse, setAsDefaultShippingAdress, setAsDefaultBillingAdress),
+      const { version } = res.body.customer;
+      const addressesResponse = res.body.customer.addresses;
+      const newApiRoot = getLoginApiRoot({ email, password });
+      setApiRoot(newApiRoot);
+      setLogin(true);
+
+      return updateAddresses(
+        newApiRoot,
+        version,
+        addressesResponse,
+        setAsDefaultShippingAddress,
+        setAsDefaultBillingAddress,
       );
     });
 

@@ -8,7 +8,7 @@ interface DataIsObject {
   $y: number;
 }
 
-export interface RegistationInformation {
+export interface RegistrationInformation {
   firstName: string;
   lastName: string;
   dateOfBirth: DataIsObject;
@@ -29,7 +29,7 @@ export interface RegistationInformation {
 
 const getCountryCode = (country: string): string => CountriesCodes[country];
 
-const getAdressesFromRegistration = (info: RegistationInformation): AddressDraft[] => {
+const getAdressesFromRegistration = (info: RegistrationInformation): AddressDraft[] => {
   const addresses: AddressDraft[] = [];
   addresses.push({
     streetName: info.shippingStreet,
@@ -63,7 +63,7 @@ const getDateOfBirth = (data: DataIsObject): string => {
   return `${year}-${month}-${day}`;
 };
 
-export const prepareRegisterInfoToRequest = (info: RegistationInformation): CustomerDraft => ({
+export const prepareRegisterInfoToRequest = (info: RegistrationInformation): CustomerDraft => ({
   firstName: info.firstName,
   lastName: info.lastName,
   dateOfBirth: getDateOfBirth(info.dateOfBirth),

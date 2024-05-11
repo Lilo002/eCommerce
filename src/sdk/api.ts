@@ -38,6 +38,7 @@ export const authenticateCustomer = async (
   { email, password }: LoginCustomerDraft,
 ): Promise<ClientResponse<CustomerSignInResult>> =>
   apiRoot
+    .me()
     .login()
     .post({
       body: {
@@ -47,12 +48,13 @@ export const authenticateCustomer = async (
     })
     .execute();
 
-export const createCustomer = (
+export const createCustomer = async (
   apiRoot: ByProjectKeyRequestBuilder,
   { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
 ): Promise<ClientResponse<CustomerSignInResult>> =>
   apiRoot
-    .customers()
+    .me()
+    .signup()
     .post({
       body: {
         email,
@@ -68,41 +70,39 @@ export const createCustomer = (
 const getCustomerUpdateActions = (
   shippingId: string,
   billingId: string,
-  setAsDefaultShippingAdress: boolean,
-  setAsDefaultBillingAdress: boolean,
+  setAsDefaultShippingAddress: boolean,
+  setAsDefaultBillingAddress: boolean,
 ): [
   CustomerSetDefaultShippingAddressAction | CustomerAddShippingAddressIdAction,
   CustomerSetDefaultBillingAddressAction | CustomerAddBillingAddressIdAction,
 ] => [
   {
-    action: setAsDefaultShippingAdress ? 'setDefaultShippingAddress' : 'addShippingAddressId',
+    action: setAsDefaultShippingAddress ? 'setDefaultShippingAddress' : 'addShippingAddressId',
     addressId: shippingId,
   },
   {
-    action: setAsDefaultBillingAdress ? 'setDefaultBillingAddress' : 'addBillingAddressId',
+    action: setAsDefaultBillingAddress ? 'setDefaultBillingAddress' : 'addBillingAddressId',
     addressId: billingId,
   },
 ];
 
 export const customerUpdate = (
   apiRoot: ByProjectKeyRequestBuilder,
-  id: string,
   version: number,
   addresses: Address[],
-  setAsDefaultShippingAdress: boolean,
-  setAsDefaultBillingAdress: boolean,
+  setAsDefaultShippingAddress: boolean,
+  setAsDefaultBillingAddress: boolean,
 ): Promise<ClientResponse<Customer>> =>
   apiRoot
-    .customers()
-    .withId({ ID: id })
+    .me()
     .post({
       body: {
         version,
         actions: getCustomerUpdateActions(
           addresses[0].id || '',
           addresses[1].id || '',
-          setAsDefaultShippingAdress,
-          setAsDefaultBillingAdress,
+          setAsDefaultShippingAddress,
+          setAsDefaultBillingAddress,
         ),
       },
     })

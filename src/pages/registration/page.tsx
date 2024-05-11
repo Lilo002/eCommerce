@@ -8,7 +8,7 @@ import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
 import { countries } from './model/countries';
-import { prepareRegisterInfoToRequest, RegistationInformation } from './model/dataToRequest';
+import { prepareRegisterInfoToRequest, RegistrationInformation } from './model/dataToRequest';
 import * as validation from './model/validation';
 
 import './_page.scss';
@@ -17,7 +17,7 @@ export function RegistrationPage() {
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
   const [registrationForm] = Form.useForm();
-  // shipping adress
+  // shipping address
   const [shippingCountry, setShippingCountry] = useState(countries[0]);
 
   const changeShippingCountry = (index: number) => {
@@ -28,7 +28,7 @@ export function RegistrationPage() {
     changeShippingCountry(index);
   };
 
-  // billing adress
+  // billing address
   const [billingCountry, setBillingCountry] = useState(countries[0]);
 
   const changeBillingCountry = (index: number) => {
@@ -40,33 +40,33 @@ export function RegistrationPage() {
   };
 
   // checkboxes
-  const [shippingAdressAsBilingAdress, setShippingAdressAsBillingAdress] = useState(true);
-  const [defaultShippingAdress, setDefaultShippingAdress] = useState(true);
-  const [defaultBillingAdress, setDefaultBillingAdress] = useState(true);
+  const [shippingAddressAsBillingAddress, setShippingAddressAsBillingAddress] = useState(true);
+  const [defaultShippingAddress, setDefaultShippingAddress] = useState(true);
+  const [defaultBillingAddress, setDefaultBillingAddress] = useState(true);
 
-  const toggleBillingAdress: CheckboxProps['onChange'] = (e) => {
-    setShippingAdressAsBillingAdress(e.target.checked);
+  const toggleBillingAddress: CheckboxProps['onChange'] = (e) => {
+    setShippingAddressAsBillingAddress(e.target.checked);
   };
 
-  const changeDefaultShippingAdress: CheckboxProps['onChange'] = (e) => {
-    setDefaultShippingAdress(e.target.checked);
+  const changeDefaultShippingAddress: CheckboxProps['onChange'] = (e) => {
+    setDefaultShippingAddress(e.target.checked);
   };
 
-  const changeDefaultBillingAdress: CheckboxProps['onChange'] = (e) => {
-    setDefaultBillingAdress(e.target.checked);
+  const changeDefaultBillingAddress: CheckboxProps['onChange'] = (e) => {
+    setDefaultBillingAddress(e.target.checked);
   };
 
-  const isDefaultBillingAdress = (): boolean => {
-    if (!shippingAdressAsBilingAdress) {
-      return defaultBillingAdress;
+  const isDefaultBillingAddress = (): boolean => {
+    if (!shippingAddressAsBillingAddress) {
+      return defaultBillingAddress;
     }
-    if (!defaultShippingAdress && shippingAdressAsBilingAdress) {
+    if (!defaultShippingAddress && shippingAddressAsBillingAddress) {
       return false;
     }
     return true;
   };
 
-  const getInformationFromForm = (): RegistationInformation => {
+  const getInformationFromForm = (): RegistrationInformation => {
     const {
       firstName,
       lastName,
@@ -86,13 +86,13 @@ export function RegistrationPage() {
       dateOfBirth,
       email,
       password,
-      defaultShippingAdress,
-      setAsBillingAdress: shippingAdressAsBilingAdress,
+      defaultShippingAddress,
+      setAsBillingAddress: shippingAddressAsBillingAddress,
       shippingCountry: shippingCountry.country,
       shippingPostalCode,
       shippingStreet,
       shippingCity,
-      defaultBillingAdress: isDefaultBillingAdress(),
+      defaultBillingAddress: isDefaultBillingAddress(),
       billingCountry: billingCountry.country,
       billingPostalCode,
       billingStreet,
@@ -104,9 +104,9 @@ export function RegistrationPage() {
     registrationForm.resetFields();
     setShippingCountry(countries[0]);
     setBillingCountry(countries[0]);
-    setShippingAdressAsBillingAdress(true);
-    setDefaultShippingAdress(true);
-    setDefaultBillingAdress(true);
+    setShippingAddressAsBillingAddress(true);
+    setDefaultShippingAddress(true);
+    setDefaultBillingAddress(true);
   };
 
   const handlerFormSubmit = () => {
@@ -122,8 +122,8 @@ export function RegistrationPage() {
           dateOfBirth,
           addresses,
         },
-        info.defaultShippingAdress,
-        info.defaultBillingAdress,
+        info.defaultShippingAddress,
+        info.defaultBillingAddress,
       )
       .then(() => {
         cleanInputs();
@@ -178,18 +178,18 @@ export function RegistrationPage() {
         <Form.Item name="password" label="Password" rules={validation.passwordRules} validateFirst hasFeedback>
           <Input.Password className="full-width" />
         </Form.Item>
-        <Form.Item name="defaultShippingAdress">
-          <Checkbox checked={defaultShippingAdress} onChange={changeDefaultShippingAdress}>
-            Set as default {shippingAdressAsBilingAdress ? 'shipping/billing' : 'shipping'} address
+        <Form.Item name="defaultShippingAddress">
+          <Checkbox checked={defaultShippingAddress} onChange={changeDefaultShippingAddress}>
+            Set as default {shippingAddressAsBillingAddress ? 'shipping/billing' : 'shipping'} address
           </Checkbox>
         </Form.Item>
-        <Form.Item name="setAsBillingdress">
-          <Checkbox checked={shippingAdressAsBilingAdress} onChange={toggleBillingAdress}>
+        <Form.Item name="setAsBillingAddress">
+          <Checkbox checked={shippingAddressAsBillingAddress} onChange={toggleBillingAddress}>
             Set as billing address
           </Checkbox>
         </Form.Item>
-        <p>Shipping adress: </p>
-        <div className="shipping-adress-content">
+        <p>Shipping address: </p>
+        <div className="shipping-address-content">
           <Form.Item name="shippingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
             <Select className="full-width" onChange={handleChangeShippingCountry}>
               {countries.map((country, index) => (
@@ -215,15 +215,15 @@ export function RegistrationPage() {
           </Form.Item>
         </div>
 
-        {!shippingAdressAsBilingAdress && (
-          <div className="billing-adress">
-            <p>Billing adress: </p>
-            <Form.Item name="defaultBillingAdress">
-              <Checkbox checked={defaultBillingAdress} onChange={changeDefaultBillingAdress}>
+        {!shippingAddressAsBillingAddress && (
+          <div className="billing-address">
+            <p>Billing address: </p>
+            <Form.Item name="defaultBillingAddress">
+              <Checkbox checked={defaultBillingAddress} onChange={changeDefaultBillingAddress}>
                 Set as default billing address
               </Checkbox>
             </Form.Item>
-            <div className="billing-adress-content">
+            <div className="billing-address-content">
               <Form.Item name="billingCountry" label="Country" initialValue={0} rules={validation.countryRules}>
                 <Select className="full-width" onChange={handleChangeBillingCountry}>
                   {countries.map((country, index) => (
