@@ -15,7 +15,7 @@ export const MyLayout = () => (
     <Content className="content">
       <Routes>
         {routes.map((rout) => (
-          <Route path={rout.path} element={rout.element} />
+          <Route path={rout.path} element={rout.element} key={rout.path} />
         ))}
       </Routes>
     </Content>
