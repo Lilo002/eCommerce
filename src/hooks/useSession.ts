@@ -24,7 +24,7 @@ export const useSession = () => {
       if (body.results.length > 0) {
         message.error(`Incorrect password. Please, try again!`);
       } else {
-        message.error(`User with the given email does not exist.`);
+        message.error(`Customer with the given email does not exist.`);
       }
     });
   };
