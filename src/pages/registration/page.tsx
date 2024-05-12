@@ -145,7 +145,8 @@ export function RegistrationPage() {
       <div className="registration-info">
         <span className="registration-title">Registration</span>
         <Link to={ROUTES.LOGIN} className="registration-login">
-          Already have an account? Sign In
+          <span className="registration-subtitle">Already have an account? </span>
+          Sign In
         </Link>
       </div>
       <div className="registration-content">
@@ -248,8 +249,8 @@ export function RegistrationPage() {
             </div>
           </div>
         )}
-        <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+        <Form.Item>
+          <Button className="registration-btn" type="primary" htmlType="submit">
             CREATE ACCOUNT
           </Button>
         </Form.Item>

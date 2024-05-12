@@ -53,7 +53,7 @@ export function LoginPage() {
       <div className="login-info">
         <span className="login-title">Sign In</span>
         <Link to={ROUTES.REGISTRATION} className="login-registration">
-          <span className="login-subtitle">New to Lidilu?</span>
+          <span className="login-subtitle">New to Lidilu? </span>
           Create new account
         </Link>
       </div>

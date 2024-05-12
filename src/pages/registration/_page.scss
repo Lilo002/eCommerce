@@ -1,8 +1,11 @@
+@import '../../shared/style/variables';
+
 .registration {
   &-form {
+    width: 100%;
     max-width: 600px;
-    margin: 0 auto;
-    padding: 30px 0;
+    background-color: $white-color;
+    border-radius: $border-radius;
   }
   &-info {
     display: flex;
@@ -10,17 +13,30 @@
     align-items: center;
     padding: 18px;
     margin-bottom: 20px;
-    background-color: #1677ff;
+    border-radius: $border-radius $border-radius 0 0;
+    background-color: $orange-color;
   }
   &-title {
     text-align: center;
     font-size: 22px;
     text-align: left;
-    color: white;
+    color: $white-color;
   }
   &-login {
     font-size: 20px;
-    color: white;
+    color: $white-color;
+    @media screen and (hover: hover) {
+      &:hover {
+        color: $orange-color-hover-text;
+      }
+    }
+  }
+  &-subtitle {
+    @media screen and (max-width: 480px) {
+      & {
+        display: none;
+      }
+    }
   }
   &-content {
     padding: 0 20px;
@@ -33,6 +49,16 @@
     }
     .full-width {
       width: 100%;
+    }
+  }
+  &-btn {
+    display: flex;
+    margin-left: auto;
+    background-color: $orange-color;
+    @media screen and (hover: hover) {
+      &:hover {
+        background-color: $orange-color-hover-btn !important;
+      }
     }
   }
 }
