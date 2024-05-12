@@ -62,3 +62,8 @@
     }
   }
 }
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: $orange-color !important;
+  border-color: $orange-color !important;
+}
