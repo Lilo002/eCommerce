@@ -15,6 +15,7 @@
     "fix": "eslint . --fix"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@commercetools/platform-sdk": "^4.2.0",
     "@commercetools/sdk-client-v2": "^2.1.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
