@@ -1,3 +1,5 @@
+@import '../../shared/style/variables';
+
 .layout {
   border-radius: 8px;
   overflow: hidden;
@@ -5,6 +7,10 @@
 }
 
 .content {
-  min-height: 120px;
-  line-height: 120px;
+  min-height: calc(100dvh - 139px - 64px - 16px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: $background-body;
 }
