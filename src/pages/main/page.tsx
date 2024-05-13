@@ -1,17 +1,9 @@
-import { Link } from 'react-router-dom';
-
-import { ROUTES } from '../../shared/constants';
+import './ui/_main.scss';
 
 export function Main() {
   return (
-    <div>
-      <h1>Main page</h1>
-      <button type="button">
-        <Link to={ROUTES.LOGIN}>to login</Link>
-      </button>
-      <button type="button">
-        <Link to={ROUTES.REGISTRATION}>to Registration</Link>
-      </button>
+    <div className="main">
+      <h2>This will be our main page</h2>
     </div>
   );
 }

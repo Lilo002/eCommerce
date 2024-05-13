@@ -1,4 +1,42 @@
+@import '../../../shared/style/variables';
+
 .footer {
-  text-align: center;
-  line-height: 64px;
+  border-top: 4px solid $orange-color;
+  background-color: $background-footer;
+  color: $white-color;
+  font-weight: $font-weight;
+  display: flex;
+  font-family: $font-family;
+  &-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10px;
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  &-social {
+    display: flex;
+    list-style: none;
+    column-gap: 15px;
+    padding: 0;
+    margin: 0;
+  }
+  &-icon {
+    fill: $orange-color;
+    width: 40px;
+    height: 40px;
+    transition: fill 0.3s ease-in-out;
+    @media screen and (hover: hover) {
+      &:hover {
+        fill: $orange-color-hover-social;
+      }
+    }
+  }
+}
+
+.school-icon {
+  width: 100px;
+  height: 47px;
 }

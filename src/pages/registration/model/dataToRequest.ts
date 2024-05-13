@@ -14,13 +14,13 @@ export interface RegistrationInformation {
   dateOfBirth: DataIsObject;
   email: string;
   password: string;
-  defaultShippingAdress: boolean;
-  setAsBillingAdress: boolean;
+  defaultShippingAddress: boolean;
+  setAsBillingAddress: boolean;
   shippingCountry: COUNTRY;
   shippingPostalCode: string;
   shippingStreet: string;
   shippingCity: string;
-  defaultBillingAdress: boolean;
+  defaultBillingAddress: boolean;
   billingCountry: COUNTRY;
   billingPostalCode?: string;
   billingStreet?: string;
@@ -37,7 +37,7 @@ const getAdressesFromRegistration = (info: RegistrationInformation): AddressDraf
     country: getCountryCode(info.shippingCountry),
     postalCode: info.shippingPostalCode,
   });
-  if (info.setAsBillingAdress) {
+  if (info.setAsBillingAddress) {
     addresses.push({
       streetName: info.shippingStreet,
       city: info.shippingCity,
@@ -45,7 +45,7 @@ const getAdressesFromRegistration = (info: RegistrationInformation): AddressDraf
       postalCode: info.shippingPostalCode,
     });
   }
-  if (!info.setAsBillingAdress) {
+  if (!info.setAsBillingAddress) {
     addresses.push({
       streetName: info.billingStreet || '',
       city: info.billingCity || '',
