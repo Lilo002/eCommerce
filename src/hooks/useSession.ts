@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { Address, ClientResponse, Project } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { message } from 'antd';
 
 import {
   authenticateCustomer,
@@ -12,31 +11,33 @@ import {
   getProject,
   LoginCustomerDraft,
 } from '../sdk/api';
-import { getAnonymousApiRoot, getLoginApiRoot } from '../sdk/client/ClientBuilder';
+import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } from '../sdk/client/ClientBuilder';
 
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
+  useLayoutEffect(() => {
+    const tokenObject = JSON.parse(getCookie('token') as string);
+    if (tokenObject !== null) {
+      const token = tokenObject.refreshToken;
+
+      setApiRoot(getRefreshApiRoot(token));
+      setLogin(true);
+    } else {
+      setApiRoot(getAnonymousApiRoot());
+    }
+  }, []);
+
   const checkCustomerExistsByEmail = (email: string): Promise<boolean> =>
     getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
 
   const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
-    authenticateCustomer(apiRoot, { email, password })
-      .then(() => {
-        setApiRoot(getLoginApiRoot({ email, password }));
-        setLogin(true);
-      })
-      .catch(() =>
-        checkCustomerExistsByEmail(email).then((isExist) => {
-          if (isExist) {
-            message.error(`Incorrect password. Please, try again!`);
-          } else {
-            message.error(`Customer with the given email does not exist.`);
-          }
-        }),
-      );
+    authenticateCustomer(apiRoot, { email, password }).then(() => {
+      setApiRoot(getLoginApiRoot({ email, password }));
+      setLogin(true);
+    });
 
   const updateAddresses = (
     newApiRoot: ByProjectKeyRequestBuilder,
@@ -74,6 +75,7 @@ export const useSession = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
     setAuth(null);
+    document.cookie = 'token=; Max-Age=-1;';
   };
 
   useEffect(() => {
@@ -87,5 +89,6 @@ export const useSession = () => {
     login,
     logout,
     register,
+    checkCustomerExistsByEmail,
   };
 };

@@ -5,6 +5,8 @@ import {
   ClientBuilder,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions,
+  TokenStore,
 } from '@commercetools/sdk-client-v2';
 
 import { LoginCustomerDraft } from '../api';
@@ -19,6 +21,13 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch,
 };
 
+export function getCookie(name: string) {
+  const matches = document.cookie.match(
+    new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`),
+  );
+  return matches ? decodeURIComponent(matches[1]) : null;
+}
+
 const createPasswordClient = ({ email, password }: LoginCustomerDraft): Client => {
   const passwordAuthOptions: PasswordAuthMiddlewareOptions = {
     host,
@@ -29,6 +38,17 @@ const createPasswordClient = ({ email, password }: LoginCustomerDraft): Client =
       user: {
         username: email,
         password,
+      },
+    },
+    tokenCache: {
+      get: (): TokenStore => {
+        const token = JSON.parse(getCookie('token') as string);
+        return token;
+      },
+      set: (token: TokenStore) => {
+        const { expirationTime } = token;
+        const tokenObjectString = JSON.stringify(token);
+        document.cookie = `token=${tokenObjectString}; expires=${new Date(Date.now() + expirationTime * 1000)};`;
       },
     },
     scopes: [`manage_project:${projectKey}`],
@@ -62,8 +82,30 @@ export const createAnonymousClient = (): Client => {
     .build();
 };
 
+export const authMiddlewareOptionsForRefreshTokenFlow = (refreshToken: string): Client => {
+  const refreshAuthMiddlewareOptions: RefreshAuthMiddlewareOptions = {
+    host,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+    },
+    refreshToken,
+    fetch,
+  };
+
+  return new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withRefreshTokenFlow(refreshAuthMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+};
+
 export const getAnonymousApiRoot = () =>
   createApiBuilderFromCtpClient(createAnonymousClient()).withProjectKey({ projectKey });
 
 export const getLoginApiRoot = (customerData: { email: string; password: string }) =>
   createApiBuilderFromCtpClient(createPasswordClient(customerData)).withProjectKey({ projectKey });
+
+export const getRefreshApiRoot = (token: string) =>
+  createApiBuilderFromCtpClient(authMiddlewareOptionsForRefreshTokenFlow(token)).withProjectKey({ projectKey });

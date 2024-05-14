@@ -17,7 +17,8 @@ export const passwordRules = [
     message: 'Password must contain only Latin letters',
   },
   {
-    pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]?)[A-Za-z\d!@#$%^&*]+$/,
+    pattern:
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{};:"\\|,.<>\\/?]?)[A-Za-z\d!@#$%^&*()_+\-=\\[\]{};:"\\|,.<>\\/?]+$/,
     message: 'Password must contain uppercase letters, lowercase letters, digits, and special characters',
   },
 ];

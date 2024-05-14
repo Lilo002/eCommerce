@@ -17,7 +17,8 @@ export const passwordRules = [
     message: 'Password must contain only Latin letters',
   },
   {
-    pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]?)[A-Za-z\d!@#$%^&*]+$/,
+    pattern:
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{};:"\\|,.<>\\/?]?)[A-Za-z\d!@#$%^&*()_+\-=\\[\]{};:"\\|,.<>\\/?]+$/,
     message: 'Password must contain uppercase letters, lowercase letters, digits and special characters',
   },
 ];
@@ -27,7 +28,7 @@ export function textRules(field: string) {
     { required: true, message: `Please input your ${field}` },
     {
       pattern: /^[a-zA-Z]+$/,
-      message: `${field} must contain at least one character and no special characters or numbers`,
+      message: `${field} must contain at least one Latin character and no special characters or numbers`,
     },
   ];
 }
