@@ -16,5 +16,6 @@ export const sessionContext = createContext<{
       setAsDefaultShippingAddress: boolean,
       setAsDefaultBillingAddress: boolean,
     ) => Promise<void | Error>;
+    checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
   } | null;
 }>({ session: null });

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Address, ClientResponse, Project } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { message } from 'antd';
 
 import {
   authenticateCustomer,
@@ -23,20 +22,10 @@ export const useSession = () => {
     getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
 
   const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
-    authenticateCustomer(apiRoot, { email, password })
-      .then(() => {
-        setApiRoot(getLoginApiRoot({ email, password }));
-        setLogin(true);
-      })
-      .catch(() =>
-        checkCustomerExistsByEmail(email).then((isExist) => {
-          if (isExist) {
-            message.error(`Incorrect password. Please, try again!`);
-          } else {
-            message.error(`Customer with the given email does not exist.`);
-          }
-        }),
-      );
+    authenticateCustomer(apiRoot, { email, password }).then(() => {
+      setApiRoot(getLoginApiRoot({ email, password }));
+      setLogin(true);
+    });
 
   const updateAddresses = (
     newApiRoot: ByProjectKeyRequestBuilder,
@@ -87,5 +76,6 @@ export const useSession = () => {
     login,
     logout,
     register,
+    checkCustomerExistsByEmail,
   };
 };

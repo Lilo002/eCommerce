@@ -1,6 +1,6 @@
 import { useContext, useLayoutEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -35,10 +35,21 @@ export function LoginPage() {
   };
 
   const onFormSubmit = () => {
-    session?.login({ email, password }).then(() => {
-      cleanInputs();
-      navigate(ROUTES.MAIN);
-    });
+    session
+      ?.login({ email, password })
+      .then(() => {
+        cleanInputs();
+        navigate(ROUTES.MAIN);
+      })
+      .catch(() =>
+        session?.checkCustomerExistsByEmail(email).then((isExist) => {
+          if (isExist) {
+            message.error(`Incorrect password. Please, try again!`);
+          } else {
+            message.error(`Customer with the given email does not exist.`);
+          }
+        }),
+      );
   };
 
   return (
