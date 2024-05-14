@@ -13,8 +13,8 @@ export const sessionContext = createContext<{
     isLogin: boolean;
     register: (
       { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
-      setAsDefaultShippingAdress: boolean,
-      setAsDefaultBillingAdress: boolean,
+      setAsDefaultShippingAddress: boolean,
+      setAsDefaultBillingAddress: boolean,
     ) => Promise<void | Error>;
   } | null;
 }>({ session: null });
