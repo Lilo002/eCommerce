@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { Address, ClientResponse, Project } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
@@ -11,12 +11,23 @@ import {
   getProject,
   LoginCustomerDraft,
 } from '../sdk/api';
-import { getAnonymousApiRoot, getLoginApiRoot } from '../sdk/client/ClientBuilder';
+import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } from '../sdk/client/ClientBuilder';
 
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
+
+  useLayoutEffect(() => {
+    const tokenObject = JSON.parse(getCookie('token') as string);
+    if (tokenObject !== null) {
+      const token = tokenObject.refreshToken.split(':')[1];
+      setApiRoot(getRefreshApiRoot(token));
+      setLogin(true);
+    } else {
+      setApiRoot(getAnonymousApiRoot());
+    }
+  }, []);
 
   const checkCustomerExistsByEmail = (email: string): Promise<boolean> =>
     getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
@@ -63,6 +74,7 @@ export const useSession = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
     setAuth(null);
+    document.cookie = 'token=; Max-Age=-1;';
   };
 
   useEffect(() => {
