@@ -22,6 +22,11 @@
     column-gap: 15px;
     padding: 0;
     margin: 0;
+    @media screen and (max-width: 450px) {
+      & {
+        column-gap: 7px;
+      }
+    }
   }
   &-icon {
     fill: $orange-color;

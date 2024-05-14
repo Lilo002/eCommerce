@@ -48,10 +48,8 @@
     display: flex;
     margin-left: auto;
     background-color: $orange-color;
-    @media screen and (hover: hover) {
-      &:hover {
-        background-color: $orange-color-hover-btn !important;
-      }
+    &:hover {
+      background-color: $orange-color-hover-btn !important;
     }
   }
 }

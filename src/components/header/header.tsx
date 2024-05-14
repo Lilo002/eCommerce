@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
@@ -12,6 +12,15 @@ import './ui/_header.scss';
 
 export const Header = () => {
   const { session } = useContext(sessionContext);
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate(ROUTES.LOGIN);
+  };
+
+  const handleRegistration = () => {
+    navigate(ROUTES.REGISTRATION);
+  };
 
   return (
     <header className="header">
@@ -27,13 +36,13 @@ export const Header = () => {
               Log out
             </Button>
           ) : (
-            <Button className="header-btn" type="link" icon={<LoginOutlined />}>
-              <Link to={ROUTES.LOGIN}>LOG IN</Link>
+            <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin}>
+              LOG IN
             </Button>
           )}
           {!session?.isLogin && (
-            <Button className="header-btn" type="link" icon={<UserOutlined />}>
-              <Link to={ROUTES.REGISTRATION}>SIGN IN</Link>
+            <Button className="header-btn" type="link" icon={<UserOutlined />} onClick={handleRegistration}>
+              SIGN IN
             </Button>
           )}
         </div>

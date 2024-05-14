@@ -28,14 +28,13 @@
       display: flex;
       gap: 25px;
       list-style: none;
+      padding: 0;
     }
     &-item {
       font-size: inherit;
       color: $white-color !important;
-      @media screen and (hover: hover) {
-        &:hover {
-          color: $orange-color !important;
-        }
+      &:hover {
+        color: $orange-color !important;
       }
     }
   }
@@ -43,13 +42,12 @@
     font-weight: inherit;
     color: $black-color;
     font-size: 18px;
-    @media screen and (hover: hover) {
-      &:hover {
-        color: $orange-color !important;
-      }
+    &:hover {
+      color: $orange-color !important;
     }
     @media screen and (max-width: 450px) {
       & {
+        padding: 4px;
         font-size: 15px;
       }
     }
