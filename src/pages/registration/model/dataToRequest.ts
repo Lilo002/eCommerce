@@ -29,7 +29,7 @@ export interface RegistrationInformation {
 
 const getCountryCode = (country: string): string => CountriesCodes[country];
 
-const getAdressesFromRegistration = (info: RegistrationInformation): AddressDraft[] => {
+const getAddressesFromRegistration = (info: RegistrationInformation): AddressDraft[] => {
   const addresses: AddressDraft[] = [];
   addresses.push({
     streetName: info.shippingStreet,
@@ -69,5 +69,5 @@ export const prepareRegisterInfoToRequest = (info: RegistrationInformation): Cus
   dateOfBirth: getDateOfBirth(info.dateOfBirth),
   email: info.email,
   password: info.password,
-  addresses: getAdressesFromRegistration(info),
+  addresses: getAddressesFromRegistration(info),
 });

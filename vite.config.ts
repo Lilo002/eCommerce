@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
+      'node-fetch': 'isomorphic-fetch',
     },
   },
   optimizeDeps: {
