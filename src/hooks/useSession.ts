@@ -21,7 +21,8 @@ export const useSession = () => {
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
     if (tokenObject !== null) {
-      const token = tokenObject.refreshToken.split(':')[1];
+      const token = tokenObject.refreshToken;
+
       setApiRoot(getRefreshApiRoot(token));
       setLogin(true);
     } else {
