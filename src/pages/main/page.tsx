@@ -19,10 +19,10 @@ export function Main() {
   return (
     <div className="main">
       <Button className="main-btn" type="link" onClick={handleLogin}>
-        LOG IN
+        SIGN IN
       </Button>
       <Button className="main-btn" type="link" onClick={handleRegistration}>
-        SIGN IN
+        SIGN UP
       </Button>
     </div>
   );

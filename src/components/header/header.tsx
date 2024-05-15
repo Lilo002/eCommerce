@@ -37,12 +37,12 @@ export const Header = () => {
             </Button>
           ) : (
             <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin}>
-              LOG IN
+              SIGN IN
             </Button>
           )}
           {!session?.isLogin && (
             <Button className="header-btn" type="link" icon={<UserOutlined />} onClick={handleRegistration}>
-              SIGN IN
+              SIGN UP
             </Button>
           )}
         </div>
