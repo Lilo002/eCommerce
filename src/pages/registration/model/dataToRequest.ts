@@ -29,32 +29,37 @@ export interface RegistrationInformation {
 
 const getCountryCode = (country: string): string => CountriesCodes[country];
 
-const getAddressesFromRegistration = (info: RegistrationInformation): AddressDraft[] => {
-  const addresses: AddressDraft[] = [];
-  addresses.push({
-    streetName: info.shippingStreet,
-    city: info.shippingCity,
-    country: getCountryCode(info.shippingCountry),
-    postalCode: info.shippingPostalCode,
-  });
-  if (info.setAsBillingAddress) {
-    addresses.push({
-      streetName: info.shippingStreet,
-      city: info.shippingCity,
-      country: getCountryCode(info.shippingCountry),
-      postalCode: info.shippingPostalCode,
-    });
-  }
-  if (!info.setAsBillingAddress) {
-    addresses.push({
-      streetName: info.billingStreet || '',
-      city: info.billingCity || '',
-      country: getCountryCode(info.billingCountry),
-      postalCode: info.billingPostalCode || '',
-    });
-  }
-  return addresses;
-};
+const getAddressesFromRegistration = (
+  shippingStreet: string,
+  shippingCity: string,
+  shippingCountry: string,
+  shippingPostalCode: string,
+  setAsBillingAddress: boolean,
+  billingStreet: string | undefined,
+  billingCity: string | undefined,
+  billingCountry: string,
+  billingPostalCode: string | undefined,
+): [AddressDraft, AddressDraft] => [
+  {
+    streetName: shippingStreet,
+    city: shippingCity,
+    country: getCountryCode(shippingCountry),
+    postalCode: shippingPostalCode,
+  },
+  !setAsBillingAddress
+    ? {
+        streetName: billingStreet || '',
+        city: billingCity || '',
+        country: getCountryCode(billingCountry),
+        postalCode: billingPostalCode || '',
+      }
+    : {
+        streetName: shippingStreet,
+        city: shippingCity,
+        country: getCountryCode(shippingCountry),
+        postalCode: shippingPostalCode,
+      },
+];
 
 const getDateOfBirth = (data: DataIsObject): string => {
   const month = (data.$M + 1).toString().padStart(2, '0');
@@ -63,11 +68,36 @@ const getDateOfBirth = (data: DataIsObject): string => {
   return `${year}-${month}-${day}`;
 };
 
-export const prepareRegisterInfoToRequest = (info: RegistrationInformation): CustomerDraft => ({
-  firstName: info.firstName,
-  lastName: info.lastName,
-  dateOfBirth: getDateOfBirth(info.dateOfBirth),
-  email: info.email,
-  password: info.password,
-  addresses: getAddressesFromRegistration(info),
+export const prepareRegisterInfoToRequest = ({
+  firstName,
+  lastName,
+  dateOfBirth,
+  email,
+  password,
+  shippingStreet,
+  shippingCity,
+  shippingCountry,
+  shippingPostalCode,
+  setAsBillingAddress,
+  billingStreet,
+  billingCity,
+  billingCountry,
+  billingPostalCode,
+}: RegistrationInformation): CustomerDraft => ({
+  firstName,
+  lastName,
+  dateOfBirth: getDateOfBirth(dateOfBirth),
+  email,
+  password,
+  addresses: getAddressesFromRegistration(
+    shippingStreet,
+    shippingCity,
+    shippingCountry,
+    shippingPostalCode,
+    setAsBillingAddress,
+    billingStreet,
+    billingCity,
+    billingCountry,
+    billingPostalCode,
+  ),
 });
