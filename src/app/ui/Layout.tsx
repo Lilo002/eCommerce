@@ -9,13 +9,13 @@ import './_layout.scss';
 
 const { Content } = Layout;
 
-export const MyLayout = () => (
+export const GlobalLayout = () => (
   <Layout className="layout">
     <Header />
     <Content className="content">
       <Routes>
-        {routes.map((rout) => (
-          <Route path={rout.path} element={rout.element} key={rout.path} />
+        {routes.map((route) => (
+          <Route path={route.path} element={route.element} key={route.path} />
         ))}
       </Routes>
     </Content>
