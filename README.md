@@ -14,6 +14,7 @@ Our eCommerce application is online board game store. If you're a board game fan
 - Prettier
 - Husky
 - Jest
+- Ant-design
 
 ### Run the project:
 
@@ -26,7 +27,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd Commerce
+  cd eCommerce
 ```
 
 Install dependencies
@@ -48,6 +49,7 @@ Have fun!!!
 - dev: run development mode
 - build: build production mode
 - lint: for running ESLint
+- fix: for running Eslint fix
 - ci:format: for running Prettier check
 - format: for running Prettier format
 - test: for running test

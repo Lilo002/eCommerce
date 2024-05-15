@@ -1,0 +1,17 @@
+@import '../../shared/style/variables';
+
+.layout {
+  // border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.content {
+  min-height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout);
+  padding: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: $background-body;
+}

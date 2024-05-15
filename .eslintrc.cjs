@@ -55,5 +55,8 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-no-constructed-context-values': 'off',
+    'import/prefer-default-export': 'off',
+    'react/function-component-definition': 'off',
   },
 };

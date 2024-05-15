@@ -1,0 +1,67 @@
+@import '../../shared/style/variables';
+
+.registration {
+  &-form {
+    width: 100%;
+    max-width: 600px;
+    background-color: $white-color;
+    border-radius: $border-radius;
+  }
+  &-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    margin-bottom: 20px;
+    border-radius: $border-radius $border-radius 0 0;
+    background-color: $orange-color;
+  }
+  &-title {
+    text-align: center;
+    font-size: 22px;
+    text-align: left;
+    color: $white-color;
+  }
+  &-login {
+    font-size: 20px;
+    color: $white-color;
+    @media screen and (hover: hover) {
+      &:hover {
+        color: $orange-color-hover-text;
+      }
+    }
+  }
+  &-subtitle {
+    @media screen and (max-width: 480px) {
+      & {
+        display: none;
+      }
+    }
+  }
+  &-content {
+    padding: 0 20px;
+    .shipping-address-content,
+    .billing-address-content {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(5, 5, 5, 0.09);
+      margin-bottom: 24px;
+    }
+    .full-width {
+      width: 100%;
+    }
+  }
+  &-btn {
+    display: flex;
+    margin-left: auto;
+    background-color: $orange-color;
+    &:hover {
+      background-color: $orange-color-hover-btn !important;
+    }
+  }
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: $orange-color !important;
+  border-color: $orange-color !important;
+}

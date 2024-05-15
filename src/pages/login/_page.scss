@@ -1,0 +1,55 @@
+@import '../../shared/style/variables';
+
+.login {
+  &-form {
+    width: 100%;
+    max-width: 600px;
+    background-color: $white-color;
+    border-radius: $border-radius;
+  }
+  &-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: $border-radius $border-radius 0 0;
+    padding: 18px;
+    background-color: $orange-color;
+  }
+  &-title {
+    text-align: center;
+    font-size: 22px;
+    text-align: left;
+    color: $white-color;
+  }
+  &-registration {
+    font-size: 20px;
+    color: $white-color;
+    @media screen and (hover: hover) {
+      &:hover {
+        color: $orange-color-hover-text;
+      }
+    }
+  }
+  &-subtitle {
+    @media screen and (max-width: 450px) {
+      & {
+        display: none;
+      }
+    }
+  }
+  &-content {
+    padding: 20px;
+    border-radius: 0 0 $border-radius $border-radius;
+  }
+  &-footer {
+    margin-bottom: 0;
+  }
+  &-btn {
+    display: flex;
+    margin-left: auto;
+    background-color: $orange-color;
+    &:hover {
+      background-color: $orange-color-hover-btn !important;
+    }
+  }
+}
