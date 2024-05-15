@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Address, ClientResponse, Project } from '@commercetools/platform-sdk';
+import { Address } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
@@ -15,7 +15,6 @@ import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } fr
 
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
-  const [auth, setAuth] = useState<Project | null>(null);
   const [isLogin, setLogin] = useState(false);
 
   useLayoutEffect(() => {
@@ -74,18 +73,15 @@ export const useSession = () => {
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
-    setAuth(null);
     document.cookie = 'token=; Max-Age=-1;';
   };
 
   useEffect(() => {
-    getProject(apiRoot).then((data: ClientResponse<Project>) => setAuth(data.body));
+    getProject(apiRoot);
   }, [apiRoot]);
 
   return {
-    isAuth: Boolean(auth),
     isLogin,
-    auth,
     login,
     logout,
     register,

@@ -21,15 +21,15 @@ export function LoginPage() {
     }
   });
 
-  const onEmailChange = (value: string) => {
-    setEmail(value);
+  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
   };
 
-  const onPasswordChange = (value: string) => {
-    setPassword(value);
+  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
   };
 
-  const cleanInputs = () => {
+  const clearForm = () => {
     setEmail('');
     setPassword('');
   };
@@ -38,7 +38,7 @@ export function LoginPage() {
     session
       ?.login({ email, password })
       .then(() => {
-        cleanInputs();
+        clearForm();
         navigate(ROUTES.MAIN);
       })
       .catch(() =>
@@ -70,11 +70,11 @@ export function LoginPage() {
       </div>
       <div className="login-content">
         <Form.Item name="email" label="Email" rules={emailRules} validateFirst hasFeedback>
-          <Input value={email} onChange={(e) => onEmailChange(e.target.value)} />
+          <Input value={email} onChange={onEmailChange} />
         </Form.Item>
 
         <Form.Item name="password" label="Password" rules={passwordRules} validateFirst hasFeedback>
-          <Input.Password value={password} onChange={(e) => onPasswordChange(e.target.value)} />
+          <Input.Password value={password} onChange={onPasswordChange} />
         </Form.Item>
 
         <Form.Item className="login-footer">
