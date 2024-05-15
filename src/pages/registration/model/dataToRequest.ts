@@ -29,32 +29,27 @@ export interface RegistrationInformation {
 
 const getCountryCode = (country: string): string => CountriesCodes[country];
 
-const getAddressesFromRegistration = (info: RegistrationInformation): AddressDraft[] => {
-  const addresses: AddressDraft[] = [];
-  addresses.push({
+const getAddressesFromRegistration = (info: RegistrationInformation): [AddressDraft, AddressDraft] => [
+  {
     streetName: info.shippingStreet,
     city: info.shippingCity,
     country: getCountryCode(info.shippingCountry),
     postalCode: info.shippingPostalCode,
-  });
-  if (info.setAsBillingAddress) {
-    addresses.push({
-      streetName: info.shippingStreet,
-      city: info.shippingCity,
-      country: getCountryCode(info.shippingCountry),
-      postalCode: info.shippingPostalCode,
-    });
-  }
-  if (!info.setAsBillingAddress) {
-    addresses.push({
-      streetName: info.billingStreet || '',
-      city: info.billingCity || '',
-      country: getCountryCode(info.billingCountry),
-      postalCode: info.billingPostalCode || '',
-    });
-  }
-  return addresses;
-};
+  },
+  !info.setAsBillingAddress
+    ? {
+        streetName: info.billingStreet || '',
+        city: info.billingCity || '',
+        country: getCountryCode(info.billingCountry),
+        postalCode: info.billingPostalCode || '',
+      }
+    : {
+        streetName: info.shippingStreet,
+        city: info.shippingCity,
+        country: getCountryCode(info.shippingCountry),
+        postalCode: info.shippingPostalCode,
+      },
+];
 
 const getDateOfBirth = (data: DataIsObject): string => {
   const month = (data.$M + 1).toString().padStart(2, '0');
