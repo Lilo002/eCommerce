@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Address } from '@commercetools/platform-sdk';
+import { Address, Customer } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
@@ -8,6 +8,7 @@ import {
   CustomerDraft,
   customerUpdate,
   getCustomerByEmail,
+  getCustomerDetails,
   getProject,
   LoginCustomerDraft,
 } from '../sdk/api';
@@ -16,6 +17,7 @@ import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } fr
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [isLogin, setLogin] = useState(false);
+  const [userData, setUserData] = useState<Customer | null>(null);
 
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
@@ -32,10 +34,17 @@ export const useSession = () => {
   const checkCustomerExistsByEmail = (email: string): Promise<boolean> =>
     getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
 
+  const getCustomer = (root: ByProjectKeyRequestBuilder) => {
+    getCustomerDetails(root).then(({ body }) => setUserData(body));
+  };
+
   const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
     authenticateCustomer(apiRoot, { email, password }).then(() => {
-      setApiRoot(getLoginApiRoot({ email, password }));
+      const newApiRoot = getLoginApiRoot({ email, password });
+      setApiRoot(newApiRoot);
       setLogin(true);
+
+      getCustomer(newApiRoot);
     });
 
   const updateAddresses = (
@@ -81,6 +90,7 @@ export const useSession = () => {
   }, [apiRoot]);
 
   return {
+    userData,
     isLogin,
     login,
     logout,

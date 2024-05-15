@@ -1,9 +1,11 @@
 import { createContext } from 'react';
+import { Customer } from '@commercetools/platform-sdk';
 
 import { CustomerDraft, LoginCustomerDraft } from '../sdk/api';
 
 export const sessionContext = createContext<{
   session: {
+    userData: Customer | null;
     login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
     logout: () => void;
     isLogin: boolean;
