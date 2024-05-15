@@ -149,7 +149,7 @@ export function RegistrationPage() {
       layout="vertical"
     >
       <div className="registration-info">
-        <span className="registration-title">Registration</span>
+        <span className="registration-title">Sign up</span>
         <Link to={ROUTES.LOGIN} className="registration-login">
           <span className="registration-subtitle">Already have an account? </span>
           Sign In
