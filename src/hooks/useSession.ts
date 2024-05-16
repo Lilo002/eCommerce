@@ -19,6 +19,10 @@ export const useSession = () => {
   const [isLogin, setLogin] = useState(false);
   const [userData, setUserData] = useState<Customer | null>(null);
 
+  const getCustomer = (root: ByProjectKeyRequestBuilder) => {
+    getCustomerDetails(root).then(({ body }) => setUserData(body));
+  };
+
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
     if (tokenObject !== null) {
@@ -34,17 +38,10 @@ export const useSession = () => {
   const checkCustomerExistsByEmail = (email: string): Promise<boolean> =>
     getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
 
-  const getCustomer = (root: ByProjectKeyRequestBuilder) => {
-    getCustomerDetails(root).then(({ body }) => setUserData(body));
-  };
-
   const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
     authenticateCustomer(apiRoot, { email, password }).then(() => {
-      const newApiRoot = getLoginApiRoot({ email, password });
-      setApiRoot(newApiRoot);
+      setApiRoot(getLoginApiRoot({ email, password }));
       setLogin(true);
-
-      getCustomer(newApiRoot);
     });
 
   const updateAddresses = (
@@ -82,12 +79,17 @@ export const useSession = () => {
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
+    setUserData(null);
     document.cookie = 'token=; Max-Age=-1;';
   };
 
   useEffect(() => {
-    getProject(apiRoot);
-  }, [apiRoot]);
+    if (isLogin) {
+      getCustomer(apiRoot);
+    } else {
+      getProject(apiRoot);
+    }
+  }, [apiRoot, isLogin]);
 
   return {
     userData,
