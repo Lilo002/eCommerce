@@ -9,10 +9,11 @@ const { Title, Text: AntText } = Typography;
 export function ProfilePage() {
   const { session } = useContext(sessionContext);
   const [isEdit, setIsEdit] = useState(false);
-  const [editedUser, setEditedUser] = useState<Customer | null>(session?.userData || null);
+  const [editedUser, setEditedUser] = useState<Customer | null>(null);
 
   useEffect(() => {
     setEditedUser(session?.userData || null);
+    console.log(editedUser)
   }, [session?.userData]);
 
   const handleInputChange = (e) => {
@@ -33,38 +34,16 @@ export function ProfilePage() {
         {session?.userData?.email}
       </AntText>
       <br />
-      {isEdit && editedUser ? (
-        <>
-          <Input name="firstName" value={editedUser.firstName} onChange={handleInputChange} placeholder="First Name" />
-          <br />
-          <Input name="lastName" value={editedUser.lastName} onChange={handleInputChange} placeholder="Last Name" />
-          <br />
-          <Input
-            name="dateOfBirth"
-            value={editedUser.dateOfBirth}
-            onChange={handleInputChange}
-            placeholder="Date of Birth"
-          />
-        </>
-      ) : (
-        <>
-          <AntText>
-            <AntText strong>First Name: </AntText>
-            {session?.userData?.firstName}
-          </AntText>
-          <br />
-          <AntText>
-            <AntText strong>Last Name: </AntText>
-            {session?.userData?.lastName}
-          </AntText>
-          <br />
-          <AntText>
-            <AntText strong>Date of Birth: </AntText>
-            {session?.userData?.dateOfBirth}
-          </AntText>
-        </>
-      )}
-
+      <Input name="firstName" value={editedUser?.firstName} onChange={handleInputChange} placeholder="First Name" />
+      <br />
+      <Input name="lastName" value={editedUser?.lastName} onChange={handleInputChange} placeholder="Last Name" />
+      <br />
+      <Input
+        name="dateOfBirth"
+        value={editedUser?.dateOfBirth}
+        onChange={handleInputChange}
+        placeholder="Date of Birth"
+      />
       <Divider />
 
       {isEdit ? (
