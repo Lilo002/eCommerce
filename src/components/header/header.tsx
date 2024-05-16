@@ -7,6 +7,7 @@ import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
 import logo from './ui/LIDILU.png';
+import sprite from './ui/sprites.svg';
 
 import './ui/_header.scss';
 
@@ -22,6 +23,10 @@ export const Header = () => {
     navigate(ROUTES.REGISTRATION);
   };
 
+  const handleUser = () => {
+    navigate(ROUTES.PROFILE);
+  };
+
   return (
     <header className="header">
       <div className="header-inner">
@@ -32,9 +37,16 @@ export const Header = () => {
         </div>
         <div className="header-inner-user">
           {session?.isLogin ? (
-            <Button className="header-btn" type="link" icon={<LogoutOutlined />} onClick={() => session?.logout()}>
-              Log out
-            </Button>
+            <>
+              <Button className="header-btn-user" type="link" onClick={handleUser}>
+                <svg className="header-user-ico">
+                  <use xlinkHref={`${sprite}#user`} />
+                </svg>
+              </Button>
+              <Button className="header-btn" type="link" icon={<LogoutOutlined />} onClick={() => session?.logout()}>
+                LOG OUT
+              </Button>
+            </>
           ) : (
             <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin}>
               LOG IN
