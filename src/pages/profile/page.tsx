@@ -13,7 +13,7 @@ export function ProfilePage() {
 
   useEffect(() => {
     setEditedUser(session?.userData || null);
-    console.log(editedUser)
+    console.log(editedUser);
   }, [session?.userData]);
 
   const handleInputChange = (e) => {
