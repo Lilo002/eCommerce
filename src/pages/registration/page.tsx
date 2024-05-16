@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useLayoutEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { CheckboxProps } from 'antd';
 import { Button, Checkbox, DatePicker, Form, Input, message, Select } from 'antd';
@@ -19,6 +19,12 @@ export function RegistrationPage() {
   const [registrationForm] = Form.useForm();
   // shipping address
   const [shippingCountry, setShippingCountry] = useState(countries[0]);
+
+  useLayoutEffect(() => {
+    if (session?.isLogin) {
+      navigate(ROUTES.MAIN);
+    }
+  });
 
   const changeShippingCountry = (index: number) => {
     setShippingCountry(countries[index]);
@@ -143,7 +149,7 @@ export function RegistrationPage() {
       layout="vertical"
     >
       <div className="registration-info">
-        <span className="registration-title">Registration</span>
+        <span className="registration-title">Sign up</span>
         <Link to={ROUTES.LOGIN} className="registration-login">
           <span className="registration-subtitle">Already have an account? </span>
           Sign In
