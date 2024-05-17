@@ -17,7 +17,12 @@
     &-user {
       display: flex;
       gap: 10px;
+      align-items: center;
     }
+  }
+  &-user-ico {
+    width: 32px;
+    height: 32px;
   }
   &-menu {
     display: flex;
@@ -36,6 +41,14 @@
       &:hover {
         color: $orange-color !important;
       }
+    }
+  }
+  .header-btn-user {
+    padding: 0;
+    stroke: $black-color;
+    transition: stroke 0.3s ease-in-out;
+    &:hover {
+      stroke: $orange-color;
     }
   }
   .header-btn {
