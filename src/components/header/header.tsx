@@ -38,6 +38,7 @@ export const Header = () => {
           ) : (
             <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin}>
               SIGN IN
+            </Button>
           )}
           {!session?.isLogin && (
             <Button className="header-btn" type="link" icon={<UserOutlined />} onClick={handleRegistration}>
