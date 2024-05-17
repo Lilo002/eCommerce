@@ -1,4 +1,21 @@
+@import '../../../shared/style/variables';
+
 .main {
   display: flex;
   justify-content: center;
+  gap: 10px;
+}
+
+.main-btn {
+  width: 130px;
+  height: 40px;
+  font-weight: inherit;
+  color: $black-color;
+  font-weight: 900;
+  font-size: 18px;
+  background: $orange-color;
+  &:hover {
+    color: $orange-color !important;
+    background: $black-color !important;
+  }
 }

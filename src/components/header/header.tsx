@@ -49,12 +49,11 @@ export const Header = () => {
             </>
           ) : (
             <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin}>
-              LOG IN
-            </Button>
+              SIGN IN
           )}
           {!session?.isLogin && (
             <Button className="header-btn" type="link" icon={<UserOutlined />} onClick={handleRegistration}>
-              SIGN IN
+              SIGN UP
             </Button>
           )}
         </div>
