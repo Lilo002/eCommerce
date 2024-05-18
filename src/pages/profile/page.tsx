@@ -53,26 +53,41 @@ export function ProfilePage() {
   };
 
   return (
+    <div className="profile">
+      <div className="profile-name">{session?.userData?.email}</div>
+      <Tabs
+        className="profile-tabs"
+        tabPosition="left"
+        activeKey={activeTab}
+        onChange={onTabChange}
+        items={[
+          {
+            label: 'General',
+            key: '1',
+            children: (
+              <div className="general-container">
     <Form
+                  form={form}
       onFinish={handleSaveChanges}
       labelCol={{ span: 5 }}
       wrapperCol={{ offset: 0, span: 24 }}
-      className="registration-form"
+                  className="general-form"
       autoComplete="off"
       layout="vertical"
     >
-      <div className="registration-info">
-        <span className="registration-title">Registration</span>
-        <Link to={ROUTES.LOGIN} className="registration-login">
-          <span className="registration-subtitle">Already have an account? </span>
-          Sign In
-        </Link>
+                  <div className="general-info">
+                    <span className="general-title">PROFILE</span>
+                    {!isEdit && (
+                      <Button shape="circle" type="text" onClick={() => setIsEdit(true)}>
+                        <EditOutlined />
+                      </Button>
+                    )}
       </div>
-      <div className="registration-content">
+                  <div className="tab-content general">
         <Form.Item
           name="firstName"
           label="First name:"
-          rules={validation.textRules('First name')}
+                      rules={isEdit ? validation.textRules('First name') : validation.textRulesDisabled('disabled')}
           validateFirst
           hasFeedback
           initialValue={firstName}
@@ -88,7 +103,7 @@ export function ProfilePage() {
         <Form.Item
           name="lastName"
           label="Last name"
-          rules={validation.textRules('Last name')}
+                      rules={isEdit ? validation.textRules('Last name') : validation.textRulesDisabled('disabled')}
           validateFirst
           hasFeedback
           initialValue={lastName}
@@ -101,7 +116,12 @@ export function ProfilePage() {
             disabled={!isEdit}
           />
         </Form.Item>
-        <Form.Item name="dateOfBirth" label="Date of birth" rules={validation.ageRules}>
+                    <Form.Item
+                      name="dateOfBirth"
+                      label="Date of birth"
+                      rules={isEdit ? validation.ageRules : validation.ageRulesDisabled}
+                      initialValue={dayjs(dateOfBirth, 'YYYY-MM-DD')}
+                    >
           <DatePicker
             disabled={!isEdit}
             placeholder={dateOfBirth || ''}
@@ -111,15 +131,22 @@ export function ProfilePage() {
         </Form.Item>
       </div>
 
-      {isEdit ? (
+                  {isEdit && (
         <Button type="primary" htmlType="submit">
           Save Changes
         </Button>
-      ) : (
-        <Button type="primary" onClick={() => setIsEdit(true)} htmlType="button">
-          Edit Profile
-        </Button>
       )}
     </Form>
+              </div>
+            ),
+          },
+          {
+            label: 'Addresses',
+            key: '2',
+            children: <Card style={{ width: '100%' }}>Content of Tab 2</Card>,
+          },
+        ]}
+      />
+    </div>
   );
 }
