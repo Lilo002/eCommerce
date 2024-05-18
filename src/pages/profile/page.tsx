@@ -51,6 +51,9 @@ export function ProfilePage() {
     console.log('Сохранение изменений:', firstName, lastName, dateOfBirth);
     setIsEdit(false);
   };
+
+  const onTabChange = (key: string) => {
+    setActiveTab(key);
   };
 
   return (
