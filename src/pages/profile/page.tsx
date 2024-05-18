@@ -49,7 +49,8 @@ export function ProfilePage() {
 
   const handleSaveChanges = () => {
     console.log('Сохранение изменений:', firstName, lastName, dateOfBirth);
-    isEdit ? setIsEdit(false) : setIsEdit(true);
+    setIsEdit(false);
+  };
   };
 
   return (
