@@ -15,7 +15,7 @@ export function CatalogPage() {
     session?.getAllProducts().then((item) => {
       setProducts(item);
     });
-  }, []);
+  }, [session]);
 
   return (
     <div className="catalog">
