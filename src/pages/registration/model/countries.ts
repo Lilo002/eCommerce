@@ -2,7 +2,7 @@ export enum COUNTRY {
   Belarus = 'Belarus',
   Germany = 'Germany',
   Poland = 'Poland',
-  US = 'Unates States',
+  US = 'United States',
 }
 
 type CountryCode = {
