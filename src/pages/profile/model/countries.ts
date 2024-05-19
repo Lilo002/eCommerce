@@ -2,7 +2,7 @@ export enum COUNTRY {
   Belarus = 'Belarus',
   Germany = 'Germany',
   Poland = 'Poland',
-  US = 'Unates States',
+  US = 'United States',
 }
 
 type CountryCode = {
@@ -14,6 +14,13 @@ export const CountriesCodes: CountryCode = {
   [COUNTRY.Germany]: 'DE',
   [COUNTRY.Poland]: 'PL',
   [COUNTRY.US]: 'US',
+};
+
+export const CountriesNames = {
+  BY: 'Belarus',
+  DE: 'Germany',
+  PL: 'Poland',
+  US: 'United States',
 };
 
 export type CountryType = {
