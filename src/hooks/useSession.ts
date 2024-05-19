@@ -28,7 +28,10 @@ export const useSession = () => {
     if (tokenObject !== null) {
       const token = tokenObject.refreshToken;
 
-      setApiRoot(getRefreshApiRoot(token));
+      const newApiRoot = getRefreshApiRoot(token);
+      getCustomer(newApiRoot);
+
+      setApiRoot(newApiRoot);
       setLogin(true);
     } else {
       setApiRoot(getAnonymousApiRoot());
@@ -51,7 +54,13 @@ export const useSession = () => {
     setAsDefaultShippingAddress: boolean,
     setAsDefaultBillingAddress: boolean,
   ): void | Error => {
-    customerUpdate(newApiRoot, version, addressesResponse, setAsDefaultShippingAddress, setAsDefaultBillingAddress);
+    customerUpdate(
+      newApiRoot,
+      version,
+      addressesResponse,
+      setAsDefaultShippingAddress,
+      setAsDefaultBillingAddress,
+    ).then(() => getCustomer(newApiRoot));
   };
 
   const register = (
@@ -84,11 +93,7 @@ export const useSession = () => {
   };
 
   useEffect(() => {
-    if (isLogin) {
-      getCustomer(apiRoot);
-    } else {
-      getProject(apiRoot);
-    }
+    if (!isLogin) getProject(apiRoot);
   }, [apiRoot, isLogin]);
 
   return {
