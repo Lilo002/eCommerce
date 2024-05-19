@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { Product } from '@commercetools/platform-sdk';
 
 import { CustomerDraft, LoginCustomerDraft } from '../sdk/api';
 
@@ -13,5 +14,6 @@ export const sessionContext = createContext<{
       setAsDefaultBillingAddress: boolean,
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
+    getAllProducts: () => Promise<Product[]>;
   } | null;
 }>({ session: null });

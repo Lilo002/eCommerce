@@ -7,6 +7,7 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  ProductPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
@@ -110,6 +111,17 @@ export const customerUpdate = (
           setAsDefaultShippingAddress,
           setAsDefaultBillingAddress,
         ),
+      },
+    })
+    .execute();
+
+export const getProducts = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<ProductPagedQueryResponse>> =>
+  apiRoot
+    .products()
+    .get({
+      queryArgs: {
+        limit: 60,
+        where: 'masterData(published=true)',
       },
     })
     .execute();
