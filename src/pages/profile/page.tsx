@@ -1,14 +1,14 @@
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EditOutlined } from '@ant-design/icons';
-import { Customer } from '@commercetools/platform-sdk';
-import { Button, Card, DatePicker, Form, Input, Tabs } from 'antd';
+import { CloseOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Form, Input, Tabs } from 'antd';
 import dayjs from 'dayjs';
 
 import { sessionContext } from '../../context/sessionContext';
 import { getCookie } from '../../sdk/client/ClientBuilder';
 import { ROUTES } from '../../shared/constants';
 
+import { AddressesTable } from './model/table';
 import * as validation from './model/validation';
 
 import './_page.scss';
@@ -18,51 +18,33 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
 
-  const [activeTab, setActiveTab] = useState('1');
+  const [activeTab, setActiveTab] = useState('general');
   const [isEdit, setIsEdit] = useState(false);
-  const [firstName, setFirstName] = useState<Customer['firstName'] | null>(session?.userData?.firstName);
-  const [lastName, setLastName] = useState<Customer['lastName'] | null>(session?.userData?.lastName);
-  const [dateOfBirth, setDateOfBirth] = useState<Customer['dateOfBirth'] | null>(session?.userData?.dateOfBirth);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
     if (!tokenObject) {
       navigate(ROUTES.MAIN);
     }
+  }, [navigate]);
 
-    if (tokenObject && session?.userData) {
-      setFirstName(session.userData.firstName);
-      setLastName(session.userData.lastName);
-      setDateOfBirth(session.userData.dateOfBirth);
-    } else {
-      setFirstName(null);
-      setLastName(null);
-      setDateOfBirth(null);
+  useLayoutEffect(() => {
+    if (session?.userData) {
+      const { email, firstName, lastName, dateOfBirth } = session.userData;
+      form.setFieldsValue({
+        email,
+        firstName,
+        lastName,
+        dateOfBirth: dateOfBirth ? dayjs(dateOfBirth, 'YYYY-MM-DD') : null,
+        dateOfBirthDisabled: dateOfBirth,
+      });
     }
-  }, [session?.userData]);
-
-  const onFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(e.target.value);
-  };
-
-  const onLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(e.target.value);
-  };
-
-  const onDateOfBirthChange = (e: React.ChangeEvent<HTMLInputElement>, dateString: string | string[]) => {
-    setDateOfBirth(dateString);
-  };
-
-  useEffect(() => {
-    form.setFieldsValue({
-      firstName,
-      lastName,
-      dateOfBirth: dateOfBirth ? dayjs(dateOfBirth, 'YYYY-MM-DD') : null,
-    });
-  }, [firstName, lastName, dateOfBirth]);
+  }, [form, session?.userData]);
 
   const handleSaveChanges = () => {
-    console.log('Сохранение изменений:', firstName, lastName, dateOfBirth);
+    const data = form.getFieldsValue();
+    console.log('Сохранение изменений:', data);
     setIsEdit(false);
   };
 
@@ -70,9 +52,37 @@ export function ProfilePage() {
     setActiveTab(key);
   };
 
+  const handleEditMode = () => {
+    setIsEdit((edit) => !edit);
+  };
+
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
   return (
     <div className="profile">
-      <div className="profile-name">{session?.userData?.email}</div>
+      <div className="profile-title">
+        {activeTab === 'general' ? (
+          <div className="general-info">
+            <span className="general-title">PROFILE</span>
+            <Button shape="circle" type="text" onClick={handleEditMode}>
+              {isEdit ? <CloseOutlined /> : <EditOutlined />}
+            </Button>
+          </div>
+        ) : (
+          <div className="general-info">
+            <div className="addresses-title">ADDRESSES</div>
+            <Button shape="circle" type="text" onClick={openAddModal}>
+              <PlusOutlined />
+            </Button>
+          </div>
+        )}
+      </div>
       <Tabs
         className="profile-tabs"
         tabPosition="left"
@@ -81,78 +91,79 @@ export function ProfilePage() {
         items={[
           {
             label: 'General',
-            key: '1',
+            key: 'general',
             children: (
               <div className="general-container">
                 <Form
+                  layout="horizontal"
                   form={form}
                   onFinish={handleSaveChanges}
-                  labelCol={{ span: 5 }}
-                  wrapperCol={{ offset: 0, span: 24 }}
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 24 }}
                   className="general-form"
                   autoComplete="off"
-                  layout="vertical"
                 >
-                  <div className="general-info">
-                    <span className="general-title">PROFILE</span>
-                    {!isEdit && (
-                      <Button shape="circle" type="text" onClick={() => setIsEdit(true)}>
-                        <EditOutlined />
-                      </Button>
-                    )}
-                  </div>
-                  <div className="tab-content general">
+                  <div className="profile-content general">
+                    <Form.Item
+                      name="email"
+                      label="Email"
+                      rules={isEdit ? validation.emailRules : validation.textRulesDisabled('disabled')}
+                      validateFirst
+                      hasFeedback={isEdit}
+                    >
+                      <Input placeholder={session?.userData?.email || ''} className="full-width" disabled={!isEdit} />
+                    </Form.Item>
                     <Form.Item
                       name="firstName"
                       label="First name:"
                       rules={isEdit ? validation.textRules('First name') : validation.textRulesDisabled('disabled')}
                       validateFirst
-                      hasFeedback
-                      initialValue={firstName}
+                      hasFeedback={isEdit}
                     >
                       <Input
-                        placeholder={firstName || ''}
-                        value={firstName || ''}
-                        onChange={onFirstNameChange}
+                        placeholder={session?.userData?.firstName || ''}
                         className="full-width"
                         disabled={!isEdit}
                       />
                     </Form.Item>
                     <Form.Item
                       name="lastName"
-                      label="Last name"
+                      label="Last name:"
                       rules={isEdit ? validation.textRules('Last name') : validation.textRulesDisabled('disabled')}
                       validateFirst
-                      hasFeedback
-                      initialValue={lastName}
+                      hasFeedback={isEdit}
                     >
                       <Input
-                        placeholder={lastName || ''}
-                        value={lastName || ''}
-                        onChange={onLastNameChange}
-                        className="full-width"
+                        placeholder={session?.userData?.lastName || ''}
+                        className={`full-width ${!isEdit && 'disabled-input'}`}
                         disabled={!isEdit}
                       />
                     </Form.Item>
-                    <Form.Item
-                      name="dateOfBirth"
-                      label="Date of birth"
-                      rules={isEdit ? validation.ageRules : validation.ageRulesDisabled}
-                      initialValue={dayjs(dateOfBirth, 'YYYY-MM-DD')}
-                    >
-                      <DatePicker
-                        disabled={!isEdit}
-                        placeholder={dateOfBirth || ''}
-                        className="full-width"
-                        onChange={onDateOfBirthChange}
-                      />
-                    </Form.Item>
+                    {isEdit ? (
+                      <Form.Item name="dateOfBirth" label="Date of birth:" rules={validation.ageRules}>
+                        <DatePicker
+                          disabled={!isEdit}
+                          placeholder={session?.userData?.dateOfBirth || ''}
+                          className="full-width"
+                        />
+                      </Form.Item>
+                    ) : (
+                      <Form.Item name="dateOfBirthDisabled" label="Date of birth" rules={validation.ageRulesDisabled}>
+                        <Input
+                          placeholder={session?.userData?.dateOfBirth || ''}
+                          className="full-width"
+                          disabled={!isEdit}
+                        />
+                      </Form.Item>
+                    )}
                   </div>
 
                   {isEdit && (
-                    <Button type="primary" htmlType="submit">
-                      Save Changes
-                    </Button>
+                    <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
+                      <Button type="primary" htmlType="submit" className="general-btn">
+                        Save Changes
+                      </Button>
+                    </Form.Item>
                   )}
                 </Form>
               </div>
@@ -160,8 +171,8 @@ export function ProfilePage() {
           },
           {
             label: 'Addresses',
-            key: '2',
-            children: <Card style={{ width: '100%' }}>Content of Tab 2</Card>,
+            key: 'addresses',
+            children: <AddressesTable isAddModalOpen={isAddModalOpen} closeAddModal={closeAddModal} />,
           },
         ]}
       />
