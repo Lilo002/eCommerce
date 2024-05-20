@@ -1,21 +1,17 @@
 import { Link } from 'react-router-dom';
 import { Product } from '@commercetools/platform-sdk';
-import { Card } from 'antd';
 
 import { CURRENCY_CODE, ROUTES } from '../../../shared/constants';
 
-const { Meta } = Card;
-
-const getShortDescription = (description: string | undefined) => {
-  if (!description) {
-    return 'No description';
+const getShortText = (text: string | undefined, maxLength: number) => {
+  if (!text) {
+    return '...';
   }
 
-  const maxLength = 145;
-  if (description.length <= maxLength) {
-    return description;
+  if (text.length <= maxLength) {
+    return text;
   }
-  return `${description.slice(0, maxLength)}...`;
+  return `${text.slice(0, maxLength)}...`;
 };
 
 const formatPrices = (prices: number | undefined, fractionDigits: number | undefined) => {
@@ -28,8 +24,10 @@ const formatPrices = (prices: number | undefined, fractionDigits: number | undef
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const productId = product.id;
-  const name = product?.masterData?.current?.name?.['en-GB'];
-  const description = getShortDescription(product?.masterData?.current?.description?.['en-GB']);
+  const maxLengthName = 23;
+  const name = getShortText(product?.masterData?.current?.name?.['en-GB'], maxLengthName);
+  const maxLengthDescription = 145;
+  const description = getShortText(product?.masterData?.current?.description?.['en-GB'], maxLengthDescription);
   const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
   const priceValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.value;
   const isDiscountedExists = !!product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted;
@@ -41,23 +39,18 @@ export const ProductCard = ({ product }: { product: Product }) => {
 
   return (
     <Link to={`${ROUTES.PRODUCT}/${productId}`}>
-      <Card
-        className="card"
-        hoverable
-        style={{
-          width: 240,
-          height: 450,
-        }}
-        cover={<img className="card-img" alt="example" src={imgUrl} />}
-      >
-        <Meta title={name} description={description} />
+      <div className="card">
+        <img className="card-img" alt="example" src={imgUrl} />
+        <div className="card-body">
+          <p className="card-title">{name}</p>
+          <p className="card-description">{description} </p>
+          <div className="card-price">
+            {isDiscountedExists && <p className="card-price-current">{discounted + currencyCode}</p>}
 
-        <div className="card-price">
-          {isDiscountedExists && <p className="card-price-current">{discounted + currencyCode}</p>}
-
-          <p className={`${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>{price + currencyCode}</p>
+            <p className={`${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>{price + currencyCode}</p>
+          </div>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 };

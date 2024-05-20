@@ -17,10 +17,32 @@
 }
 
 .card {
+  position: relative;
+  display: flex;
+  height: 430px;
+  width: 240px;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 1px -1px 14px 1px rgba(0, 0, 0, 0.09);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.06);
+  }
+
   &-img {
-    width: 100%;
     height: 200px;
-    object-fit: cover;
+  }
+
+  &-body {
+    margin: 7%;
+    color: $black-color;
+  }
+  &-title {
+    font-size: 15px;
+    font-weight: bold;
   }
   &-price {
     position: absolute;
