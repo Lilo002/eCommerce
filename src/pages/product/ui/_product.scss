@@ -1,0 +1,40 @@
+@import '../../../shared/style/variables';
+
+.product {
+  padding: 10px;
+  background-color: $white-color;
+  font-family: $font-family;
+  max-width: $max-width;
+  &-title {
+    text-transform: uppercase;
+    font-family: inherit;
+    font-size: 26px;
+    margin: 0;
+  }
+  &-price {
+    font-family: inherit;
+    font-size: 16px;
+  }
+}
+
+.product-info {
+  &-title {
+    width: 100%;
+    border-bottom: 3px solid $orange-color;
+    &-content {
+      display: inline-block;
+      color: $white-color;
+      text-transform: uppercase;
+      background-color: $black-color;
+      padding: 0 32px;
+      line-height: 32px;
+      margin: 0;
+    }
+  }
+  &-detail {
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: $font-weight;
+    width: 130px;
+  }
+}

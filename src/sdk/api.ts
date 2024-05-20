@@ -7,6 +7,7 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  Product,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
@@ -113,3 +114,6 @@ export const customerUpdate = (
       },
     })
     .execute();
+
+export const getProduct = (apiRoot: ByProjectKeyRequestBuilder, productKey: string): Promise<ClientResponse<Product>> =>
+  apiRoot.products().withKey({ key: productKey }).get().execute();
