@@ -1,6 +1,8 @@
 import { Product } from '@commercetools/platform-sdk';
 import { Card } from 'antd';
 
+import { CURRENCY_CODE } from '../../../shared/constants';
+
 const { Meta } = Card;
 
 const getShortDescription = (description: string | undefined) => {
@@ -29,7 +31,8 @@ export const ProductCard = ({ product }: { product: Product }) => {
   const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
   const priceValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.value;
   const isDiscountedExists = !!product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted;
-  const discountedValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.value;
+  const discountedValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted?.value;
+  const currencyCode = priceValue?.currencyCode ? CURRENCY_CODE[priceValue?.currencyCode] : '';
 
   const price = formatPrices(priceValue?.centAmount, priceValue?.fractionDigits);
   const discounted = formatPrices(discountedValue?.centAmount, discountedValue?.fractionDigits);
@@ -40,15 +43,16 @@ export const ProductCard = ({ product }: { product: Product }) => {
       hoverable
       style={{
         width: 240,
+        height: 450,
       }}
       cover={<img className="card-img" alt="example" src={imgUrl} />}
     >
       <Meta title={name} description={description} />
 
       <div className="card-price">
-        {isDiscountedExists && <p className="card-price-current">{discounted}</p>}
+        {isDiscountedExists && <p className="card-price-current">{discounted + currencyCode}</p>}
 
-        <div className={`my-component ${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>{price}</div>
+        <p className={`${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>{price + currencyCode}</p>
       </div>
     </Card>
   );
