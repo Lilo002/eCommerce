@@ -8,8 +8,8 @@ import { sessionContext } from '../../context/sessionContext';
 import { getCookie } from '../../sdk/client/ClientBuilder';
 import { ROUTES } from '../../shared/constants';
 
-import { AddressesTable } from './model/table';
 import * as validation from './model/validation';
+import { AddressesTable } from './ui/table';
 
 import './_page.scss';
 
@@ -43,8 +43,7 @@ export function ProfilePage() {
   }, [form, session?.userData]);
 
   const handleSaveChanges = () => {
-    const data = form.getFieldsValue();
-    console.log('Сохранение изменений:', data);
+    /* const data = form.getFieldsValue(); */
     setIsEdit(false);
   };
 
