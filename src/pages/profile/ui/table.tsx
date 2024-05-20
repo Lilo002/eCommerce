@@ -1,13 +1,15 @@
-import { useContext, useState } from 'react';
+import { useContext, useLayoutEffect, useState } from 'react';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Address } from '@commercetools/platform-sdk';
 import { Button, Checkbox, Form, Input, Modal, Select, Switch, Table, Tag } from 'antd';
+import { ColumnGroupType, ColumnType } from 'antd/es/table';
 import { MaskedInput } from 'antd-mask-input';
 
 import { sessionContext } from '../../../context/sessionContext';
 import { countries, CountriesNames, CountryType } from '../model/countries';
 import * as validation from '../model/validation';
 
-import '../_page.scss';
+import './_page.scss';
 
 export function AddressesTable({
   closeAddModal,
@@ -23,8 +25,16 @@ export function AddressesTable({
 
   const [isBilling, setIsBilling] = useState(false);
   const [isShipping, setIsShipping] = useState(false);
+  const [addressesArray, setAddressesArray] = useState<(Address & { index: number })[]>([]);
 
   const [currentCountry, setCurrentCountry] = useState<CountryType>(countries[0]);
+
+  useLayoutEffect(() => {
+    setAddressesArray([]);
+    session?.userData?.addresses.forEach((address, index) => {
+      setAddressesArray((prevArray) => [...prevArray, { ...address, index: index + 1 }]);
+    });
+  }, [session?.userData]);
 
   const isBillingAddress = (id: Address['id']): boolean => {
     if (session?.userData?.billingAddressIds && id) {
@@ -50,7 +60,6 @@ export function AddressesTable({
 
     setCurrentCountry(countries.find((country) => country.country === addressData.country) ?? countries[0]);
     const { postalCode, city, country, streetName } = addressData;
-    console.log(postalCode);
     if (country) {
       form.setFieldsValue({
         postalCode,
@@ -72,7 +81,13 @@ export function AddressesTable({
     editModal(record);
   };
 
-  const columns = [
+  const columns: (ColumnGroupType<Address> | ColumnType<Address>)[] = [
+    {
+      title: '№',
+      dataIndex: 'index',
+      key: 'index',
+      fixed: 'left',
+    },
     {
       title: 'City',
       dataIndex: 'city',
@@ -114,13 +129,14 @@ export function AddressesTable({
     {
       title: 'Actions',
       key: 'actions',
-      render: (_: unknown, record: Address) => (
+      fixed: 'right',
+      render: (_, record: Address) => (
         <>
-          <Button type="primary" onClick={() => handleClick(record)}>
-            Edit
+          <Button shape="circle" type="primary" onClick={() => handleClick(record)}>
+            <EditOutlined />
           </Button>
-          <Button danger style={{ marginLeft: 8 }}>
-            Delete
+          <Button danger shape="circle" style={{ marginLeft: 8 }}>
+            <DeleteOutlined />
           </Button>
         </>
       ),
@@ -142,8 +158,7 @@ export function AddressesTable({
   };
 
   const handleSaveChanges = () => {
-    const data = form.getFieldsValue();
-    console.log('Сохранение изменений:', data);
+    /* const data = form.getFieldsValue(); */
   };
 
   const handleChangeShippingCountry = (index: number) => {
@@ -152,7 +167,13 @@ export function AddressesTable({
 
   return (
     <>
-      <Table dataSource={session?.userData?.addresses} columns={columns} rowKey="id" />
+      <Table
+        className="addresses-table"
+        scroll={{ x: true }}
+        dataSource={addressesArray}
+        columns={columns}
+        rowKey="id"
+      />
       <Modal
         className="modal"
         open={isModalOpen || isAddModalOpen}
