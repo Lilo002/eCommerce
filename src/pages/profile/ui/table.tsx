@@ -72,6 +72,60 @@ export function AddressesTable({
     editModal(record);
   };
 
+  const columns = [
+    {
+      title: 'City',
+      dataIndex: 'city',
+      key: 'city',
+    },
+    {
+      title: 'StreetName',
+      dataIndex: 'streetName',
+      key: 'streetName',
+    },
+    {
+      title: 'Country',
+      dataIndex: 'country',
+      key: 'country',
+    },
+    {
+      title: 'Postal Code',
+      dataIndex: 'postalCode',
+      key: 'postalCode',
+    },
+    {
+      title: 'Type',
+      key: 'type',
+      render: (_: React.ReactNode, { id }: Address) => (
+        <>
+          {isBillingAddress(id) && (
+            <Tag color={isBillingDefault(id) ? 'orange' : 'black'}>
+              {isBillingDefault(id) ? 'default billing' : 'billing'}
+            </Tag>
+          )}
+          {isShippingAddress(id) && (
+            <Tag color={isShippingDefault(id) ? 'orange' : 'black'}>
+              {isShippingDefault(id) ? 'default shipping' : 'shipping'}
+            </Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (_: unknown, record: Address) => (
+        <>
+          <Button type="primary" onClick={() => handleClick(record)}>
+            Edit
+          </Button>
+          <Button danger style={{ marginLeft: 8 }}>
+            Delete
+          </Button>
+        </>
+      ),
+    },
+  ];
 
   const resetModalState = () => {
     form.resetFields();
@@ -98,6 +152,7 @@ export function AddressesTable({
 
   return (
     <>
+      <Table dataSource={session?.userData?.addresses} columns={columns} rowKey="id" />
       <Modal
         className="modal"
         open={isModalOpen || isAddModalOpen}
