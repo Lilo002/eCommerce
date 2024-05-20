@@ -11,7 +11,7 @@ import { ROUTES } from '../../shared/constants';
 import * as validation from './model/validation';
 import { AddressesTable } from './ui/table';
 
-import './_page.scss';
+import './ui/_page.scss';
 
 export function ProfilePage() {
   const [form] = Form.useForm();
@@ -84,7 +84,7 @@ export function ProfilePage() {
       </div>
       <Tabs
         className="profile-tabs"
-        tabPosition="left"
+        tabPosition="top"
         activeKey={activeTab}
         onChange={onTabChange}
         items={[
