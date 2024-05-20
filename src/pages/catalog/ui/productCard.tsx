@@ -1,7 +1,8 @@
+import { Link } from 'react-router-dom';
 import { Product } from '@commercetools/platform-sdk';
 import { Card } from 'antd';
 
-import { CURRENCY_CODE } from '../../../shared/constants';
+import { CURRENCY_CODE, ROUTES } from '../../../shared/constants';
 
 const { Meta } = Card;
 
@@ -26,6 +27,7 @@ const formatPrices = (prices: number | undefined, fractionDigits: number | undef
 };
 
 export const ProductCard = ({ product }: { product: Product }) => {
+  const productId = product.id;
   const name = product?.masterData?.current?.name?.['en-GB'];
   const description = getShortDescription(product?.masterData?.current?.description?.['en-GB']);
   const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
@@ -38,22 +40,24 @@ export const ProductCard = ({ product }: { product: Product }) => {
   const discounted = formatPrices(discountedValue?.centAmount, discountedValue?.fractionDigits);
 
   return (
-    <Card
-      className="card"
-      hoverable
-      style={{
-        width: 240,
-        height: 450,
-      }}
-      cover={<img className="card-img" alt="example" src={imgUrl} />}
-    >
-      <Meta title={name} description={description} />
+    <Link to={`${ROUTES.PRODUCT}/${productId}`}>
+      <Card
+        className="card"
+        hoverable
+        style={{
+          width: 240,
+          height: 450,
+        }}
+        cover={<img className="card-img" alt="example" src={imgUrl} />}
+      >
+        <Meta title={name} description={description} />
 
-      <div className="card-price">
-        {isDiscountedExists && <p className="card-price-current">{discounted + currencyCode}</p>}
+        <div className="card-price">
+          {isDiscountedExists && <p className="card-price-current">{discounted + currencyCode}</p>}
 
-        <p className={`${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>{price + currencyCode}</p>
-      </div>
-    </Card>
+          <p className={`${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>{price + currencyCode}</p>
+        </div>
+      </Card>
+    </Link>
   );
 };

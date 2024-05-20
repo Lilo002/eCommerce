@@ -12,14 +12,13 @@ export function CatalogPage() {
   const { session } = useContext(sessionContext);
 
   useEffect(() => {
-    session?.getAllProducts().then((item) => {
-      setProducts(item);
+    session?.getAllProducts().then((items) => {
+      setProducts(items);
     });
   }, [session]);
 
   return (
     <div className="catalog">
-      <h2>This will be our catalog page</h2>
       <ProductsList products={products} />
     </div>
   );
