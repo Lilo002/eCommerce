@@ -16,7 +16,7 @@ export const CountriesCodes: CountryCode = {
   [COUNTRY.US]: 'US',
 };
 
-export const CountriesNames = {
+export const CountriesNames: { [key: string]: string } = {
   BY: 'Belarus',
   DE: 'Germany',
   PL: 'Poland',
