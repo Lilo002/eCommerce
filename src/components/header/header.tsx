@@ -77,6 +77,11 @@ export const Header = () => {
               ABOUT US
             </Link>
           </li>
+          <li>
+            <Link className="header-menu-item" to={`${ROUTES.PRODUCT}/375`}>
+              Product
+            </Link>
+          </li>
         </ul>
       </nav>
     </header>
