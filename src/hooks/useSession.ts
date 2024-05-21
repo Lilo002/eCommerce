@@ -109,7 +109,12 @@ export const useSession = () => {
   };
 
   const updatePassword = ({ version, currentPassword, newPassword }: MyCustomerChangePassword) =>
-    updatePasswordRequest(apiRoot, { version, currentPassword, newPassword });
+  const addAddress = ({ streetName, postalCode, city, country }: AddressDraft) => {
+    const { version } = userData as Customer;
+    return addAddressRequest(apiRoot, { streetName, postalCode, city, country }, version).then(() =>
+      getCustomer(apiRoot),
+    );
+  };
 
   useEffect(() => {
     if (!isLogin) getProject(apiRoot);
@@ -125,5 +130,6 @@ export const useSession = () => {
     getAllProducts,
     updateCustomerInfo,
     updatePassword,
+    addAddress,
   };
 };

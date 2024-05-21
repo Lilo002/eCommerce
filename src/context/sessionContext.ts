@@ -1,7 +1,8 @@
 import { createContext } from 'react';
 import { ClientResponse, Customer, MyCustomerChangePassword, Product } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
-import { CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
+import { AddressDraft, CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
 
 export const sessionContext = createContext<{
   session: {
@@ -22,5 +23,6 @@ export const sessionContext = createContext<{
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
     getAllProducts: (limit: number) => Promise<Product[]>;
+    addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<ClientResponse<Customer>>;
   } | null;
 }>({ session: null });

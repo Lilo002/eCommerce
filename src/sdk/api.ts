@@ -186,3 +186,28 @@ export const updatePasswordRequest = (
       },
     })
     .execute();
+
+export const addAddressRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  { streetName, postalCode, city, country }: AddressDraft,
+  version: Customer['version'],
+) =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addAddress',
+            address: {
+              streetName,
+              postalCode,
+              city,
+              country,
+            },
+          },
+        ],
+      },
+    })
+    .execute();

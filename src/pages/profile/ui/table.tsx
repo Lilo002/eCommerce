@@ -161,6 +161,15 @@ export function AddressesTable({
     /* const data = form.getFieldsValue(); */
   };
 
+  const handleAddNewAddress = () => {
+    const { streetName, postalCode, city } = form.getFieldsValue();
+    session
+      ?.addAddress({ streetName, postalCode, city, country: CountriesCodes[currentCountry.country] })
+      .then(() => handleCancel())
+      .then(() => message.success('Address has been added successfully'))
+      .catch((err) => message.error(err.message));
+  };
+
   const handleChangeShippingCountry = (index: number) => {
     setCurrentCountry(countries[index]);
   };
@@ -185,7 +194,7 @@ export function AddressesTable({
           initialValues={{
             postalCode: '',
             city: '',
-            country: countries[0].country,
+            country: 0,
             streetName: '',
             defaultShippingAddress: false,
             defaultBillingAddress: false,
@@ -196,7 +205,7 @@ export function AddressesTable({
           form={form}
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 24 }}
-          onFinish={handleSaveChanges}
+          onFinish={editingAddress ? handleSaveChanges : handleAddNewAddress}
           onValuesChange={(_, values) => {
             setIsBilling(values.billingAddress);
             setIsShipping(values.shippingAddress);
