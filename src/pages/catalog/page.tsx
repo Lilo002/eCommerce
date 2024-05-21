@@ -3,6 +3,7 @@ import { Product } from '@commercetools/platform-sdk';
 
 import { sessionContext } from '../../context/sessionContext';
 
+import { LIMIT_PRODUCT } from './model/constants';
 import { ProductsList } from './ui/productsList';
 
 import './ui/_catalog.scss';
@@ -12,7 +13,7 @@ export function CatalogPage() {
   const { session } = useContext(sessionContext);
 
   useEffect(() => {
-    session?.getAllProducts().then((items) => {
+    session?.getAllProducts(LIMIT_PRODUCT).then((items) => {
       setProducts(items);
     });
   }, [session]);

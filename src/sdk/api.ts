@@ -115,12 +115,15 @@ export const customerUpdate = (
     })
     .execute();
 
-export const getProducts = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<ProductPagedQueryResponse>> =>
+export const getProducts = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  limit: number,
+): Promise<ClientResponse<ProductPagedQueryResponse>> =>
   apiRoot
     .products()
     .get({
       queryArgs: {
-        limit: 60,
+        limit,
         where: 'masterData(published=true)',
       },
     })

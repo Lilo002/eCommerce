@@ -86,7 +86,8 @@ export const useSession = () => {
       );
     });
 
-  const getAllProducts = (): Promise<Product[]> => getProducts(apiRoot).then(({ body }) => body.results);
+  const getAllProducts = (limit: number): Promise<Product[]> =>
+    getProducts(apiRoot, limit).then(({ body }) => body.results);
 
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());

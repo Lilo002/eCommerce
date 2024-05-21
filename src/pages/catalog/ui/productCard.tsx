@@ -2,32 +2,14 @@ import { Link } from 'react-router-dom';
 import { Product } from '@commercetools/platform-sdk';
 
 import { CURRENCY_CODE, ROUTES } from '../../../shared/constants';
-
-const getShortText = (text: string | undefined, maxLength: number) => {
-  if (!text) {
-    return '...';
-  }
-
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return `${text.slice(0, maxLength)}...`;
-};
-
-const formatPrices = (prices: number | undefined, fractionDigits: number | undefined) => {
-  if (prices && fractionDigits) {
-    return (prices / 10 ** fractionDigits).toFixed(fractionDigits).replace('.', ',');
-  }
-
-  return 0;
-};
+import { formatPrices } from '../lib/formatPrices';
+import { getShortText } from '../lib/getShortText';
+import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from '../model/constants';
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const productId = product.id;
-  const maxLengthName = 23;
-  const name = getShortText(product?.masterData?.current?.name?.['en-GB'], maxLengthName);
-  const maxLengthDescription = 145;
-  const description = getShortText(product?.masterData?.current?.description?.['en-GB'], maxLengthDescription);
+  const name = getShortText(product?.masterData?.current?.name?.['en-GB'], MAX_LENGTH_NAME);
+  const description = getShortText(product?.masterData?.current?.description?.['en-GB'], MAX_LENGTH_DESCRIPTION);
   const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
   const priceValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.value;
   const isDiscountedExists = !!product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted;
