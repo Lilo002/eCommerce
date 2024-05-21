@@ -9,8 +9,11 @@ import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from '../model/constants';
 export const ProductCard = ({ product }: { product: Product }) => {
   const productKey = product.key;
   const name = getShortText(product?.masterData?.current?.name?.['en-GB'], MAX_LENGTH_NAME);
-  const description = getShortText(product?.masterData?.current?.description?.['en-GB'], MAX_LENGTH_DESCRIPTION);
-  const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
+  const description = getShortText(
+    product?.masterData?.current?.masterVariant.attributes?.[0].value,
+    MAX_LENGTH_DESCRIPTION,
+  );
+  const imgUrl = product?.masterData?.current?.masterVariant?.attributes?.[6].value;
   const priceValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.value;
   const isDiscountedExists = !!product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted;
   const discountedValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted?.value;
