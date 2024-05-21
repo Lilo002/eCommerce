@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { Customer, Product } from '@commercetools/platform-sdk';
+import { ClientResponse, Customer, MyCustomerChangePassword, Product } from '@commercetools/platform-sdk';
 
 import { CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
 
@@ -10,6 +10,11 @@ export const sessionContext = createContext<{
     logout: () => void;
     isLogin: boolean;
     updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<void | Error>;
+    updatePassword: ({
+      version,
+      currentPassword,
+      newPassword,
+    }: MyCustomerChangePassword) => Promise<ClientResponse<Customer>>;
     register: (
       { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
       setAsDefaultShippingAddress: boolean,

@@ -7,6 +7,7 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  MyCustomerChangePassword,
   ProductPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
@@ -166,6 +167,22 @@ export const updateCustomerInfoRequest = (
             dateOfBirth,
           },
         ],
+      },
+    })
+    .execute();
+
+export const updatePasswordRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  { version, currentPassword, newPassword }: MyCustomerChangePassword,
+) =>
+  apiRoot
+    .me()
+    .password()
+    .post({
+      body: {
+        version,
+        currentPassword,
+        newPassword,
       },
     })
     .execute();

@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Address, Customer, Product } from '@commercetools/platform-sdk';
+import { Address, Customer, MyCustomerChangePassword, Product } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { message } from 'antd';
 
 import {
   authenticateCustomer,
@@ -15,6 +14,7 @@ import {
   LoginCustomerDraft,
   UpdateCustomerDraft,
   updateCustomerInfoRequest,
+  updatePasswordRequest,
 } from '../sdk/api';
 import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } from '../sdk/client/ClientBuilder';
 
@@ -105,6 +105,9 @@ export const useSession = () => {
     );
   };
 
+  const updatePassword = ({ version, currentPassword, newPassword }: MyCustomerChangePassword) =>
+    updatePasswordRequest(apiRoot, { version, currentPassword, newPassword });
+
   useEffect(() => {
     if (!isLogin) getProject(apiRoot);
   }, [apiRoot, isLogin]);
@@ -118,5 +121,6 @@ export const useSession = () => {
     checkCustomerExistsByEmail,
     getAllProducts,
     updateCustomerInfo,
+    updatePassword,
   };
 };

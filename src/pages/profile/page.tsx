@@ -1,6 +1,7 @@
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloseOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Customer } from '@commercetools/platform-sdk';
 import { Button, DatePicker, Form, Input, message, Tabs } from 'antd';
 import dayjs from 'dayjs';
 
@@ -10,12 +11,14 @@ import { getCookie } from '../../sdk/client/ClientBuilder';
 import { ROUTES } from '../../shared/constants';
 
 import * as validation from './model/validation';
+import { passwordRules } from './model/validation';
 import { AddressesTable } from './ui/table';
 
 import './ui/_page.scss';
 
 export function ProfilePage() {
   const [form] = Form.useForm();
+  const [passwordForm] = Form.useForm();
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
 
@@ -30,7 +33,7 @@ export function ProfilePage() {
     }
   }, [navigate]);
 
-  const setUserDataToFrom = () => {
+  const setUserDataToFrom = useCallback(() => {
     if (session?.userData) {
       const { email, firstName, lastName, dateOfBirth } = session.userData;
       form.setFieldsValue({
@@ -41,11 +44,11 @@ export function ProfilePage() {
         dateOfBirthDisabled: dateOfBirth,
       });
     }
-  };
+  }, [form, session?.userData]);
 
   useLayoutEffect(() => {
     setUserDataToFrom();
-  }, [form, session?.userData]);
+  }, [setUserDataToFrom]);
 
   const handleSaveChanges = () => {
     const { email, firstName, lastName, dateOfBirth } = form.getFieldsValue();
@@ -63,6 +66,17 @@ export function ProfilePage() {
       .catch((err) => {
         message.error(err.message);
       });
+  };
+
+  const handlePasswordChange = () => {
+    const { currentPassword, newPassword } = passwordForm.getFieldsValue();
+
+    const { version } = session?.userData as Customer;
+
+    session
+      ?.updatePassword({ version, currentPassword, newPassword })
+      .then(() => message.success('Your password has been changed successfully'))
+      .catch((err) => message.error(err.message));
   };
 
   const onTabChange = (key: string) => {
@@ -193,6 +207,43 @@ export function ProfilePage() {
             label: 'Addresses',
             key: 'addresses',
             children: <AddressesTable isAddModalOpen={isAddModalOpen} closeAddModal={closeAddModal} />,
+          },
+          {
+            label: 'Password change',
+            key: 'password',
+            children: (
+              <Form
+                form={passwordForm}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ offset: 0, span: 24 }}
+                className="password-form"
+                autoComplete="off"
+                onFinish={handlePasswordChange}
+                layout="horizontal"
+              >
+                <div className="password-content">
+                  <Form.Item
+                    name="currentPassword"
+                    label="Current password"
+                    rules={passwordRules}
+                    validateFirst
+                    hasFeedback
+                  >
+                    <Input.Password />
+                  </Form.Item>
+
+                  <Form.Item name="newPassword" label="New password" rules={passwordRules} validateFirst hasFeedback>
+                    <Input.Password />
+                  </Form.Item>
+
+                  <Form.Item wrapperCol={{ offset: 8 }} className="password-footer">
+                    <Button className="password-btn" type="primary" htmlType="submit">
+                      Change
+                    </Button>
+                  </Form.Item>
+                </div>
+              </Form>
+            ),
           },
         ]}
       />
