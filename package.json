@@ -22,11 +22,12 @@
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "antd": "^5.17.0",
     "antd-mask-input": "^2.0.7",
+    "dayjs": "^1.11.11",
+    "isomorphic-fetch": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.0",
-    "isomorphic-fetch": "^3.0.0"
+    "react-router-dom": "^6.23.0"
   },
   "husky": {
     "hooks": {
