@@ -8,10 +8,15 @@ import {
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
   MyCustomerChangePassword,
+  MyCustomerUpdateAction,
   ProductPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
+export interface CustomerUpdate {
+  actions: MyCustomerUpdateAction[];
+  version: Customer['version'];
+}
 export interface CustomerDraft {
   email: string;
   password: string;
@@ -208,6 +213,21 @@ export const addAddressRequest = (
             },
           },
         ],
+      },
+    })
+    .execute();
+
+export const addAddressInfoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  actions: MyCustomerUpdateAction[],
+  version: Customer['version'],
+) =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions,
       },
     })
     .execute();

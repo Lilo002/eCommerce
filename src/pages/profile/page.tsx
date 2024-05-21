@@ -63,6 +63,7 @@ export function ProfilePage() {
     session
       ?.updateCustomerInfo(updatedCustomer)
       .then(() => setIsEdit(false))
+      .then(() => message.success('Your data has been changed successfully!'))
       .catch((err) => {
         message.error(err.message);
       });
@@ -75,6 +76,7 @@ export function ProfilePage() {
 
     session
       ?.updatePassword({ version, currentPassword, newPassword })
+      .then(() => passwordForm.resetFields())
       .then(() => message.success('Your password has been changed successfully'))
       .catch((err) => message.error(err.message));
   };

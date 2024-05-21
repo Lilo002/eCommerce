@@ -3,11 +3,13 @@ import { Address, Customer, MyCustomerChangePassword, Product } from '@commercet
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
+  addAddressInfoRequest,
   addAddressRequest,
   AddressDraft,
   authenticateCustomer,
   createCustomer,
   CustomerDraft,
+  CustomerUpdate,
   customerUpdate,
   getCustomerByEmail,
   getCustomerDetails,
@@ -25,8 +27,11 @@ export const useSession = () => {
   const [isLogin, setLogin] = useState(false);
   const [userData, setUserData] = useState<Customer | null>(null);
 
-  const getCustomer = (root: ByProjectKeyRequestBuilder) =>
-    getCustomerDetails(root).then(({ body }) => setUserData(body));
+  const getCustomer = (root: ByProjectKeyRequestBuilder): Promise<Customer> =>
+    getCustomerDetails(root).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
 
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
@@ -102,11 +107,17 @@ export const useSession = () => {
     document.cookie = 'token=; Max-Age=-1;';
   };
 
-  const updateCustomerInfo = async ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => {
+  const updateCustomerInfo = async ({
+    email,
+    firstName,
+    lastName,
+    dateOfBirth,
+  }: UpdateCustomerDraft): Promise<Customer> => {
     const { version } = userData as Customer;
-    return updateCustomerInfoRequest(apiRoot, { email, firstName, lastName, dateOfBirth }, version).then(() =>
-      getCustomer(apiRoot),
-    );
+    return updateCustomerInfoRequest(apiRoot, { email, firstName, lastName, dateOfBirth }, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
   };
 
   const updatePassword = ({ version, currentPassword, newPassword }: MyCustomerChangePassword) =>
@@ -117,12 +128,19 @@ export const useSession = () => {
       return login({ email, password: newPassword }, newApiRoot);
     });
 
-  const addAddress = ({ streetName, postalCode, city, country }: AddressDraft) => {
+  const addAddress = async ({ streetName, postalCode, city, country }: AddressDraft): Promise<Customer> => {
     const { version } = userData as Customer;
-    return addAddressRequest(apiRoot, { streetName, postalCode, city, country }, version).then(() =>
-      getCustomer(apiRoot),
-    );
+    return addAddressRequest(apiRoot, { streetName, postalCode, city, country }, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
   };
+
+  const addAddressInfo = ({ actions, version }: CustomerUpdate) =>
+    addAddressInfoRequest(apiRoot, actions, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
 
   useEffect(() => {
     if (!isLogin) getProject(apiRoot);
@@ -139,5 +157,6 @@ export const useSession = () => {
     updateCustomerInfo,
     updatePassword,
     addAddress,
+    addAddressInfo,
   };
 };

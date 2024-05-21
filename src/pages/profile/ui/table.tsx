@@ -1,12 +1,13 @@
 import { useContext, useLayoutEffect, useState } from 'react';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Address } from '@commercetools/platform-sdk';
-import { Button, Checkbox, Form, Input, Modal, Select, Switch, Table, Tag } from 'antd';
+import { Address, Customer, MyCustomerUpdateAction } from '@commercetools/platform-sdk';
+import { Button, Checkbox, Form, Input, message, Modal, Select, Switch, Table, Tag } from 'antd';
 import { ColumnGroupType, ColumnType } from 'antd/es/table';
 import { MaskedInput } from 'antd-mask-input';
 
 import { sessionContext } from '../../../context/sessionContext';
-import { countries, CountriesNames, CountryType } from '../model/countries';
+import { CustomerUpdate } from '../../../sdk/api';
+import { countries, CountriesCodes, CountriesNames, CountryType } from '../model/countries';
 import * as validation from '../model/validation';
 
 import './_page.scss';
@@ -32,7 +33,10 @@ export function AddressesTable({
   useLayoutEffect(() => {
     setAddressesArray([]);
     session?.userData?.addresses.forEach((address, index) => {
-      setAddressesArray((prevArray) => [...prevArray, { ...address, index: index + 1 }]);
+      setAddressesArray((prevArray) => [
+        ...prevArray,
+        { ...address, index: index + 1, country: CountriesNames[address.country] || address.country },
+      ]);
     });
   }, [session?.userData]);
 
@@ -157,7 +161,21 @@ export function AddressesTable({
     closeAddModal();
   };
 
+  const createAddressUpdate = (addressId: Address['id'], version: Customer['version']): CustomerUpdate => {
+    const { shippingAddress, defaultShippingAddress, billingAddress, defaultBillingAddress } = form.getFieldsValue();
+
+    const actions: MyCustomerUpdateAction[] = [];
+
+    if (defaultBillingAddress) actions.push({ addressId, action: 'setDefaultBillingAddress' });
+    if (billingAddress && !defaultBillingAddress) actions.push({ addressId, action: 'addBillingAddressId' });
+    if (defaultShippingAddress) actions.push({ addressId, action: 'setDefaultShippingAddress' });
+    if (shippingAddress && !defaultShippingAddress) actions.push({ addressId, action: 'addShippingAddressId' });
+    console.log(actions);
+    return { actions, version };
+  };
+
   const handleSaveChanges = () => {
+    console.log('save');
     /* const data = form.getFieldsValue(); */
   };
 
@@ -165,6 +183,13 @@ export function AddressesTable({
     const { streetName, postalCode, city } = form.getFieldsValue();
     session
       ?.addAddress({ streetName, postalCode, city, country: CountriesCodes[currentCountry.country] })
+      .then((body) => {
+        const { version } = body;
+        const { length } = body.addresses;
+        const { id } = body.addresses[length - 1];
+        return createAddressUpdate(id, version);
+      })
+      .then((request) => session?.addAddressInfo(request))
       .then(() => handleCancel())
       .then(() => message.success('Address has been added successfully'))
       .catch((err) => message.error(err.message));
