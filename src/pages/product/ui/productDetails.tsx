@@ -12,7 +12,7 @@ const Detail = ({ title, value }: { title: string; value: number | string }) => 
 );
 
 export const ProductDetails = ({ attributes }: { attributes: Details[] }) => {
-  const [year, difficulty, rating, minPlayers, maxPlayers] = attributes;
+  const [, year, difficulty, rating, minPlayers, maxPlayers] = attributes;
 
   return (
     <div className="product-info">
