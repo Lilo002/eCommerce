@@ -14,3 +14,5 @@ export const getPlayers = (minPlayers: number, maxPlayers: number): string => {
   }
   return `${minPlayers} - ${maxPlayers}`;
 };
+
+export const getRoundedNumber = (intNumber: number): number => Math.round(intNumber * 10) / 10;
