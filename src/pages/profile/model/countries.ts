@@ -16,6 +16,13 @@ export const CountriesCodes: CountryCode = {
   [COUNTRY.US]: 'US',
 };
 
+export const CountriesNames: { [key: string]: string } = {
+  BY: 'Belarus',
+  DE: 'Germany',
+  PL: 'Poland',
+  US: 'United States',
+};
+
 export type CountryType = {
   country: COUNTRY;
   mask: string;

@@ -117,3 +117,5 @@ export const customerUpdate = (
 
 export const getProduct = (apiRoot: ByProjectKeyRequestBuilder, productKey: string): Promise<ClientResponse<Product>> =>
   apiRoot.products().withKey({ key: productKey }).get().execute();
+
+export const getCustomerDetails = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.me().get().execute();

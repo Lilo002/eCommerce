@@ -210,7 +210,7 @@ export function RegistrationPage() {
             rules={[{ pattern: shippingCountry.pattern, message: validation.messageForPostalCodeError }]}
             initialValue={shippingCountry.postalCode}
           >
-            <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
+            <MaskedInput key={Math.random()} mask={shippingCountry.mask} value={shippingCountry.postalCode} />
           </Form.Item>
           <Form.Item name="shippingStreet" label="Street" rules={validation.streetRules}>
             <Input className="full-width" />
