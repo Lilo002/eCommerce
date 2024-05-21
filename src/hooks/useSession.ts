@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Address } from '@commercetools/platform-sdk';
+import { Address, Customer } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
@@ -8,6 +8,7 @@ import {
   CustomerDraft,
   customerUpdate,
   getCustomerByEmail,
+  getCustomerDetails,
   getProject,
   LoginCustomerDraft,
 } from '../sdk/api';
@@ -16,13 +17,21 @@ import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } fr
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [isLogin, setLogin] = useState(false);
+  const [userData, setUserData] = useState<Customer | null>(null);
+
+  const getCustomer = (root: ByProjectKeyRequestBuilder) => {
+    getCustomerDetails(root).then(({ body }) => setUserData(body));
+  };
 
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
     if (tokenObject !== null) {
       const token = tokenObject.refreshToken;
 
-      setApiRoot(getRefreshApiRoot(token));
+      const newApiRoot = getRefreshApiRoot(token);
+      getCustomer(newApiRoot);
+
+      setApiRoot(newApiRoot);
       setLogin(true);
     } else {
       setApiRoot(getAnonymousApiRoot());
@@ -45,7 +54,13 @@ export const useSession = () => {
     setAsDefaultShippingAddress: boolean,
     setAsDefaultBillingAddress: boolean,
   ): void | Error => {
-    customerUpdate(newApiRoot, version, addressesResponse, setAsDefaultShippingAddress, setAsDefaultBillingAddress);
+    customerUpdate(
+      newApiRoot,
+      version,
+      addressesResponse,
+      setAsDefaultShippingAddress,
+      setAsDefaultBillingAddress,
+    ).then(() => getCustomer(newApiRoot));
   };
 
   const register = (
@@ -73,14 +88,16 @@ export const useSession = () => {
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
+    setUserData(null);
     document.cookie = 'token=; Max-Age=-1;';
   };
 
   useEffect(() => {
-    getProject(apiRoot);
-  }, [apiRoot]);
+    if (!isLogin) getProject(apiRoot);
+  }, [apiRoot, isLogin]);
 
   return {
+    userData,
     isLogin,
     login,
     logout,

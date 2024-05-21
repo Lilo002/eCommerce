@@ -1,4 +1,5 @@
 import { BrowserRouter as Router } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
 
 import { sessionContext } from '../context/sessionContext';
 import { useSession } from '../hooks/useSession';
@@ -9,11 +10,19 @@ function App() {
   const session = useSession();
 
   return (
-    <sessionContext.Provider value={{ session }}>
-      <Router>
-        <GlobalLayout />
-      </Router>
-    </sessionContext.Provider>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#F4801A',
+        },
+      }}
+    >
+      <sessionContext.Provider value={{ session }}>
+        <Router>
+          <GlobalLayout />
+        </Router>
+      </sessionContext.Provider>
+    </ConfigProvider>
   );
 }
 

@@ -27,6 +27,11 @@ export const Header = () => {
     navigate(ROUTES.PROFILE);
   };
 
+  const handleLogout = () => {
+    session?.logout();
+    navigate(ROUTES.MAIN);
+  };
+
   return (
     <header className="header">
       <div className="header-inner">
@@ -43,7 +48,7 @@ export const Header = () => {
                   <use xlinkHref={`${sprite}#user`} />
                 </svg>
               </Button>
-              <Button className="header-btn" type="link" icon={<LogoutOutlined />} onClick={() => session?.logout()}>
+              <Button className="header-btn" type="link" icon={<LogoutOutlined />} onClick={handleLogout}>
                 LOG OUT
               </Button>
             </>
