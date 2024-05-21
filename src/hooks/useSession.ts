@@ -3,6 +3,8 @@ import { Address, Customer, MyCustomerChangePassword, Product } from '@commercet
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
+  addAddressRequest,
+  AddressDraft,
   authenticateCustomer,
   createCustomer,
   CustomerDraft,
@@ -44,12 +46,11 @@ export const useSession = () => {
   const checkCustomerExistsByEmail = (email: string): Promise<boolean> =>
     getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
 
-  const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
-    authenticateCustomer(apiRoot, { email, password }).then(() => {
+  const login = ({ email, password }: LoginCustomerDraft, root: ByProjectKeyRequestBuilder = apiRoot): Promise<void> =>
+    authenticateCustomer(root, { email, password }).then(() => {
       const newApiRoot = getLoginApiRoot({ email, password });
       setApiRoot(newApiRoot);
       setLogin(true);
-
       getCustomer(newApiRoot);
     });
 
@@ -109,6 +110,13 @@ export const useSession = () => {
   };
 
   const updatePassword = ({ version, currentPassword, newPassword }: MyCustomerChangePassword) =>
+    updatePasswordRequest(apiRoot, { version, currentPassword, newPassword }).then(() => {
+      const { email } = userData as Customer;
+      document.cookie = 'token=; Max-Age=-1;';
+      const newApiRoot = getAnonymousApiRoot();
+      return login({ email, password: newPassword }, newApiRoot);
+    });
+
   const addAddress = ({ streetName, postalCode, city, country }: AddressDraft) => {
     const { version } = userData as Customer;
     return addAddressRequest(apiRoot, { streetName, postalCode, city, country }, version).then(() =>
