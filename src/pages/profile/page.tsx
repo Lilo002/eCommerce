@@ -1,10 +1,11 @@
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloseOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input, Tabs } from 'antd';
+import { Button, DatePicker, Form, Input, message, Tabs } from 'antd';
 import dayjs from 'dayjs';
 
 import { sessionContext } from '../../context/sessionContext';
+import { UpdateCustomerDraft } from '../../sdk/api';
 import { getCookie } from '../../sdk/client/ClientBuilder';
 import { ROUTES } from '../../shared/constants';
 
@@ -29,7 +30,7 @@ export function ProfilePage() {
     }
   }, [navigate]);
 
-  useLayoutEffect(() => {
+  const setUserDataToFrom = () => {
     if (session?.userData) {
       const { email, firstName, lastName, dateOfBirth } = session.userData;
       form.setFieldsValue({
@@ -40,11 +41,28 @@ export function ProfilePage() {
         dateOfBirthDisabled: dateOfBirth,
       });
     }
+  };
+
+  useLayoutEffect(() => {
+    setUserDataToFrom();
   }, [form, session?.userData]);
 
   const handleSaveChanges = () => {
-    /* const data = form.getFieldsValue(); */
-    setIsEdit(false);
+    const { email, firstName, lastName, dateOfBirth } = form.getFieldsValue();
+    const date = dateOfBirth.format('YYYY-MM-DD');
+
+    const updatedCustomer: UpdateCustomerDraft = {
+      email,
+      firstName,
+      lastName,
+      dateOfBirth: date,
+    };
+    session
+      ?.updateCustomerInfo(updatedCustomer)
+      .then(() => setIsEdit(false))
+      .catch((err) => {
+        message.error(err.message);
+      });
   };
 
   const onTabChange = (key: string) => {
@@ -52,6 +70,9 @@ export function ProfilePage() {
   };
 
   const handleEditMode = () => {
+    if (isEdit) {
+      setUserDataToFrom();
+    }
     setIsEdit((edit) => !edit);
   };
 

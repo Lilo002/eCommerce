@@ -32,6 +32,13 @@ export interface AddressDraft {
   postalCode: string;
 }
 
+export interface UpdateCustomerDraft {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+}
+
 export const getProject = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.get().execute();
 
 export const authenticateCustomer = async (
@@ -130,3 +137,35 @@ export const getProducts = (
     .execute();
 
 export const getCustomerDetails = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.me().get().execute();
+
+export const updateCustomerInfoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  { email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft,
+  version: Customer['version'],
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'changeEmail',
+            email,
+          },
+          {
+            action: 'setFirstName',
+            firstName,
+          },
+          {
+            action: 'setLastName',
+            lastName,
+          },
+          {
+            action: 'setDateOfBirth',
+            dateOfBirth,
+          },
+        ],
+      },
+    })
+    .execute();

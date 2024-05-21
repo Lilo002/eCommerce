@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { Address, Customer, Product } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
+import { message } from 'antd';
 
 import {
   authenticateCustomer,
@@ -12,6 +13,8 @@ import {
   getProducts,
   getProject,
   LoginCustomerDraft,
+  UpdateCustomerDraft,
+  updateCustomerInfoRequest,
 } from '../sdk/api';
 import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } from '../sdk/client/ClientBuilder';
 
@@ -20,9 +23,8 @@ export const useSession = () => {
   const [isLogin, setLogin] = useState(false);
   const [userData, setUserData] = useState<Customer | null>(null);
 
-  const getCustomer = (root: ByProjectKeyRequestBuilder) => {
+  const getCustomer = (root: ByProjectKeyRequestBuilder) =>
     getCustomerDetails(root).then(({ body }) => setUserData(body));
-  };
 
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
@@ -96,6 +98,13 @@ export const useSession = () => {
     document.cookie = 'token=; Max-Age=-1;';
   };
 
+  const updateCustomerInfo = async ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => {
+    const { version } = userData as Customer;
+    return updateCustomerInfoRequest(apiRoot, { email, firstName, lastName, dateOfBirth }, version).then(() =>
+      getCustomer(apiRoot),
+    );
+  };
+
   useEffect(() => {
     if (!isLogin) getProject(apiRoot);
   }, [apiRoot, isLogin]);
@@ -108,5 +117,6 @@ export const useSession = () => {
     register,
     checkCustomerExistsByEmail,
     getAllProducts,
+    updateCustomerInfo,
   };
 };

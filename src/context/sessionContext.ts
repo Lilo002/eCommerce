@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { Customer, Product } from '@commercetools/platform-sdk';
 
-import { CustomerDraft, LoginCustomerDraft } from '../sdk/api';
+import { CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
 
 export const sessionContext = createContext<{
   session: {
@@ -9,6 +9,7 @@ export const sessionContext = createContext<{
     login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
     logout: () => void;
     isLogin: boolean;
+    updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<void | Error>;
     register: (
       { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
       setAsDefaultShippingAddress: boolean,
