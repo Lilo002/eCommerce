@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ProductCatalogData } from '@commercetools/platform-sdk';
 
 import { sessionContext } from '../../context/sessionContext';
+import { ROUTES } from '../../shared/constants';
 
 import { getPlayers, getPrice } from './model/data';
 
@@ -10,6 +11,7 @@ import './ui/_product.scss';
 
 export const ProductPage = () => {
   const { productId } = useParams();
+  const navigate = useNavigate();
   const { session } = useContext(sessionContext);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<ProductCatalogData | null>(null);
@@ -22,8 +24,8 @@ export const ProductPage = () => {
         setIsLoading(false);
         console.log(res.current.masterVariant.prices?.[0].discounted);
       })
-      .catch((err) => console.error(err));
-  }, [productId, session]);
+      .catch(() => navigate(ROUTES.NOT_FOUND));
+  }, [navigate, productId, session]);
   return (
     !isLoading &&
     data && (
