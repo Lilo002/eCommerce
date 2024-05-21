@@ -134,6 +134,7 @@ export function RegistrationPage() {
       .then(() => {
         cleanInputs();
         navigate(ROUTES.MAIN);
+        message.success('Your account has been created successfully!');
       })
       .catch(() => message.error('Customer with the given email already exists'));
   };
