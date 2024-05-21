@@ -7,7 +7,7 @@ import { getShortText } from '../lib/getShortText';
 import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from '../model/constants';
 
 export const ProductCard = ({ product }: { product: Product }) => {
-  const productId = product.key;
+  const productKey = product.key;
   const name = getShortText(product?.masterData?.current?.name?.['en-GB'], MAX_LENGTH_NAME);
   const description = getShortText(product?.masterData?.current?.description?.['en-GB'], MAX_LENGTH_DESCRIPTION);
   const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
@@ -20,7 +20,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
   const discounted = formatPrices(discountedValue?.centAmount, discountedValue?.fractionDigits);
 
   return (
-    <Link to={`${ROUTES.PRODUCT}/${productId}`}>
+    <Link to={`${ROUTES.PRODUCT}/${productKey}`}>
       <div className="card">
         <img className="card-img" alt="example" src={imgUrl} />
         <div className="card-body">

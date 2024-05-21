@@ -5,7 +5,9 @@ import { ProductCatalogData, ProductData } from '@commercetools/platform-sdk';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
-import { getPlayers, getPrice, getRoundedNumber } from './model/data';
+import { ProductDetails } from './ui/productDetails';
+import { ProductPrice } from './ui/productPrice';
+import { ProductImage } from './ui/slider';
 
 import './ui/_product.scss';
 
@@ -26,43 +28,37 @@ export const ProductPage = () => {
       .catch(() => navigate(ROUTES.NOT_FOUND));
   }, [navigate, productId, session]);
 
+  if (!data) {
+    return <div>Product not found</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const { name, masterVariant, description } = data;
+  const imageUrl = data.masterVariant?.images?.[0]?.url;
+  const price = masterVariant?.prices?.[0];
+  const isDiscounted = !!data.masterVariant?.prices?.[0]?.discounted;
+  const attributes = masterVariant?.attributes || [];
+
   return (
-    !isLoading &&
-    data && (
-      <article className="product-inner">
-        <div className="product-slider">
-          <img className="product-slider-img" alt="board game" src={data.masterVariant?.images?.[0]?.url} />
-        </div>
-        <div className="product">
-          <h2 className="product-title">{data.name['en-GB']}</h2>
-          <p className="product-price">{getPrice(data.masterVariant.prices?.[0].value)}</p>
-          <div className="product-info">
-            <div className="product-info-title">
-              <h3 className="product-info-title-content">Description</h3>
-            </div>
-            <p>{data.description?.['en-GB']}</p>
-            <div className="product-info-title">
-              <h3 className="product-info-title-content">Details</h3>
-            </div>
-            <p>
-              <span className="product-info-detail">Year:</span>
-              {data.masterVariant.attributes?.[0].value}
-            </p>
-            <p>
-              <span className="product-info-detail">Difficulty:</span>
-              {getRoundedNumber(data.masterVariant.attributes?.[1].value)}
-            </p>
-            <p>
-              <span className="product-info-detail">Rating:</span>
-              {getRoundedNumber(data.masterVariant.attributes?.[2].value)}
-            </p>
-            <p>
-              <span className="product-info-detail">Players:</span>
-              {getPlayers(data.masterVariant.attributes?.[3].value, data.masterVariant.attributes?.[4].value)}
-            </p>
+    <article className="product-inner">
+      {imageUrl && <ProductImage imageUrl={data.masterVariant?.images?.[0]?.url} />}
+      <div className="product">
+        <h2 className="product-title">{name['en-GB']}</h2>
+        <ProductPrice price={price} isDiscounted={isDiscounted} />
+        <div className="product-info">
+          <div className="product-info-title">
+            <h3 className="product-info-title-content">Description</h3>
           </div>
+          <p>{description?.['en-GB']}</p>
+          <div className="product-info-title">
+            <h3 className="product-info-title-content">Details</h3>
+          </div>
+          <ProductDetails attributes={attributes} />
         </div>
-      </article>
-    )
+      </div>
+    </article>
   );
 };
