@@ -170,7 +170,6 @@ export function AddressesTable({
     if (billingAddress && !defaultBillingAddress) actions.push({ addressId, action: 'addBillingAddressId' });
     if (defaultShippingAddress) actions.push({ addressId, action: 'setDefaultShippingAddress' });
     if (shippingAddress && !defaultShippingAddress) actions.push({ addressId, action: 'addShippingAddressId' });
-    console.log(actions);
     return { actions, version };
   };
 
