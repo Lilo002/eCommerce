@@ -81,8 +81,12 @@ export function AddressesTable({
     setIsShipping(isShippingAddress(addressData.id));
   };
 
-  const handleClick = (record: Address) => {
+  const handleEdit = (record: Address) => {
     editModal(record);
+  };
+
+  const handleRemove = (record: Address) => {
+    session?.removeAddress(record.id).catch((err) => message.error(err.message));
   };
 
   const columns: (ColumnGroupType<Address> | ColumnType<Address>)[] = [
@@ -136,10 +140,10 @@ export function AddressesTable({
       fixed: 'right',
       render: (_, record: Address) => (
         <>
-          <Button shape="circle" type="primary" onClick={() => handleClick(record)}>
+          <Button shape="circle" type="primary" onClick={() => handleEdit(record)}>
             <EditOutlined />
           </Button>
-          <Button danger shape="circle" style={{ marginLeft: 8 }}>
+          <Button danger shape="circle" style={{ marginLeft: 8 }} onClick={() => handleRemove(record)}>
             <DeleteOutlined />
           </Button>
         </>

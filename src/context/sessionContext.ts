@@ -1,5 +1,12 @@
 import { createContext } from 'react';
-import { ClientResponse, Customer, MyCustomerChangePassword, Product, Update } from '@commercetools/platform-sdk';
+import {
+  Address,
+  ClientResponse,
+  Customer,
+  MyCustomerChangePassword,
+  Product,
+  Update,
+} from '@commercetools/platform-sdk';
 
 import { AddressDraft, CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
 
@@ -24,5 +31,6 @@ export const sessionContext = createContext<{
     getAllProducts: (limit: number) => Promise<Product[]>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
+    removeAddress: (addressId: Address['id']) => Promise<Customer>;
   } | null;
 }>({ session: null });

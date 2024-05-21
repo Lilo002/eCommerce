@@ -179,7 +179,7 @@ export const updateCustomerInfoRequest = (
 export const updatePasswordRequest = (
   apiRoot: ByProjectKeyRequestBuilder,
   { version, currentPassword, newPassword }: MyCustomerChangePassword,
-) =>
+): Promise<ClientResponse<Customer>> =>
   apiRoot
     .me()
     .password()
@@ -196,7 +196,7 @@ export const addAddressRequest = (
   apiRoot: ByProjectKeyRequestBuilder,
   { streetName, postalCode, city, country }: AddressDraft,
   version: Customer['version'],
-) =>
+): Promise<ClientResponse<Customer>> =>
   apiRoot
     .me()
     .post({
@@ -221,13 +221,33 @@ export const addAddressInfoRequest = (
   apiRoot: ByProjectKeyRequestBuilder,
   actions: MyCustomerUpdateAction[],
   version: Customer['version'],
-) =>
+): Promise<ClientResponse<Customer>> =>
   apiRoot
     .me()
     .post({
       body: {
         version,
         actions,
+      },
+    })
+    .execute();
+
+export const removeAddressRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  addressId: Address['id'],
+  version: Customer['version'],
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeAddress',
+            addressId,
+          },
+        ],
       },
     })
     .execute();
