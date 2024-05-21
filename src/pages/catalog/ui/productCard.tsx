@@ -7,7 +7,7 @@ import { getShortText } from '../lib/getShortText';
 import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from '../model/constants';
 
 export const ProductCard = ({ product }: { product: Product }) => {
-  const productId = product.id;
+  const productId = product.key;
   const name = getShortText(product?.masterData?.current?.name?.['en-GB'], MAX_LENGTH_NAME);
   const description = getShortText(product?.masterData?.current?.description?.['en-GB'], MAX_LENGTH_DESCRIPTION);
   const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
