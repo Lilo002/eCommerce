@@ -46,8 +46,11 @@ export const useSession = () => {
 
   const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
     authenticateCustomer(apiRoot, { email, password }).then(() => {
-      setApiRoot(getLoginApiRoot({ email, password }));
+      const newApiRoot = getLoginApiRoot({ email, password });
+      setApiRoot(newApiRoot);
       setLogin(true);
+
+      getCustomer(newApiRoot);
     });
 
   const updateAddresses = (
