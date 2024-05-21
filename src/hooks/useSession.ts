@@ -8,8 +8,8 @@ import {
   CustomerDraft,
   customerUpdate,
   getCustomerByEmail,
-  getProducts,
   getCustomerDetails,
+  getProducts,
   getProject,
   LoginCustomerDraft,
 } from '../sdk/api';

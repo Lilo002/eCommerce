@@ -125,5 +125,5 @@ export const getProducts = (apiRoot: ByProjectKeyRequestBuilder): Promise<Client
       },
     })
     .execute();
-    
+
 export const getCustomerDetails = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.me().get().execute();
