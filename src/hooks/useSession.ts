@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Address, Customer, ProductCatalogData } from '@commercetools/platform-sdk';
+import { Address, Customer, Product, ProductCatalogData } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
@@ -10,6 +10,7 @@ import {
   getCustomerByEmail,
   getCustomerDetails,
   getProduct,
+  getProducts,
   getProject,
   LoginCustomerDraft,
 } from '../sdk/api';
@@ -86,6 +87,9 @@ export const useSession = () => {
       );
     });
 
+  const getAllProducts = (limit: number): Promise<Product[]> =>
+    getProducts(apiRoot, limit).then(({ body }) => body.results);
+
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
@@ -108,5 +112,6 @@ export const useSession = () => {
     register,
     checkCustomerExistsByEmail,
     getProductFromServer,
+    getAllProducts,
   };
 };

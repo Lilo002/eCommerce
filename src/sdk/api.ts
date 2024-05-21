@@ -8,6 +8,7 @@ import {
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
   Product,
+  ProductPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
@@ -117,5 +118,19 @@ export const customerUpdate = (
 
 export const getProduct = (apiRoot: ByProjectKeyRequestBuilder, productKey: string): Promise<ClientResponse<Product>> =>
   apiRoot.products().withKey({ key: productKey }).get().execute();
+
+export const getProducts = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  limit: number,
+): Promise<ClientResponse<ProductPagedQueryResponse>> =>
+  apiRoot
+    .products()
+    .get({
+      queryArgs: {
+        limit,
+        where: 'masterData(published=true)',
+      },
+    })
+    .execute();
 
 export const getCustomerDetails = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.me().get().execute();
