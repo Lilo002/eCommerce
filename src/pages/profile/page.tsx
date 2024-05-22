@@ -103,19 +103,25 @@ export function ProfilePage() {
   return (
     <div className="profile">
       <div className="profile-title">
-        {activeTab === 'general' ? (
+        {activeTab === 'general' && (
           <div className="general-info">
             <span className="general-title">PROFILE</span>
             <Button shape="circle" type="text" onClick={handleEditMode}>
               {isEdit ? <CloseOutlined /> : <EditOutlined />}
             </Button>
           </div>
-        ) : (
+        )}
+        {activeTab === 'addresses' && (
           <div className="general-info">
             <div className="addresses-title">ADDRESSES</div>
             <Button shape="circle" type="text" onClick={openAddModal}>
               <PlusOutlined />
             </Button>
+          </div>
+        )}
+        {activeTab === 'password' && (
+          <div className="general-info">
+            <div className="addresses-title">PASSWORD</div>
           </div>
         )}
       </div>
