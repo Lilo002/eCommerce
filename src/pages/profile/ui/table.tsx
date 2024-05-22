@@ -6,7 +6,7 @@ import { ColumnGroupType, ColumnType } from 'antd/es/table';
 import { MaskedInput } from 'antd-mask-input';
 
 import { sessionContext } from '../../../context/sessionContext';
-import { CustomerUpdate } from '../../../sdk/api';
+import { AddressDraft, CustomerUpdate } from '../../../sdk/api';
 import { countries, CountriesCodes, CountriesNames, CountryType } from '../model/countries';
 import * as validation from '../model/validation';
 
@@ -62,13 +62,15 @@ export function AddressesTable({
     setIsModalOpen(true);
     setEditingAddress(addressData);
 
+    const countryIndex = countries.findIndex((country) => country.country === addressData.country);
     setCurrentCountry(countries.find((country) => country.country === addressData.country) ?? countries[0]);
     const { postalCode, city, country, streetName } = addressData;
+
     if (country) {
       form.setFieldsValue({
         postalCode,
         city,
-        country: CountriesNames[country],
+        country: countryIndex,
         streetName,
         defaultShippingAddress: isShippingDefault(addressData.id),
         defaultBillingAddress: isBillingDefault(addressData.id),
@@ -165,7 +167,7 @@ export function AddressesTable({
     closeAddModal();
   };
 
-  const createAddressUpdate = (addressId: Address['id'], version: Customer['version']): CustomerUpdate => {
+  const createAddedAddressUpdate = (addressId: Address['id'], version: Customer['version']): CustomerUpdate => {
     const { shippingAddress, defaultShippingAddress, billingAddress, defaultBillingAddress } = form.getFieldsValue();
 
     const actions: MyCustomerUpdateAction[] = [];
@@ -177,20 +179,75 @@ export function AddressesTable({
     return { actions, version };
   };
 
+  const createEditedAddressUpdate = (addressId: Address['id'], version: Customer['version']): CustomerUpdate => {
+    const { shippingAddress, defaultShippingAddress, billingAddress, defaultBillingAddress } = form.getFieldsValue();
+    const actions: MyCustomerUpdateAction[] = [];
+
+    if (isBillingAddress(addressId) !== Boolean(billingAddress)) {
+      if (billingAddress) {
+        actions.push({ addressId, action: 'addBillingAddressId' });
+      } else {
+        actions.push({ addressId, action: 'removeBillingAddressId' });
+      }
+    }
+
+    if (isBillingDefault(addressId) !== Boolean(defaultBillingAddress)) {
+      if (defaultBillingAddress) {
+        actions.push({ addressId, action: 'setDefaultBillingAddress' });
+      } else {
+        actions.push({ addressId: undefined, action: 'setDefaultBillingAddress' });
+      }
+    }
+
+    if (isShippingAddress(addressId) !== Boolean(shippingAddress)) {
+      if (shippingAddress) {
+        actions.push({ addressId, action: 'addShippingAddressId' });
+      } else {
+        actions.push({ addressId, action: 'removeShippingAddressId' });
+      }
+    }
+
+    if (isShippingDefault(addressId) !== Boolean(defaultShippingAddress)) {
+      if (defaultShippingAddress) {
+        actions.push({ addressId, action: 'setDefaultShippingAddress' });
+      } else {
+        actions.push({ addressId: undefined, action: 'setDefaultShippingAddress' });
+      }
+    }
+
+    return { actions, version };
+  };
+
+  const getDataFromAddressForm = (): AddressDraft => {
+    const { streetName, postalCode, city } = form.getFieldsValue();
+    const country = CountriesCodes[currentCountry.country];
+    return { streetName, postalCode, city, country };
+  };
+
   const handleSaveChanges = () => {
-    console.log('save');
-    /* const data = form.getFieldsValue(); */
+    const address = getDataFromAddressForm();
+    const { id } = editingAddress as Address;
+    session
+      ?.updateAddress(id, address)
+      .then((body) => {
+        const { version } = body;
+        return createEditedAddressUpdate(id, version);
+      })
+      .then((request) => session?.addAddressInfo(request))
+      .then(() => handleCancel())
+      .then(() => message.success('Address has been changed successfully'))
+      .catch((err) => message.error(err.message));
   };
 
   const handleAddNewAddress = () => {
-    const { streetName, postalCode, city } = form.getFieldsValue();
+    const address = getDataFromAddressForm();
     session
-      ?.addAddress({ streetName, postalCode, city, country: CountriesCodes[currentCountry.country] })
+      ?.addAddress(address)
       .then((body) => {
         const { version } = body;
         const { length } = body.addresses;
         const { id } = body.addresses[length - 1];
-        return createAddressUpdate(id, version);
+        return createAddedAddressUpdate(id, version);
       })
       .then((request) => session?.addAddressInfo(request))
       .then(() => handleCancel())

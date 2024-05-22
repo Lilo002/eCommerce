@@ -32,5 +32,6 @@ export const sessionContext = createContext<{
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
     removeAddress: (addressId: Address['id']) => Promise<Customer>;
+    updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
   } | null;
 }>({ session: null });

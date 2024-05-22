@@ -17,6 +17,7 @@ import {
   getProject,
   LoginCustomerDraft,
   removeAddressRequest,
+  updateAddressRequest,
   UpdateCustomerDraft,
   updateCustomerInfoRequest,
   updatePasswordRequest,
@@ -152,6 +153,14 @@ export const useSession = () => {
     });
   };
 
+  const updateAddress = async (addressId: Address['id'], address: AddressDraft) => {
+    const { version } = userData as Customer;
+    return updateAddressRequest(apiRoot, addressId, address, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
+  };
+
   useEffect(() => {
     if (!isLogin) getProject(apiRoot);
   }, [apiRoot, isLogin]);
@@ -169,5 +178,6 @@ export const useSession = () => {
     addAddress,
     addAddressInfo,
     removeAddress,
+    updateAddress,
   };
 };

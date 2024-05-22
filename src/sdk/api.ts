@@ -13,6 +13,18 @@ import {
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
+/* export interface MyCustomerUpdateAction {
+  addressId: string | null | undefined;
+  action:
+    | 'addBillingAddressId'
+    | 'removeBillingAddressId'
+    | 'setDefaultBillingAddress'
+    | 'removeAddress'
+    | 'addShippingAddressId'
+    | 'setDefaultShippingAddress'
+    | 'removeShippingAddressId';
+} */
+
 export interface CustomerUpdate {
   actions: MyCustomerUpdateAction[];
   version: Customer['version'];
@@ -246,6 +258,28 @@ export const removeAddressRequest = (
           {
             action: 'removeAddress',
             addressId,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const updateAddressRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  addressId: Address['id'],
+  address: Address,
+  version: Customer['version'],
+) =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'changeAddress',
+            addressId,
+            address,
           },
         ],
       },
