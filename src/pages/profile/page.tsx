@@ -1,20 +1,24 @@
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloseOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input, Tabs } from 'antd';
+import { Customer } from '@commercetools/platform-sdk';
+import { Button, DatePicker, Form, Input, message, Tabs } from 'antd';
 import dayjs from 'dayjs';
 
 import { sessionContext } from '../../context/sessionContext';
+import { UpdateCustomerDraft } from '../../sdk/api';
 import { getCookie } from '../../sdk/client/ClientBuilder';
 import { ROUTES } from '../../shared/constants';
 
 import * as validation from './model/validation';
+import { passwordRules } from './model/validation';
 import { AddressesTable } from './ui/table';
 
 import './ui/_page.scss';
 
 export function ProfilePage() {
   const [form] = Form.useForm();
+  const [passwordForm] = Form.useForm();
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
 
@@ -29,8 +33,8 @@ export function ProfilePage() {
     }
   }, [navigate]);
 
-  useLayoutEffect(() => {
-    if (session?.userData) {
+  const setUserDataToForm = useCallback(() => {
+    if (session?.userData.email) {
       const { email, firstName, lastName, dateOfBirth } = session.userData;
       form.setFieldsValue({
         email,
@@ -42,9 +46,39 @@ export function ProfilePage() {
     }
   }, [form, session?.userData]);
 
+  useLayoutEffect(() => {
+    setUserDataToForm();
+  }, [setUserDataToForm]);
+
   const handleSaveChanges = () => {
-    /* const data = form.getFieldsValue(); */
-    setIsEdit(false);
+    const { email, firstName, lastName, dateOfBirth } = form.getFieldsValue();
+    const date = dateOfBirth.format('YYYY-MM-DD');
+
+    const updatedCustomer: UpdateCustomerDraft = {
+      email,
+      firstName,
+      lastName,
+      dateOfBirth: date,
+    };
+    session
+      ?.updateCustomerInfo(updatedCustomer)
+      .then(() => setIsEdit(false))
+      .then(() => message.success('Your data has been changed successfully!'))
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
+
+  const handlePasswordChange = () => {
+    const { currentPassword, newPassword } = passwordForm.getFieldsValue();
+
+    const { version } = session?.userData as Customer;
+
+    session
+      ?.updatePassword({ version, currentPassword, newPassword })
+      .then(() => passwordForm.resetFields())
+      .then(() => message.success('Your password has been changed successfully'))
+      .catch((err) => message.error(err.message));
   };
 
   const onTabChange = (key: string) => {
@@ -52,6 +86,9 @@ export function ProfilePage() {
   };
 
   const handleEditMode = () => {
+    if (isEdit) {
+      setUserDataToForm();
+    }
     setIsEdit((edit) => !edit);
   };
 
@@ -66,19 +103,25 @@ export function ProfilePage() {
   return (
     <div className="profile">
       <div className="profile-title">
-        {activeTab === 'general' ? (
+        {activeTab === 'general' && (
           <div className="general-info">
             <span className="general-title">PROFILE</span>
             <Button shape="circle" type="text" onClick={handleEditMode}>
               {isEdit ? <CloseOutlined /> : <EditOutlined />}
             </Button>
           </div>
-        ) : (
+        )}
+        {activeTab === 'addresses' && (
           <div className="general-info">
             <div className="addresses-title">ADDRESSES</div>
             <Button shape="circle" type="text" onClick={openAddModal}>
               <PlusOutlined />
             </Button>
+          </div>
+        )}
+        {activeTab === 'password' && (
+          <div className="general-info">
+            <div className="addresses-title">PASSWORD</div>
           </div>
         )}
       </div>
@@ -172,6 +215,43 @@ export function ProfilePage() {
             label: 'Addresses',
             key: 'addresses',
             children: <AddressesTable isAddModalOpen={isAddModalOpen} closeAddModal={closeAddModal} />,
+          },
+          {
+            label: 'Password change',
+            key: 'password',
+            children: (
+              <Form
+                form={passwordForm}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ offset: 0, span: 24 }}
+                className="password-form"
+                autoComplete="off"
+                onFinish={handlePasswordChange}
+                layout="horizontal"
+              >
+                <div className="password-content">
+                  <Form.Item
+                    name="currentPassword"
+                    label="Current password"
+                    rules={passwordRules}
+                    validateFirst
+                    hasFeedback
+                  >
+                    <Input.Password />
+                  </Form.Item>
+
+                  <Form.Item name="newPassword" label="New password" rules={passwordRules} validateFirst hasFeedback>
+                    <Input.Password />
+                  </Form.Item>
+
+                  <Form.Item wrapperCol={{ offset: 8 }} className="password-footer">
+                    <Button className="password-btn" type="primary" htmlType="submit">
+                      Change
+                    </Button>
+                  </Form.Item>
+                </div>
+              </Form>
+            ),
           },
         ]}
       />

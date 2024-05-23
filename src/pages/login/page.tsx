@@ -41,15 +41,9 @@ export function LoginPage() {
         clearForm();
         navigate(ROUTES.MAIN);
       })
-      .catch(() =>
-        session?.checkCustomerExistsByEmail(email).then((isExist) => {
-          if (isExist) {
-            message.error(`Incorrect password. Please, try again!`);
-          } else {
-            message.error(`Customer with the given email does not exist.`);
-          }
-        }),
-      );
+      .catch((err) => {
+        message.error(err.message);
+      });
   };
 
   return (

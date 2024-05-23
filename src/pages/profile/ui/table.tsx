@@ -1,12 +1,13 @@
 import { useContext, useLayoutEffect, useState } from 'react';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Address } from '@commercetools/platform-sdk';
-import { Button, Checkbox, Form, Input, Modal, Select, Switch, Table, Tag } from 'antd';
+import { Address, Customer, MyCustomerUpdateAction } from '@commercetools/platform-sdk';
+import { Button, Checkbox, Form, Input, message, Modal, Select, Switch, Table, Tag } from 'antd';
 import { ColumnGroupType, ColumnType } from 'antd/es/table';
 import { MaskedInput } from 'antd-mask-input';
 
 import { sessionContext } from '../../../context/sessionContext';
-import { countries, CountriesNames, CountryType } from '../model/countries';
+import { AddressDraft, CustomerUpdate } from '../../../sdk/api';
+import { countries, CountriesCodes, CountriesNames, CountryType } from '../model/countries';
 import * as validation from '../model/validation';
 
 import './_page.scss';
@@ -32,7 +33,10 @@ export function AddressesTable({
   useLayoutEffect(() => {
     setAddressesArray([]);
     session?.userData?.addresses.forEach((address, index) => {
-      setAddressesArray((prevArray) => [...prevArray, { ...address, index: index + 1 }]);
+      setAddressesArray((prevArray) => [
+        ...prevArray,
+        { ...address, index: index + 1, country: CountriesNames[address.country] || address.country },
+      ]);
     });
   }, [session?.userData]);
 
@@ -58,13 +62,15 @@ export function AddressesTable({
     setIsModalOpen(true);
     setEditingAddress(addressData);
 
+    const countryIndex = countries.findIndex((country) => country.country === addressData.country);
     setCurrentCountry(countries.find((country) => country.country === addressData.country) ?? countries[0]);
     const { postalCode, city, country, streetName } = addressData;
+
     if (country) {
       form.setFieldsValue({
         postalCode,
         city,
-        country: CountriesNames[country],
+        country: countryIndex,
         streetName,
         defaultShippingAddress: isShippingDefault(addressData.id),
         defaultBillingAddress: isBillingDefault(addressData.id),
@@ -77,8 +83,12 @@ export function AddressesTable({
     setIsShipping(isShippingAddress(addressData.id));
   };
 
-  const handleClick = (record: Address) => {
+  const handleEdit = (record: Address) => {
     editModal(record);
+  };
+
+  const handleRemove = (record: Address) => {
+    session?.removeAddress(record.id).catch((err) => message.error(err.message));
   };
 
   const columns: (ColumnGroupType<Address> | ColumnType<Address>)[] = [
@@ -132,10 +142,10 @@ export function AddressesTable({
       fixed: 'right',
       render: (_, record: Address) => (
         <>
-          <Button shape="circle" type="primary" onClick={() => handleClick(record)}>
+          <Button shape="circle" type="primary" onClick={() => handleEdit(record)}>
             <EditOutlined />
           </Button>
-          <Button danger shape="circle" style={{ marginLeft: 8 }}>
+          <Button danger shape="circle" style={{ marginLeft: 8 }} onClick={() => handleRemove(record)}>
             <DeleteOutlined />
           </Button>
         </>
@@ -157,8 +167,92 @@ export function AddressesTable({
     closeAddModal();
   };
 
+  const createAddedAddressUpdate = (addressId: Address['id'], version: Customer['version']): CustomerUpdate => {
+    const { shippingAddress, defaultShippingAddress, billingAddress, defaultBillingAddress } = form.getFieldsValue();
+
+    const actions: MyCustomerUpdateAction[] = [];
+
+    if (defaultBillingAddress) actions.push({ addressId, action: 'setDefaultBillingAddress' });
+    if (billingAddress && !defaultBillingAddress) actions.push({ addressId, action: 'addBillingAddressId' });
+    if (defaultShippingAddress) actions.push({ addressId, action: 'setDefaultShippingAddress' });
+    if (shippingAddress && !defaultShippingAddress) actions.push({ addressId, action: 'addShippingAddressId' });
+    return { actions, version };
+  };
+
+  const createEditedAddressUpdate = (addressId: Address['id'], version: Customer['version']): CustomerUpdate => {
+    const { shippingAddress, defaultShippingAddress, billingAddress, defaultBillingAddress } = form.getFieldsValue();
+    const actions: MyCustomerUpdateAction[] = [];
+
+    if (isBillingAddress(addressId) !== Boolean(billingAddress)) {
+      if (billingAddress) {
+        actions.push({ addressId, action: 'addBillingAddressId' });
+      } else {
+        actions.push({ addressId, action: 'removeBillingAddressId' });
+      }
+    }
+
+    if (isBillingDefault(addressId) !== Boolean(defaultBillingAddress)) {
+      if (defaultBillingAddress) {
+        actions.push({ addressId, action: 'setDefaultBillingAddress' });
+      } else {
+        actions.push({ addressId: undefined, action: 'setDefaultBillingAddress' });
+      }
+    }
+
+    if (isShippingAddress(addressId) !== Boolean(shippingAddress)) {
+      if (shippingAddress) {
+        actions.push({ addressId, action: 'addShippingAddressId' });
+      } else {
+        actions.push({ addressId, action: 'removeShippingAddressId' });
+      }
+    }
+
+    if (isShippingDefault(addressId) !== Boolean(defaultShippingAddress)) {
+      if (defaultShippingAddress) {
+        actions.push({ addressId, action: 'setDefaultShippingAddress' });
+      } else {
+        actions.push({ addressId: undefined, action: 'setDefaultShippingAddress' });
+      }
+    }
+
+    return { actions, version };
+  };
+
+  const getDataFromAddressForm = (): AddressDraft => {
+    const { streetName, postalCode, city } = form.getFieldsValue();
+    const country = CountriesCodes[currentCountry.country];
+    return { streetName, postalCode, city, country };
+  };
+
   const handleSaveChanges = () => {
-    /* const data = form.getFieldsValue(); */
+    const address = getDataFromAddressForm();
+    const { id } = editingAddress as Address;
+    session
+      ?.updateAddress(id, address)
+      .then((body) => {
+        const { version } = body;
+        return createEditedAddressUpdate(id, version);
+      })
+      .then((request) => session?.addAddressInfo(request))
+      .then(() => handleCancel())
+      .then(() => message.success('Address has been changed successfully'))
+      .catch((err) => message.error(err.message));
+  };
+
+  const handleAddNewAddress = () => {
+    const address = getDataFromAddressForm();
+    session
+      ?.addAddress(address)
+      .then((body) => {
+        const { version } = body;
+        const { length } = body.addresses;
+        const { id } = body.addresses[length - 1];
+        return createAddedAddressUpdate(id, version);
+      })
+      .then((request) => session?.addAddressInfo(request))
+      .then(() => handleCancel())
+      .then(() => message.success('Address has been added successfully'))
+      .catch((err) => message.error(err.message));
   };
 
   const handleChangeShippingCountry = (index: number) => {
@@ -185,7 +279,7 @@ export function AddressesTable({
           initialValues={{
             postalCode: '',
             city: '',
-            country: countries[0].country,
+            country: 0,
             streetName: '',
             defaultShippingAddress: false,
             defaultBillingAddress: false,
@@ -196,7 +290,7 @@ export function AddressesTable({
           form={form}
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 24 }}
-          onFinish={handleSaveChanges}
+          onFinish={editingAddress ? handleSaveChanges : handleAddNewAddress}
           onValuesChange={(_, values) => {
             setIsBilling(values.billingAddress);
             setIsShipping(values.shippingAddress);

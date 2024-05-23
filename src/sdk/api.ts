@@ -7,11 +7,17 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  MyCustomerChangePassword,
+  MyCustomerUpdateAction,
   Product,
   ProductPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
+export interface CustomerUpdate {
+  actions: MyCustomerUpdateAction[];
+  version: Customer['version'];
+}
 export interface CustomerDraft {
   email: string;
   password: string;
@@ -31,6 +37,13 @@ export interface AddressDraft {
   city: string;
   country: string;
   postalCode: string;
+}
+
+export interface UpdateCustomerDraft {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
 }
 
 export const getProject = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.get().execute();
@@ -136,3 +149,133 @@ export const getProducts = (
     .execute();
 
 export const getCustomerDetails = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.me().get().execute();
+
+export const updateCustomerInfoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  { email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft,
+  version: Customer['version'],
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'changeEmail',
+            email,
+          },
+          {
+            action: 'setFirstName',
+            firstName,
+          },
+          {
+            action: 'setLastName',
+            lastName,
+          },
+          {
+            action: 'setDateOfBirth',
+            dateOfBirth,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const updatePasswordRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  { version, currentPassword, newPassword }: MyCustomerChangePassword,
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .me()
+    .password()
+    .post({
+      body: {
+        version,
+        currentPassword,
+        newPassword,
+      },
+    })
+    .execute();
+
+export const addAddressRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  { streetName, postalCode, city, country }: AddressDraft,
+  version: Customer['version'],
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addAddress',
+            address: {
+              streetName,
+              postalCode,
+              city,
+              country,
+            },
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const addAddressInfoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  actions: MyCustomerUpdateAction[],
+  version: Customer['version'],
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions,
+      },
+    })
+    .execute();
+
+export const removeAddressRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  addressId: Address['id'],
+  version: Customer['version'],
+): Promise<ClientResponse<Customer>> =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeAddress',
+            addressId,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const updateAddressRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  addressId: Address['id'],
+  address: Address,
+  version: Customer['version'],
+) =>
+  apiRoot
+    .me()
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'changeAddress',
+            addressId,
+            address,
+          },
+        ],
+      },
+    })
+    .execute();

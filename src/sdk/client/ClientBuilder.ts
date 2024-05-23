@@ -47,8 +47,9 @@ const createPasswordClient = ({ email, password }: LoginCustomerDraft): Client =
       },
       set: (token: TokenStore) => {
         const { expirationTime } = token;
+
         const tokenObjectString = JSON.stringify(token);
-        document.cookie = `token=${tokenObjectString}; expires=${new Date(Date.now() + expirationTime * 1000)};`;
+        document.cookie = `token=${tokenObjectString}; expires=${new Date(expirationTime)};`;
       },
     },
     scopes: [`manage_project:${projectKey}`],

@@ -26,13 +26,12 @@
 }
 
 .general {
+  max-width: 450px;
+  margin: 0 auto;
   &-container {
     display: flex;
     flex-direction: column;
     gap: 50px;
-  }
-  &-form {
-    max-width: 400px;
   }
   &-info {
     display: flex;
@@ -50,6 +49,11 @@
     font-size: 20px;
     line-height: 32px;
   }
+}
+
+.password-form {
+  max-width: 450px;
+  margin: 0 auto;
 }
 
 .modal {

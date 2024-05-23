@@ -1,11 +1,15 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Address, Customer, Product, ProductCatalogData } from '@commercetools/platform-sdk';
+import { Address, Customer, MyCustomerChangePassword, Product, ProductCatalogData } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
+  addAddressInfoRequest,
+  addAddressRequest,
+  AddressDraft,
   authenticateCustomer,
   createCustomer,
   CustomerDraft,
+  CustomerUpdate,
   customerUpdate,
   getCustomerByEmail,
   getCustomerDetails,
@@ -13,17 +17,35 @@ import {
   getProducts,
   getProject,
   LoginCustomerDraft,
+  removeAddressRequest,
+  updateAddressRequest,
+  UpdateCustomerDraft,
+  updateCustomerInfoRequest,
+  updatePasswordRequest,
 } from '../sdk/api';
 import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } from '../sdk/client/ClientBuilder';
+
+const initialCustomer: Customer = {
+  version: 0,
+  email: '',
+  id: '',
+  addresses: [],
+  authenticationMode: '',
+  createdAt: '',
+  isEmailVerified: false,
+  lastModifiedAt: '',
+};
 
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [isLogin, setLogin] = useState(false);
-  const [userData, setUserData] = useState<Customer | null>(null);
+  const [userData, setUserData] = useState<Customer>(initialCustomer);
 
-  const getCustomer = (root: ByProjectKeyRequestBuilder) => {
-    getCustomerDetails(root).then(({ body }) => setUserData(body));
-  };
+  const getCustomer = (root: ByProjectKeyRequestBuilder): Promise<Customer> =>
+    getCustomerDetails(root).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
 
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
@@ -43,10 +65,12 @@ export const useSession = () => {
   const checkCustomerExistsByEmail = (email: string): Promise<boolean> =>
     getCustomerByEmail(apiRoot, email).then(({ body }) => body.results.length > 0);
 
-  const login = ({ email, password }: LoginCustomerDraft): Promise<void> =>
-    authenticateCustomer(apiRoot, { email, password }).then(() => {
-      setApiRoot(getLoginApiRoot({ email, password }));
+  const login = ({ email, password }: LoginCustomerDraft, root: ByProjectKeyRequestBuilder = apiRoot): Promise<void> =>
+    authenticateCustomer(root, { email, password }).then(() => {
+      const newApiRoot = getLoginApiRoot({ email, password });
+      setApiRoot(newApiRoot);
       setLogin(true);
+      getCustomer(newApiRoot);
     });
 
   const updateAddresses = (
@@ -93,8 +117,60 @@ export const useSession = () => {
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
-    setUserData(null);
+    setUserData(initialCustomer);
     document.cookie = 'token=; Max-Age=-1;';
+  };
+
+  const updateCustomerInfo = async ({
+    email,
+    firstName,
+    lastName,
+    dateOfBirth,
+  }: UpdateCustomerDraft): Promise<Customer> => {
+    const { version } = userData;
+    return updateCustomerInfoRequest(apiRoot, { email, firstName, lastName, dateOfBirth }, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
+  };
+
+  const updatePassword = ({ version, currentPassword, newPassword }: MyCustomerChangePassword) =>
+    updatePasswordRequest(apiRoot, { version, currentPassword, newPassword }).then(() => {
+      const { email } = userData;
+      document.cookie = 'token=; Max-Age=-1;';
+      const newApiRoot = getAnonymousApiRoot();
+      return login({ email, password: newPassword }, newApiRoot);
+    });
+
+  const addAddress = async ({ streetName, postalCode, city, country }: AddressDraft): Promise<Customer> => {
+    const { version } = userData;
+    return addAddressRequest(apiRoot, { streetName, postalCode, city, country }, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
+  };
+
+  const addAddressInfo = ({ actions, version }: CustomerUpdate) =>
+    addAddressInfoRequest(apiRoot, actions, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
+
+  const removeAddress = async (addressId: Address['id']) => {
+    const { version } = userData;
+
+    return removeAddressRequest(apiRoot, addressId, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
+  };
+
+  const updateAddress = async (addressId: Address['id'], address: AddressDraft) => {
+    const { version } = userData;
+    return updateAddressRequest(apiRoot, addressId, address, version).then(({ body }) => {
+      setUserData(body);
+      return body;
+    });
   };
 
   useEffect(() => {
@@ -113,5 +189,11 @@ export const useSession = () => {
     checkCustomerExistsByEmail,
     getProduct,
     getAllProducts,
+    updateCustomerInfo,
+    updatePassword,
+    addAddress,
+    addAddressInfo,
+    removeAddress,
+    updateAddress,
   };
 };
