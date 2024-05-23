@@ -7,10 +7,13 @@ import { getShortText } from '../lib/getShortText';
 import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from '../model/constants';
 
 export const ProductCard = ({ product }: { product: Product }) => {
-  const productId = product.id;
+  const productKey = product.key;
   const name = getShortText(product?.masterData?.current?.name?.['en-GB'], MAX_LENGTH_NAME);
-  const description = getShortText(product?.masterData?.current?.description?.['en-GB'], MAX_LENGTH_DESCRIPTION);
-  const imgUrl = product?.masterData?.current?.masterVariant?.images?.[0]?.url;
+  const description = getShortText(
+    product?.masterData?.current?.masterVariant.attributes?.[0].value,
+    MAX_LENGTH_DESCRIPTION,
+  );
+  const imgUrl = product?.masterData?.current?.masterVariant?.attributes?.[6].value;
   const priceValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.value;
   const isDiscountedExists = !!product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted;
   const discountedValue = product?.masterData?.current?.masterVariant?.prices?.[0]?.discounted?.value;
@@ -20,7 +23,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
   const discounted = formatPrices(discountedValue?.centAmount, discountedValue?.fractionDigits);
 
   return (
-    <Link to={`${ROUTES.PRODUCT}/${productId}`}>
+    <Link to={`${ROUTES.PRODUCT}/${productKey}`}>
       <div className="card">
         <img className="card-img" alt="example" src={imgUrl} />
         <div className="card-body">
