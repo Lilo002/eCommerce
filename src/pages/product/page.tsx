@@ -7,7 +7,7 @@ import { ROUTES } from '../../shared/constants';
 
 import { ProductDetails } from './ui/productDetails';
 import { ProductPrice } from './ui/productPrice';
-import { ProductImage } from './ui/slider';
+import { ProductImage } from './ui/slider/slider';
 
 import './ui/_product.scss';
 
