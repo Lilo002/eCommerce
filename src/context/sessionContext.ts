@@ -5,6 +5,7 @@ import {
   Customer,
   MyCustomerChangePassword,
   Product,
+  ProductCatalogData,
   Update,
 } from '@commercetools/platform-sdk';
 
@@ -28,6 +29,7 @@ export const sessionContext = createContext<{
       setAsDefaultBillingAddress: boolean,
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
+    getProduct: (productkey: string) => Promise<ProductCatalogData>;
     getAllProducts: (limit: number) => Promise<Product[]>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
