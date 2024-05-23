@@ -33,8 +33,8 @@ export function ProfilePage() {
     }
   }, [navigate]);
 
-  const setUserDataToFrom = useCallback(() => {
-    if (session?.userData) {
+  const setUserDataToForm = useCallback(() => {
+    if (session?.userData.email) {
       const { email, firstName, lastName, dateOfBirth } = session.userData;
       form.setFieldsValue({
         email,
@@ -47,8 +47,8 @@ export function ProfilePage() {
   }, [form, session?.userData]);
 
   useLayoutEffect(() => {
-    setUserDataToFrom();
-  }, [setUserDataToFrom]);
+    setUserDataToForm();
+  }, [setUserDataToForm]);
 
   const handleSaveChanges = () => {
     const { email, firstName, lastName, dateOfBirth } = form.getFieldsValue();
@@ -87,7 +87,7 @@ export function ProfilePage() {
 
   const handleEditMode = () => {
     if (isEdit) {
-      setUserDataToFrom();
+      setUserDataToForm();
     }
     setIsEdit((edit) => !edit);
   };

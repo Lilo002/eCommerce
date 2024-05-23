@@ -24,10 +24,21 @@ import {
 } from '../sdk/api';
 import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } from '../sdk/client/ClientBuilder';
 
+const initialCustomer: Customer = {
+  version: 0,
+  email: '',
+  id: '',
+  addresses: [],
+  authenticationMode: '',
+  createdAt: '',
+  isEmailVerified: false,
+  lastModifiedAt: '',
+};
+
 export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [isLogin, setLogin] = useState(false);
-  const [userData, setUserData] = useState<Customer | null>(null);
+  const [userData, setUserData] = useState<Customer>(initialCustomer);
 
   const getCustomer = (root: ByProjectKeyRequestBuilder): Promise<Customer> =>
     getCustomerDetails(root).then(({ body }) => {
@@ -105,7 +116,7 @@ export const useSession = () => {
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
-    setUserData(null);
+    setUserData(initialCustomer);
     document.cookie = 'token=; Max-Age=-1;';
   };
 
@@ -115,7 +126,7 @@ export const useSession = () => {
     lastName,
     dateOfBirth,
   }: UpdateCustomerDraft): Promise<Customer> => {
-    const { version } = userData as Customer;
+    const { version } = userData;
     return updateCustomerInfoRequest(apiRoot, { email, firstName, lastName, dateOfBirth }, version).then(({ body }) => {
       setUserData(body);
       return body;
@@ -124,14 +135,14 @@ export const useSession = () => {
 
   const updatePassword = ({ version, currentPassword, newPassword }: MyCustomerChangePassword) =>
     updatePasswordRequest(apiRoot, { version, currentPassword, newPassword }).then(() => {
-      const { email } = userData as Customer;
+      const { email } = userData;
       document.cookie = 'token=; Max-Age=-1;';
       const newApiRoot = getAnonymousApiRoot();
       return login({ email, password: newPassword }, newApiRoot);
     });
 
   const addAddress = async ({ streetName, postalCode, city, country }: AddressDraft): Promise<Customer> => {
-    const { version } = userData as Customer;
+    const { version } = userData;
     return addAddressRequest(apiRoot, { streetName, postalCode, city, country }, version).then(({ body }) => {
       setUserData(body);
       return body;
@@ -145,7 +156,7 @@ export const useSession = () => {
     });
 
   const removeAddress = async (addressId: Address['id']) => {
-    const { version } = userData as Customer;
+    const { version } = userData;
 
     return removeAddressRequest(apiRoot, addressId, version).then(({ body }) => {
       setUserData(body);
@@ -154,7 +165,7 @@ export const useSession = () => {
   };
 
   const updateAddress = async (addressId: Address['id'], address: AddressDraft) => {
-    const { version } = userData as Customer;
+    const { version } = userData;
     return updateAddressRequest(apiRoot, addressId, address, version).then(({ body }) => {
       setUserData(body);
       return body;

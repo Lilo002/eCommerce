@@ -12,7 +12,7 @@ import { AddressDraft, CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } 
 
 export const sessionContext = createContext<{
   session: {
-    userData: Customer | null;
+    userData: Customer;
     login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
     logout: () => void;
     isLogin: boolean;
