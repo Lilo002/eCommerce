@@ -1,5 +1,8 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Image } from '@commercetools/platform-sdk';
-import { EffectFlip, Navigation, Pagination } from 'swiper/modules';
+import { Modal } from 'antd';
+import { Swiper as SwiperType } from 'swiper';
+import { EffectFlip, Keyboard, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css/navigation';
@@ -8,21 +11,76 @@ import 'swiper/css/effect-flip';
 
 import 'swiper/css';
 import './_slider.scss';
+import './_modal.scss';
 
-export const ProductImage = ({ images }: { images: Image[] }) => (
-  <div className="product-slider">
-    <Swiper
-      effect="flip"
-      slidesPerView={1}
-      navigation
-      modules={[EffectFlip, Navigation, Pagination]}
-      pagination={{ clickable: true }}
-    >
-      {images.map((image) => (
-        <SwiperSlide key={image.url}>
-          <img className="product-slider-img" alt="board game" src={image.url} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  </div>
-);
+export const ProductImage = ({ images }: { images: Image[] }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  const setCurrentSlide = useCallback(() => {
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(activeIndex);
+    }
+  }, [activeIndex]);
+
+  const showModal = () => {
+    setCurrentSlide();
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const updateIndex = (swiperInstance: SwiperType) => {
+    if (swiperInstance) {
+      setActiveIndex(swiperInstance.activeIndex);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentSlide();
+  }, [activeIndex, setCurrentSlide]);
+
+  const handleSwiper = (swiper: SwiperType) => {
+    swiperRef.current = swiper;
+  };
+
+  const renderSlides = (imageClass: string) =>
+    images.map((image, index) => (
+      <SwiperSlide key={image.url}>
+        <img className={imageClass} alt={`${index + 1} board game`} src={image.url} />
+      </SwiperSlide>
+    ));
+
+  return (
+    <div className="product-slider">
+      <Swiper
+        effect="flip"
+        slidesPerView={1}
+        navigation
+        modules={[EffectFlip, Navigation, Pagination]}
+        pagination={{ clickable: true }}
+        onClick={showModal}
+        onRealIndexChange={updateIndex}
+      >
+        {renderSlides('product-slider-img')}
+      </Swiper>
+      <Modal className="modal" open={isModalOpen} footer={null} onCancel={handleCancel} width="100%">
+        <Swiper
+          onSwiper={handleSwiper}
+          effect="flip"
+          slidesPerView={1}
+          navigation
+          modules={[EffectFlip, Keyboard, Navigation, Pagination]}
+          pagination={{ clickable: true }}
+          keyboard={{ enabled: true }}
+        >
+          {renderSlides('modal-img')}
+        </Swiper>
+      </Modal>
+    </div>
+  );
+};
