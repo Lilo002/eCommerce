@@ -9,7 +9,7 @@ import {
   customerUpdate,
   getCustomerByEmail,
   getCustomerDetails,
-  getProduct,
+  getOneProduct,
   getProducts,
   getProject,
   LoginCustomerDraft,
@@ -101,8 +101,8 @@ export const useSession = () => {
     if (!isLogin) getProject(apiRoot);
   }, [apiRoot, isLogin]);
 
-  const getProductFromServer = (productKey: string): Promise<ProductCatalogData> =>
-    getProduct(apiRoot, productKey).then(({ body }) => body.masterData);
+  const getProduct = (productKey: string): Promise<ProductCatalogData> =>
+    getOneProduct(apiRoot, productKey).then(({ body }) => body.masterData);
 
   return {
     userData,
@@ -111,7 +111,7 @@ export const useSession = () => {
     logout,
     register,
     checkCustomerExistsByEmail,
-    getProductFromServer,
+    getProduct,
     getAllProducts,
   };
 };

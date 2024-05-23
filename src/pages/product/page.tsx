@@ -20,7 +20,7 @@ export const ProductPage = () => {
 
   useEffect(() => {
     session
-      ?.getProductFromServer(productId || '')
+      ?.getProduct(productId || '')
       .then((res: ProductCatalogData) => {
         setData(res.current);
         setIsLoading(false);

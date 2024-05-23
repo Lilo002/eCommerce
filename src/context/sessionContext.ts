@@ -15,7 +15,7 @@ export const sessionContext = createContext<{
       setAsDefaultBillingAddress: boolean,
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
-    getProductFromServer: (productkey: string) => Promise<ProductCatalogData>;
+    getProduct: (productkey: string) => Promise<ProductCatalogData>;
     getAllProducts: (limit: number) => Promise<Product[]>;
   } | null;
 }>({ session: null });

@@ -116,8 +116,10 @@ export const customerUpdate = (
     })
     .execute();
 
-export const getProduct = (apiRoot: ByProjectKeyRequestBuilder, productKey: string): Promise<ClientResponse<Product>> =>
-  apiRoot.products().withKey({ key: productKey }).get().execute();
+export const getOneProduct = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  productKey: string,
+): Promise<ClientResponse<Product>> => apiRoot.products().withKey({ key: productKey }).get().execute();
 
 export const getProducts = (
   apiRoot: ByProjectKeyRequestBuilder,
