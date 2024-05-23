@@ -37,14 +37,15 @@ export const ProductPage = () => {
   }
 
   const { name, masterVariant, description } = data;
-  const imageUrl = data.masterVariant?.images?.[0]?.url;
+  // const imageUrl = data.masterVariant?.images?.[0]?.url;
+  const images = data.masterVariant?.images;
   const price = masterVariant?.prices?.[0];
   const isDiscounted = !!data.masterVariant?.prices?.[0]?.discounted;
   const attributes = masterVariant?.attributes || [];
 
   return (
     <article className="product-inner">
-      {imageUrl && <ProductImage imageUrl={data.masterVariant?.images?.[0]?.url} />}
+      {images && <ProductImage images={images} />}
       <div className="product">
         <h2 className="product-title">{name['en-GB']}</h2>
         <ProductPrice price={price} isDiscounted={isDiscounted} />

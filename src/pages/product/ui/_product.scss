@@ -1,6 +1,7 @@
 @import '../../../shared/style/variables';
 
 .product-inner {
+  user-select: none;
   padding: 10px;
   background-color: $white-color;
   font-family: $font-family;
@@ -15,13 +16,15 @@
 }
 
 .product-slider {
-  padding: 10px 40px;
+  padding: 10px;
   width: 40%;
   max-height: 100%;
   &-img {
     display: flex;
     width: 100%;
     margin: 0 auto;
+    height: 475px;
+    padding: 50px;
     @media screen and (max-width: 768px) {
       max-height: 340px;
       width: auto;
