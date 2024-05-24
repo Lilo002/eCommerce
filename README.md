@@ -15,6 +15,7 @@ Our eCommerce application is online board game store. If you're a board game fan
 - Husky
 - Jest
 - Ant-design
+- Swiperjs
 
 ### Run the project:
 
