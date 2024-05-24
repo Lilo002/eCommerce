@@ -37,7 +37,6 @@ export const ProductPage = () => {
   }
 
   const { name, masterVariant, description } = data;
-  // const imageUrl = data.masterVariant?.images?.[0]?.url;
   const images = data.masterVariant?.images;
   const price = masterVariant?.prices?.[0];
   const isDiscounted = !!data.masterVariant?.prices?.[0]?.discounted;
