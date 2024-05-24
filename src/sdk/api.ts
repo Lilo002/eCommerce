@@ -1,5 +1,6 @@
 import {
   Address,
+  CategoryPagedQueryResponse,
   ClientResponse,
   Customer,
   CustomerAddBillingAddressIdAction,
@@ -50,6 +51,10 @@ export interface ParamsRequestProducts {
   limit: number;
   staged: boolean;
   sort: string;
+}
+
+export interface ParamsRequestCategories {
+  limit: number;
 }
 
 export const getProject = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.get().execute();
@@ -175,6 +180,19 @@ export const getProductByName = (
       queryArgs: {
         fuzzy: true,
         'text.en-GB': productName,
+      },
+    })
+    .execute();
+
+export const getCategories = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  { limit }: ParamsRequestCategories,
+): Promise<ClientResponse<CategoryPagedQueryResponse>> =>
+  apiRoot
+    .categories()
+    .get({
+      queryArgs: {
+        limit,
       },
     })
     .execute();

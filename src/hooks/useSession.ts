@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Address,
+  Category,
   Customer,
   MyCustomerChangePassword,
   ProductCatalogData,
@@ -17,6 +18,7 @@ import {
   CustomerDraft,
   CustomerUpdate,
   customerUpdate,
+  getCategories,
   getCustomerByEmail,
   getCustomerDetails,
   getOneProduct,
@@ -24,6 +26,7 @@ import {
   getProducts,
   getProject,
   LoginCustomerDraft,
+  ParamsRequestCategories,
   ParamsRequestProducts,
   removeAddressRequest,
   updateAddressRequest,
@@ -125,6 +128,9 @@ export const useSession = () => {
   const findProduct = (productName: string): Promise<ProductProjection[]> =>
     getProductByName(apiRoot, productName).then(({ body }) => body.results);
 
+  const getAllCategories = ({ limit }: ParamsRequestCategories): Promise<Category[]> =>
+    getCategories(apiRoot, { limit }).then(({ body }) => body.results);
+
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
@@ -207,5 +213,6 @@ export const useSession = () => {
     addAddressInfo,
     removeAddress,
     updateAddress,
+    getAllCategories,
   };
 };

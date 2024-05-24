@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import {
   Address,
+  Category,
   ClientResponse,
   Customer,
   MyCustomerChangePassword,
@@ -13,6 +14,7 @@ import {
   AddressDraft,
   CustomerDraft,
   LoginCustomerDraft,
+  ParamsRequestCategories,
   ParamsRequestProducts,
   UpdateCustomerDraft,
 } from '../sdk/api';
@@ -42,5 +44,6 @@ export const sessionContext = createContext<{
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
     removeAddress: (addressId: Address['id']) => Promise<Customer>;
     updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
+    getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
   } | null;
 }>({ session: null });
