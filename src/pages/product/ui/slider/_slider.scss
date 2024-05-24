@@ -1,0 +1,21 @@
+@import '../../../../shared/style/variables';
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: $orange-color;
+  transition: color 0.3s ease-in;
+  &:hover {
+    color: $orange-color-hover-btn;
+  }
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  max-height: 100%;
+  height: auto;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: $orange-color;
+}
