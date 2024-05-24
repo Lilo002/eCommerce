@@ -12,6 +12,8 @@
 .swiper-slide {
   background-position: center;
   background-size: cover;
+  max-height: 100%;
+  height: auto;
 }
 
 .swiper-pagination-bullet-active {

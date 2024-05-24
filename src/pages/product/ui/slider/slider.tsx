@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Image } from '@commercetools/platform-sdk';
 import { Modal } from 'antd';
 import { Swiper as SwiperType } from 'swiper';
@@ -19,11 +19,11 @@ export const ProductImage = ({ images }: { images: Image[] }) => {
 
   const swiperRef = useRef<SwiperType | null>(null);
 
-  const setCurrentSlide = useCallback(() => {
+  const setCurrentSlide = () => {
     if (swiperRef.current) {
       swiperRef.current.slideTo(activeIndex);
     }
-  }, [activeIndex]);
+  };
 
   const showModal = () => {
     setCurrentSlide();
@@ -39,10 +39,6 @@ export const ProductImage = ({ images }: { images: Image[] }) => {
       setActiveIndex(swiperInstance.activeIndex);
     }
   };
-
-  useEffect(() => {
-    setCurrentSlide();
-  }, [activeIndex, setCurrentSlide]);
 
   const handleSwiper = (swiper: SwiperType) => {
     swiperRef.current = swiper;
@@ -77,6 +73,7 @@ export const ProductImage = ({ images }: { images: Image[] }) => {
           modules={[EffectFlip, Keyboard, Navigation, Pagination]}
           pagination={{ clickable: true }}
           keyboard={{ enabled: true }}
+          initialSlide={activeIndex}
         >
           {renderSlides('modal-img')}
         </Swiper>
