@@ -1,5 +1,11 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Address, Customer, MyCustomerChangePassword, Product, ProductCatalogData } from '@commercetools/platform-sdk';
+import {
+  Address,
+  Customer,
+  MyCustomerChangePassword,
+  ProductCatalogData,
+  ProductProjection,
+} from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
 import {
@@ -14,9 +20,11 @@ import {
   getCustomerByEmail,
   getCustomerDetails,
   getOneProduct,
+  getProductByName,
   getProducts,
   getProject,
   LoginCustomerDraft,
+  ParamsRequestProducts,
   removeAddressRequest,
   updateAddressRequest,
   UpdateCustomerDraft,
@@ -111,8 +119,11 @@ export const useSession = () => {
       );
     });
 
-  const getAllProducts = (limit: number): Promise<Product[]> =>
-    getProducts(apiRoot, limit).then(({ body }) => body.results);
+  const getAllProducts = ({ limit, staged, sort }: ParamsRequestProducts): Promise<ProductProjection[]> =>
+    getProducts(apiRoot, { limit, staged, sort }).then(({ body }) => body.results);
+
+  const findProduct = (productName: string): Promise<ProductProjection[]> =>
+    getProductByName(apiRoot, productName).then(({ body }) => body.results);
 
   const logout = () => {
     setApiRoot(getAnonymousApiRoot());
@@ -189,6 +200,7 @@ export const useSession = () => {
     checkCustomerExistsByEmail,
     getProduct,
     getAllProducts,
+    findProduct,
     updateCustomerInfo,
     updatePassword,
     addAddress,

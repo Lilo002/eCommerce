@@ -10,7 +10,7 @@ import {
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
   Product,
-  ProductPagedQueryResponse,
+  ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
@@ -44,6 +44,12 @@ export interface UpdateCustomerDraft {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
+}
+
+export interface ParamsRequestProducts {
+  limit: number;
+  staged: boolean;
+  sort: string;
 }
 
 export const getProject = (apiRoot: ByProjectKeyRequestBuilder) => apiRoot.get().execute();
@@ -136,14 +142,39 @@ export const getOneProduct = (
 
 export const getProducts = (
   apiRoot: ByProjectKeyRequestBuilder,
-  limit: number,
-): Promise<ClientResponse<ProductPagedQueryResponse>> =>
+  { limit, staged, sort }: ParamsRequestProducts,
+): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> => {
+  const queryArgs = sort
+    ? {
+        limit,
+        staged,
+        sort,
+      }
+    : {
+        limit,
+        staged,
+      };
+
+  return apiRoot
+    .productProjections()
+    .search()
+    .get({
+      queryArgs,
+    })
+    .execute();
+};
+
+export const getProductByName = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  productName: string,
+): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> =>
   apiRoot
-    .products()
+    .productProjections()
+    .search()
     .get({
       queryArgs: {
-        limit,
-        where: 'masterData(published=true)',
+        fuzzy: true,
+        'text.en-GB': productName,
       },
     })
     .execute();

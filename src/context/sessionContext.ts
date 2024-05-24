@@ -4,12 +4,18 @@ import {
   ClientResponse,
   Customer,
   MyCustomerChangePassword,
-  Product,
   ProductCatalogData,
+  ProductProjection,
   Update,
 } from '@commercetools/platform-sdk';
 
-import { AddressDraft, CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
+import {
+  AddressDraft,
+  CustomerDraft,
+  LoginCustomerDraft,
+  ParamsRequestProducts,
+  UpdateCustomerDraft,
+} from '../sdk/api';
 
 export const sessionContext = createContext<{
   session: {
@@ -30,7 +36,8 @@ export const sessionContext = createContext<{
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
     getProduct: (productkey: string) => Promise<ProductCatalogData>;
-    getAllProducts: (limit: number) => Promise<Product[]>;
+    getAllProducts: ({ limit, staged, sort }: ParamsRequestProducts) => Promise<ProductProjection[]>;
+    findProduct: (productName: string) => Promise<ProductProjection[]>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
     removeAddress: (addressId: Address['id']) => Promise<Customer>;

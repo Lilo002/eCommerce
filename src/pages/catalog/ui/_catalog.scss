@@ -1,5 +1,10 @@
 @import '../../../shared/style/variables';
 
+.catalo-page {
+  margin: 10px;
+  width: 100%;
+}
+
 .catalog {
   display: flex;
   flex-direction: column;
@@ -7,9 +12,9 @@
   margin: 10px 0;
   &-cards {
     display: flex;
-    justify-content: center;
     align-items: flex-start;
     align-content: flex-start;
+    justify-content: center;
     gap: 40px;
     flex-wrap: wrap;
     margin-bottom: 100px;
@@ -62,4 +67,37 @@
       margin: 0;
     }
   }
+}
+
+.catalog-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-control-panel {
+  display: flex;
+  justify-content: space-between;
+  &-form {
+    display: flex;
+  }
+
+  &-sort {
+    display: flex;
+    gap: 10px;
+
+    &-btn {
+      display: flex;
+      margin-left: auto;
+      gap: 2px;
+      background-color: $orange-color;
+      &:hover {
+        background-color: $orange-color-hover-btn !important;
+      }
+    }
+  }
+}
+
+.icon {
+  width: 20px;
+  height: 24px;
 }
