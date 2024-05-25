@@ -12,7 +12,8 @@ import sprite from './ui/sprites.svg';
 import './ui/_header.scss';
 
 export const Header = () => {
-  const { session } = useContext(sessionContext);
+  const sessionData = useContext(sessionContext);
+  const session = sessionData?.session;
   const navigate = useNavigate();
 
   const handleLogin = () => {
