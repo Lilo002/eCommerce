@@ -51,6 +51,7 @@ export interface ParamsRequestProducts {
   limit: number;
   staged: boolean;
   sort: string;
+  filter: string;
 }
 
 export interface ParamsRequestCategories {
@@ -147,18 +148,20 @@ export const getOneProduct = (
 
 export const getProducts = (
   apiRoot: ByProjectKeyRequestBuilder,
-  { limit, staged, sort }: ParamsRequestProducts,
+  { limit, staged, sort, filter }: ParamsRequestProducts,
 ): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> => {
-  const queryArgs = sort
-    ? {
-        limit,
-        staged,
-        sort,
-      }
-    : {
-        limit,
-        staged,
-      };
+  const queryArgs: { limit: number; staged: boolean; sort?: string; 'filter.query'?: string } = {
+    limit,
+    staged,
+  };
+
+  if (sort) {
+    queryArgs.sort = sort;
+  }
+
+  if (filter) {
+    queryArgs['filter.query'] = filter;
+  }
 
   return apiRoot
     .productProjections()

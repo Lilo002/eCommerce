@@ -4,6 +4,8 @@ export const MAX_LENGTH_DESCRIPTION = 145;
 
 export const LIMIT_PRODUCT = 60;
 
+export const LIMIT_CATEGORY = 50;
+
 export const STAGED_PRODUCT = false;
 
 export const SORT_FIELDS = {
