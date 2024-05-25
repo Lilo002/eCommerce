@@ -1,38 +1,49 @@
-import { BrowserRouter as Router } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 
 import { Main } from '../pages/main/page';
 
-test('Renders the Main page', () => {
-  render(
-    <Router>
-      <Main />
-    </Router>,
-  );
-  expect(true).toBeTruthy();
-});
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+}));
 
-test('Should render headline', () => {
-  render(
-    <Router>
-      <Main />
-    </Router>,
-  );
-  expect(screen.getByText('Main page')).toBeInTheDocument();
-});
+describe('Main Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-test('Checking for the Registration button and Log in button', () => {
-  render(
-    <Router>
-      <Main />
-    </Router>,
-  );
+  test('navigates to login page when "SIGN IN" button is clicked', () => {
+    const mockNavigate = jest.requireMock('react-router-dom').useNavigate;
+    const mockNavigateFn = jest.fn();
+    mockNavigate.mockReturnValue(mockNavigateFn);
 
-  const registrationButton = screen.getByRole('button', { name: /to Registration/i });
-  expect(registrationButton).toBeInTheDocument();
+    render(
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>,
+    );
 
-  const logInButton = screen.getByRole('button', { name: /to login/i });
-  expect(logInButton).toBeInTheDocument();
+    fireEvent.click(screen.getByText('SIGN IN'));
+
+    expect(mockNavigateFn).toHaveBeenCalledWith('/login');
+  });
+
+  test('navigates to registration page when "SIGN UP" button is clicked', () => {
+    const mockNavigate = jest.requireMock('react-router-dom').useNavigate;
+    const mockNavigateFn = jest.fn();
+    mockNavigate.mockReturnValue(mockNavigateFn);
+
+    render(
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>,
+    );
+
+    fireEvent.click(screen.getByText('SIGN UP'));
+
+    expect(mockNavigateFn).toHaveBeenCalledWith('/registration');
+  });
 });
