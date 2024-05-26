@@ -38,7 +38,13 @@ export const sessionContext = createContext<{
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
     getProduct: (productkey: string) => Promise<ProductCatalogData>;
-    getAllProducts: ({ limit, staged, sort, filter }: ParamsRequestProducts) => Promise<ProductProjection[]>;
+    getAllProducts: ({
+      limit,
+      staged,
+      sort,
+      filter,
+      priceCurrency,
+    }: ParamsRequestProducts) => Promise<ProductProjection[]>;
     findProduct: (productName: string) => Promise<ProductProjection[]>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;

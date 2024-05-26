@@ -122,8 +122,14 @@ export const useSession = () => {
       );
     });
 
-  const getAllProducts = ({ limit, staged, sort, filter }: ParamsRequestProducts): Promise<ProductProjection[]> =>
-    getProducts(apiRoot, { limit, staged, sort, filter }).then(({ body }) => body.results);
+  const getAllProducts = ({
+    limit,
+    staged,
+    sort,
+    filter,
+    priceCurrency,
+  }: ParamsRequestProducts): Promise<ProductProjection[]> =>
+    getProducts(apiRoot, { limit, staged, sort, filter, priceCurrency }).then(({ body }) => body.results);
 
   const findProduct = (productName: string): Promise<ProductProjection[]> =>
     getProductByName(apiRoot, productName).then(({ body }) => body.results);

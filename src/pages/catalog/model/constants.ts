@@ -17,3 +17,7 @@ export const SORT_DIRECTIONS = {
   ASC: 'asc',
   DESC: 'desc',
 };
+
+export const PRICE_CURRENCY = {
+  USD: 'USD',
+};

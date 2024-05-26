@@ -50,8 +50,9 @@ export interface UpdateCustomerDraft {
 export interface ParamsRequestProducts {
   limit: number;
   staged: boolean;
-  sort: string;
-  filter: string;
+  sort: string | null;
+  filter: string[];
+  priceCurrency: string | null;
 }
 
 export interface ParamsRequestCategories {
@@ -148,9 +149,15 @@ export const getOneProduct = (
 
 export const getProducts = (
   apiRoot: ByProjectKeyRequestBuilder,
-  { limit, staged, sort, filter }: ParamsRequestProducts,
+  { limit, staged, sort, filter, priceCurrency }: ParamsRequestProducts,
 ): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> => {
-  const queryArgs: { limit: number; staged: boolean; sort?: string; 'filter.query'?: string } = {
+  const queryArgs: {
+    limit: number;
+    staged: boolean;
+    sort?: string;
+    'filter.query'?: string[];
+    priceCurrency?: string;
+  } = {
     limit,
     staged,
   };
@@ -161,6 +168,10 @@ export const getProducts = (
 
   if (filter) {
     queryArgs['filter.query'] = filter;
+  }
+
+  if (priceCurrency) {
+    queryArgs.priceCurrency = priceCurrency;
   }
 
   return apiRoot

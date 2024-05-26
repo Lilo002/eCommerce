@@ -4,7 +4,7 @@ import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { sessionContext } from '../../context/sessionContext';
 import { ParamsRequestCategories, ParamsRequestProducts } from '../../sdk/api';
 
-import { LIMIT_CATEGORY, LIMIT_PRODUCT, SORT_FIELDS, STAGED_PRODUCT } from './model/constants';
+import { LIMIT_CATEGORY, LIMIT_PRODUCT, PRICE_CURRENCY, SORT_FIELDS, STAGED_PRODUCT } from './model/constants';
 import { Filters } from './ui/filters';
 import { ProductsList } from './ui/productsList';
 import { SearchBar } from './ui/searchBar';
@@ -15,8 +15,9 @@ import './ui/_catalog.scss';
 const paramsRequest: ParamsRequestProducts = {
   limit: LIMIT_PRODUCT,
   staged: STAGED_PRODUCT,
-  sort: '',
-  filter: '',
+  sort: null,
+  filter: [],
+  priceCurrency: null,
 };
 
 const defaultParamsGetCategories: ParamsRequestCategories = {
@@ -62,12 +63,19 @@ export function CatalogPage() {
     });
   };
 
-  const handleSetFilters = (categoriesIds: string[]) => {
+  const handleSetFilters = (categoriesIds: string[], productsWithDiscount: boolean) => {
     const minLength = 1;
+    paramsRequest.filter = [];
+    paramsRequest.priceCurrency = '';
 
     if (categoriesIds.length >= minLength) {
       const filter = categoriesIds.map((id) => `subtree("${id}")`).join(', ');
-      paramsRequest.filter = `categories.id: ${filter}`;
+      paramsRequest.filter.push(`categories.id: ${filter}`);
+    }
+
+    if (productsWithDiscount) {
+      paramsRequest.priceCurrency = PRICE_CURRENCY.USD;
+      paramsRequest.filter.push(`variants.scopedPriceDiscounted:${productsWithDiscount}`);
     }
 
     session?.getAllProducts(paramsRequest).then((items) => {
@@ -77,7 +85,8 @@ export function CatalogPage() {
 
   const handleClearFilters = () => {
     if (paramsRequest.filter) {
-      paramsRequest.filter = '';
+      paramsRequest.filter = [];
+      paramsRequest.priceCurrency = '';
 
       session?.getAllProducts(paramsRequest).then((items) => {
         setProducts(items);
