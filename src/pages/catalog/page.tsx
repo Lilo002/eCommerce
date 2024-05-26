@@ -4,7 +4,14 @@ import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { sessionContext } from '../../context/sessionContext';
 import { ParamsRequestCategories, ParamsRequestProducts } from '../../sdk/api';
 
-import { LIMIT_CATEGORY, LIMIT_PRODUCT, PRICE_CURRENCY, SORT_FIELDS, STAGED_PRODUCT } from './model/constants';
+import {
+  FRACTION_DIGITS,
+  LIMIT_CATEGORY,
+  LIMIT_PRODUCT,
+  PRICE_CURRENCY,
+  SORT_FIELDS,
+  STAGED_PRODUCT,
+} from './model/constants';
 import { Filters } from './ui/filters';
 import { ProductsList } from './ui/productsList';
 import { SearchBar } from './ui/searchBar';
@@ -63,7 +70,7 @@ export function CatalogPage() {
     });
   };
 
-  const handleSetFilters = (categoriesIds: string[], productsWithDiscount: boolean) => {
+  const handleSetFilters = (categoriesIds: string[], productsWithDiscount: boolean, priceRange: number[]) => {
     const minLength = 1;
     paramsRequest.filter = [];
     paramsRequest.priceCurrency = '';
@@ -77,6 +84,10 @@ export function CatalogPage() {
       paramsRequest.priceCurrency = PRICE_CURRENCY.USD;
       paramsRequest.filter.push(`variants.scopedPriceDiscounted:${productsWithDiscount}`);
     }
+
+    paramsRequest.filter.push(
+      `variants.price.centAmount: range(${priceRange[0] * FRACTION_DIGITS} to ${priceRange[1] * FRACTION_DIGITS})`,
+    );
 
     session?.getAllProducts(paramsRequest).then((items) => {
       setProducts(items);

@@ -3,7 +3,7 @@ import { Button } from 'antd';
 
 import { SORT_DIRECTIONS, SORT_FIELDS } from '../model/constants';
 
-import sprites from './sprites.svg';
+import sprites from './icon/sprites.svg';
 
 type SortField = (typeof SORT_FIELDS)[keyof typeof SORT_FIELDS];
 type SortDirection = (typeof SORT_DIRECTIONS)[keyof typeof SORT_DIRECTIONS];

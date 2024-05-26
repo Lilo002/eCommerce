@@ -21,3 +21,10 @@ export const SORT_DIRECTIONS = {
 export const PRICE_CURRENCY = {
   USD: 'USD',
 };
+
+export const PRICE_RANGE = {
+  MIN_PRICE: 0,
+  MAX_PRICE: 300,
+};
+
+export const FRACTION_DIGITS = 100;

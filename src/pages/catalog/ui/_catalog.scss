@@ -147,3 +147,31 @@
 .catalog-filters-block-checkbox {
   margin-bottom: 30px;
 }
+
+.catalog-filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  &-title {
+    line-height: 32px;
+    margin: 0;
+  }
+}
+
+.catalog-filters-container {
+  height: 0;
+  overflow: hidden;
+}
+
+.show-filters {
+  height: auto;
+}
+
+.catalog-filters-block-price {
+  margin-bottom: 20px;
+
+  &-slider {
+    margin: 0 5px;
+  }
+}
