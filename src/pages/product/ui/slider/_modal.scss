@@ -1,8 +1,4 @@
-.ant-modal-content {
-  padding: 0 !important;
-}
-
-.modal {
+.modal-product {
   max-width: 700px;
   user-select: none;
   &-img {
@@ -12,5 +8,8 @@
     height: calc(100% - 100px);
     padding: 50px;
     object-fit: contain;
+  }
+  & .ant-modal-content {
+    padding: 0 !important;
   }
 }
