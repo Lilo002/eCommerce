@@ -21,7 +21,7 @@ export const SearchBar = ({ onSearch }: { onSearch: (searchTerm: string) => void
       layout="vertical"
       className="catalog-control-panel-form"
     >
-      <Form.Item name="email">
+      <Form.Item name="search">
         <Input value={searchTerm} placeholder="Search..." onChange={onSearchTermChange} />
       </Form.Item>
 
