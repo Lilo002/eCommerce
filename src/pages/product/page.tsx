@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProductCatalogData, ProductData } from '@commercetools/platform-sdk';
+import { Breadcrumb } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -46,6 +47,23 @@ export const ProductPage = () => {
     <article className="product-inner">
       {images && <ProductImage images={images} />}
       <div className="product">
+        <Breadcrumb
+          className="product-breadcrumb"
+          separator=">"
+          items={[
+            {
+              title: 'Home',
+              href: ROUTES.MAIN,
+            },
+            {
+              title: 'Catalog',
+              href: ROUTES.CATALOG,
+            },
+            {
+              title: name['en-GB'],
+            },
+          ]}
+        />
         <h2 className="product-title">{name['en-GB']}</h2>
         <ProductPrice price={price} isDiscounted={isDiscounted} />
         <div className="product-info">
