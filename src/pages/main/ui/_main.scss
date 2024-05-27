@@ -6,26 +6,12 @@
   gap: 10px;
   width: 100%;
   max-width: $max-width;
-}
-
-.img {
-  display: flex;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout - 16px);
-}
-
-.main-btn {
-  width: 130px;
-  height: 40px;
-  font-weight: inherit;
-  color: $black-color;
-  font-weight: 900;
-  font-size: 18px;
-  background: $orange-color;
-  &:hover {
-    color: $orange-color !important;
-    background: $black-color !important;
+  &-swiper {
+    &-img {
+      display: flex;
+      width: 100%;
+      object-fit: cover;
+      height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout - 16px);
+    }
   }
 }
