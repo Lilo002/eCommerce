@@ -1,29 +1,34 @@
-import { useNavigate } from 'react-router-dom';
-import { Button } from 'antd';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ROUTES } from '../../shared/constants';
+import 'swiper/css/autoplay';
+
+import img1 from './ui/images/bg1_1.jpg';
+import img2 from './ui/images/bg2.jpg';
+import img3 from './ui/images/bg3_3.jpg';
 
 import './ui/_main.scss';
+import 'swiper/css';
 
 export function Main() {
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    navigate(ROUTES.LOGIN);
-  };
-
-  const handleRegistration = () => {
-    navigate(ROUTES.REGISTRATION);
-  };
+  const images = [img1, img2, img3];
 
   return (
     <div className="main">
-      <Button className="main-btn" type="link" onClick={handleLogin}>
-        SIGN IN
-      </Button>
-      <Button className="main-btn" type="link" onClick={handleRegistration}>
-        SIGN UP
-      </Button>
+      <Swiper
+        slidesPerView={1}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        modules={[Autoplay]}
+      >
+        {images.map((image, index) => (
+          <SwiperSlide className="mySwiper" key={image}>
+            <img className="img" src={image} alt={`Slide ${index}`} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }
