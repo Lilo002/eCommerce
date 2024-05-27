@@ -29,7 +29,7 @@ jest.mock('swiper/css', () => jest.fn());
 
 describe('ProductPage component', () => {
   test('renders product details when product is found', async () => {
-    const { getByText } = render(
+    const { getByText, getByRole } = render(
       <MemoryRouter initialEntries={['/products/1']}>
         <SessionContextProviderMock>
           <Routes>
@@ -40,7 +40,8 @@ describe('ProductPage component', () => {
     );
 
     await waitFor(() => {
-      expect(getByText('Mock Product')).toBeInTheDocument();
+      const productTitle = getByRole('heading', { name: 'Mock Product', level: 2 });
+      expect(productTitle).toBeInTheDocument();
       expect(getByText('Mock Description')).toBeInTheDocument();
       expect(getByText('Details')).toBeInTheDocument();
     });
