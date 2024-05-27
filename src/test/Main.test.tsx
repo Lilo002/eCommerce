@@ -1,5 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 
@@ -10,40 +9,31 @@ jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }));
 
+jest.mock('swiper/react', () => ({
+  Swiper: ({ children }: { children: React.ReactNode }) => <div data-testid="swiper-testid">{children}</div>,
+  SwiperSlide: ({ children }: { children: React.ReactNode }) => <div data-testid="swiper-slide-testid">{children}</div>,
+}));
+
+jest.mock('swiper/modules', () => ({
+  Autoplay: () => null,
+}));
+
+jest.mock('swiper/css', () => jest.fn());
+jest.mock('swiper/css/autoplay', () => jest.fn());
+
 describe('Main Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test('navigates to login page when "SIGN IN" button is clicked', () => {
-    const mockNavigate = jest.requireMock('react-router-dom').useNavigate;
-    const mockNavigateFn = jest.fn();
-    mockNavigate.mockReturnValue(mockNavigateFn);
-
-    render(
-      <BrowserRouter>
-        <Main />
-      </BrowserRouter>,
-    );
-
-    fireEvent.click(screen.getByText('SIGN IN'));
-
-    expect(mockNavigateFn).toHaveBeenCalledWith('/login');
+  test('renders without crashing', () => {
+    render(<Main />);
+    expect(screen.getByRole('img', { name: /slide 0/i })).toBeInTheDocument();
   });
 
-  test('navigates to registration page when "SIGN UP" button is clicked', () => {
-    const mockNavigate = jest.requireMock('react-router-dom').useNavigate;
-    const mockNavigateFn = jest.fn();
-    mockNavigate.mockReturnValue(mockNavigateFn);
-
-    render(
-      <BrowserRouter>
-        <Main />
-      </BrowserRouter>,
-    );
-
-    fireEvent.click(screen.getByText('SIGN UP'));
-
-    expect(mockNavigateFn).toHaveBeenCalledWith('/registration');
+  test('renders correct number of slides', () => {
+    render(<Main />);
+    const slides = screen.getAllByRole('img');
+    expect(slides).toHaveLength(3);
   });
 });

@@ -11,7 +11,11 @@ import './ui/_main.scss';
 import 'swiper/css';
 
 export function Main() {
-  const images = [img1, img2, img3];
+  const images = [
+    { src: img1, order: 1 },
+    { src: img2, order: 2 },
+    { src: img3, order: 3 },
+  ];
 
   return (
     <div className="main">
@@ -24,8 +28,8 @@ export function Main() {
         modules={[Autoplay]}
       >
         {images.map((image, index) => (
-          <SwiperSlide className="main-swiper" key={image}>
-            <img className="main-swiper-img" src={image} alt={`Slide ${index}`} />
+          <SwiperSlide className="main-swiper" key={image.order}>
+            <img className="main-swiper-img" src={image.src} alt={`Slide ${index}`} />
           </SwiperSlide>
         ))}
       </Swiper>
