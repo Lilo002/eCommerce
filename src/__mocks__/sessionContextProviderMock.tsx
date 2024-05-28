@@ -2,16 +2,17 @@ import React, { ReactNode } from 'react';
 import {
   Address,
   AddressDraft,
+  Category,
   ClientResponse,
   Customer,
   MyCustomerChangePassword,
-  Product,
   ProductCatalogData,
+  ProductProjection,
   Update,
 } from '@commercetools/platform-sdk';
 
 import { sessionContext } from '../context/sessionContext';
-import { LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
+import { LoginCustomerDraft, ParamsRequestCategories, UpdateCustomerDraft } from '../sdk/api';
 
 type SessionContextType = {
   session: {
@@ -28,11 +29,13 @@ type SessionContextType = {
     }: MyCustomerChangePassword) => Promise<ClientResponse<Customer>>;
     register: (customer: Partial<Customer>) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: string) => Promise<boolean>;
-    getAllProducts: () => Promise<Product[]>;
+    getAllProducts: () => Promise<ProductProjection[]>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
     removeAddress: (addressId: string | undefined) => Promise<Customer>;
     updateAddress: (addressId: string | undefined, address: Address) => Promise<Customer>;
+    findProduct: (productName: string) => Promise<ProductProjection[]>;
+    getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
   };
 };
 
@@ -131,6 +134,8 @@ export const SessionContextProviderMock: React.FC<SessionContextProviderMockProp
       addAddressInfo: jest.fn(),
       removeAddress: jest.fn(),
       updateAddress: jest.fn(),
+      findProduct: jest.fn(),
+      getAllCategories: jest.fn(),
     },
   };
 

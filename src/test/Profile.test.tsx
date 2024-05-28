@@ -63,10 +63,12 @@ describe('ProfilePage', () => {
     checkCustomerExistsByEmail: jest.fn().mockResolvedValue(undefined),
     getProduct: jest.fn().mockResolvedValue(undefined),
     getAllProducts: jest.fn().mockResolvedValue(undefined),
+    findProduct: jest.fn().mockResolvedValue(undefined),
     updateAddress: jest.fn().mockResolvedValue(undefined),
     removeAddress: jest.fn().mockResolvedValue(undefined),
     addAddress: jest.fn().mockResolvedValue(undefined),
     addAddressInfo: jest.fn().mockResolvedValue(undefined),
+    getAllCategories: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(() => {
