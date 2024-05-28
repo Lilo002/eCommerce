@@ -1,15 +1,23 @@
 import { createContext } from 'react';
 import {
   Address,
+  Category,
   ClientResponse,
   Customer,
   MyCustomerChangePassword,
-  Product,
   ProductCatalogData,
+  ProductProjection,
   Update,
 } from '@commercetools/platform-sdk';
 
-import { AddressDraft, CustomerDraft, LoginCustomerDraft, UpdateCustomerDraft } from '../sdk/api';
+import {
+  AddressDraft,
+  CustomerDraft,
+  LoginCustomerDraft,
+  ParamsRequestCategories,
+  ParamsRequestProducts,
+  UpdateCustomerDraft,
+} from '../sdk/api';
 
 export const sessionContext = createContext<{
   session: {
@@ -30,10 +38,18 @@ export const sessionContext = createContext<{
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
     getProduct: (productkey: string) => Promise<ProductCatalogData>;
-    getAllProducts: (limit: number) => Promise<Product[]>;
+    getAllProducts: ({
+      limit,
+      staged,
+      sort,
+      filter,
+      priceCurrency,
+    }: ParamsRequestProducts) => Promise<ProductProjection[]>;
+    findProduct: (productName: string) => Promise<ProductProjection[]>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
     removeAddress: (addressId: Address['id']) => Promise<Customer>;
     updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
+    getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
   } | null;
 }>({ session: null });
