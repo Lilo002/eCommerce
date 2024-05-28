@@ -12,6 +12,7 @@ import {
   SORT_FIELDS,
   STAGED_PRODUCT,
 } from './model/constants';
+import { BreadcrumbCatalog } from './ui/breadcrumbCatalog';
 import { Filters } from './ui/filters';
 import { ProductsList } from './ui/productsList';
 import { SearchBar } from './ui/searchBar';
@@ -33,6 +34,7 @@ type SortField = (typeof SORT_FIELDS)[keyof typeof SORT_FIELDS];
 export function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [userCategories, setUserCategories] = useState('');
   const { session } = useContext(sessionContext);
 
   useEffect(() => {
@@ -76,6 +78,10 @@ export function CatalogPage() {
     if (categoriesIds.length >= minLength) {
       const filter = categoriesIds.map((id) => `subtree("${id}")`).join(', ');
       paramsRequest.filter.push(`categories.id: ${filter}`);
+      const selectedCategories = categoriesIds
+        .map((id) => categories.find((category) => category.id === id)?.name['en-GB'])
+        .join(', ');
+      setUserCategories(selectedCategories);
     }
 
     if (productsWithDiscount) {
@@ -101,6 +107,7 @@ export function CatalogPage() {
         setProducts(items);
       });
     }
+    setUserCategories('');
   };
 
   return (
@@ -109,6 +116,7 @@ export function CatalogPage() {
         <Filters categories={categories} onSetFilters={setFilters} onClearFilters={clearFilters} />
       </div>
       <div className="catalog-main">
+        <BreadcrumbCatalog userCategories={userCategories} />
         <div className="catalog-control-panel">
           <SortBar onSort={sortProduct} />
           <SearchBar onSearch={searchProduct} />

@@ -48,18 +48,6 @@
 .product {
   width: 60%;
   padding: 10px;
-  &-breadcrumb {
-    margin-bottom: 10px;
-    a.ant-breadcrumb-link {
-      color: $orange-color;
-      @media screen and (hover: hover) {
-        &:hover {
-          color: $black-color;
-          background-color: transparent;
-        }
-      }
-    }
-  }
   &-title {
     text-transform: uppercase;
     font-family: inherit;
@@ -110,5 +98,18 @@
     text-transform: uppercase;
     font-weight: $font-weight;
     width: 130px;
+  }
+}
+
+.breadcrumb {
+  margin-bottom: 10px;
+  a.ant-breadcrumb-link {
+    color: $orange-color;
+    @media screen and (hover: hover) {
+      &:hover {
+        color: $black-color;
+        background-color: transparent;
+      }
+    }
   }
 }

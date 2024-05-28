@@ -48,7 +48,7 @@ export const ProductPage = () => {
       {images && <ProductImage images={images} />}
       <div className="product">
         <Breadcrumb
-          className="product-breadcrumb"
+          className="breadcrumb"
           separator=">"
           items={[
             {
