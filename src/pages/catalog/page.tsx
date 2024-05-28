@@ -48,13 +48,13 @@ export function CatalogPage() {
     });
   }, [session]);
 
-  const handleSearch = (searchTerm: string) => {
+  const searchProduct = (searchTerm: string) => {
     session?.findProduct(searchTerm).then((items) => {
       setProducts(items);
     });
   };
 
-  const handleSort = (sortField: SortField, sortDirection: string | null) => {
+  const sortProduct = (sortField: SortField, sortDirection: string | null) => {
     if (sortDirection) {
       if (sortField === SORT_FIELDS.NAME) {
         paramsRequest.sort = `name.en-GB ${sortDirection}`;
@@ -70,8 +70,9 @@ export function CatalogPage() {
     });
   };
 
-  const handleSetFilters = (categoriesIds: string[], productsWithDiscount: boolean, priceRange: number[]) => {
+  const setFilters = (categoriesIds: string[], productsWithDiscount: boolean, priceRange: number[]) => {
     const minLength = 1;
+    const [minPrice, maxPrice] = priceRange;
     paramsRequest.filter = [];
     paramsRequest.priceCurrency = '';
 
@@ -86,7 +87,7 @@ export function CatalogPage() {
     }
 
     paramsRequest.filter.push(
-      `variants.price.centAmount: range(${priceRange[0] * FRACTION_DIGITS} to ${priceRange[1] * FRACTION_DIGITS})`,
+      `variants.price.centAmount: range(${minPrice * FRACTION_DIGITS} to ${maxPrice * FRACTION_DIGITS})`,
     );
 
     session?.getAllProducts(paramsRequest).then((items) => {
@@ -94,7 +95,7 @@ export function CatalogPage() {
     });
   };
 
-  const handleClearFilters = () => {
+  const clearFilters = () => {
     if (paramsRequest.filter) {
       paramsRequest.filter = [];
       paramsRequest.priceCurrency = '';
@@ -108,12 +109,12 @@ export function CatalogPage() {
   return (
     <div className="catalog-page">
       <div className="catalog-filters">
-        <Filters categories={categories} onSetFilters={handleSetFilters} onClearFilters={handleClearFilters} />
+        <Filters categories={categories} onSetFilters={setFilters} onClearFilters={clearFilters} />
       </div>
       <div className="catalog-main">
         <div className="catalog-control-panel">
-          <SortBar onSort={handleSort} />
-          <SearchBar onSearch={handleSearch} />
+          <SortBar onSort={sortProduct} />
+          <SearchBar onSearch={searchProduct} />
         </div>
         <div className="catalog">
           <ProductsList products={products} />

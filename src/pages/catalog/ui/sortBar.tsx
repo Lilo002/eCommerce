@@ -13,7 +13,7 @@ export const SortBar = ({ onSort }: { onSort: (sortField: SortField, sortDirecti
   const [sortDirection, setSortDirection] = useState<SortDirection | null>(null);
   const [clickCount, setClickCount] = useState(0);
 
-  const handleSort = (field: SortField) => {
+  const sortProduct = (field: SortField) => {
     let direction: SortDirection | null = SORT_DIRECTIONS.ASC;
     if (sortField === field) {
       if (clickCount === 2) {
@@ -55,10 +55,10 @@ export const SortBar = ({ onSort }: { onSort: (sortField: SortField, sortDirecti
 
   return (
     <div className="catalog-control-panel-sort">
-      <Button className="catalog-control-panel-sort-btn" type="primary" onClick={() => handleSort(SORT_FIELDS.NAME)}>
+      <Button className="catalog-control-panel-sort-btn" type="primary" onClick={() => sortProduct(SORT_FIELDS.NAME)}>
         <span>Name </span> {sortField === SORT_FIELDS.NAME ? getSortDirection(SORT_FIELDS.NAME) : ''}
       </Button>
-      <Button className="catalog-control-panel-sort-btn" type="primary" onClick={() => handleSort(SORT_FIELDS.PRICE)}>
+      <Button className="catalog-control-panel-sort-btn" type="primary" onClick={() => sortProduct(SORT_FIELDS.PRICE)}>
         <span>Price</span> {sortField === SORT_FIELDS.PRICE ? getSortDirection(SORT_FIELDS.PRICE) : ''}
       </Button>
     </div>

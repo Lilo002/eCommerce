@@ -4,7 +4,7 @@ import { Button, Form, Input } from 'antd';
 export const SearchBar = ({ onSearch }: { onSearch: (searchTerm: string) => void }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = () => {
+  const search = () => {
     onSearch(searchTerm);
   };
 
@@ -16,7 +16,7 @@ export const SearchBar = ({ onSearch }: { onSearch: (searchTerm: string) => void
     <Form
       labelCol={{ span: 5 }}
       wrapperCol={{ offset: 0, span: 23 }}
-      onFinish={handleSearch}
+      onFinish={search}
       autoComplete="off"
       layout="vertical"
       className="catalog-control-panel-form"

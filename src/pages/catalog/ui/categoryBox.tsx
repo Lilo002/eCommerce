@@ -11,12 +11,8 @@ export const CategoryBox = ({
 }) => {
   const name = category?.name?.['en-GB'];
 
-  const handleClick = () => {
-    onCategoryClick();
-  };
-
   return (
-    <button type="button" className={`category ${isActive ? 'active' : ''}`} onClick={handleClick}>
+    <button type="button" className={`category ${isActive ? 'active' : ''}`} onClick={onCategoryClick}>
       {name}
     </button>
   );

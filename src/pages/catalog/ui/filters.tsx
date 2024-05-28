@@ -21,8 +21,9 @@ export const Filters = ({
   const [productsWithDiscount, setProductsWithDiscount] = useState(false);
   const [isVisibleFilters, setIsVisibleFilters] = useState(true);
   const [priceRange, setPriceRange] = useState([PRICE_RANGE.MIN_PRICE, PRICE_RANGE.MAX_PRICE]);
+  const [minPrice, maxPrice] = priceRange;
 
-  const handleCategoryClick = (id: string) => {
+  const selectCategory = (id: string) => {
     if (selectedCategoryIds.includes(id)) {
       setSelectedCategoryIds(selectedCategoryIds.filter((item) => item !== id));
     } else {
@@ -30,11 +31,11 @@ export const Filters = ({
     }
   };
 
-  const handleClickFilterBtn = () => {
+  const setFilters = () => {
     onSetFilters(selectedCategoryIds, productsWithDiscount, priceRange);
   };
 
-  const handleClearFilterBtn = () => {
+  const clearFilters = () => {
     setSelectedCategoryIds([]);
     setProductsWithDiscount(false);
     setPriceRange([PRICE_RANGE.MIN_PRICE, PRICE_RANGE.MAX_PRICE]);
@@ -45,11 +46,11 @@ export const Filters = ({
     setProductsWithDiscount(e.target.checked);
   };
 
-  const handleClick = () => {
+  const changeVisibilityStatusFilters = () => {
     setIsVisibleFilters(!isVisibleFilters);
   };
 
-  const handleChangePriceRange = (newPriceRange: SetStateAction<number[]>) => {
+  const changePriceRange = (newPriceRange: SetStateAction<number[]>) => {
     setPriceRange(newPriceRange);
   };
 
@@ -57,7 +58,7 @@ export const Filters = ({
     <>
       <div className="catalog-filters-header">
         <h2 className="catalog-filters-header-title">FILTERS</h2>
-        <Button type="primary" onClick={handleClick}>
+        <Button type="primary" onClick={changeVisibilityStatusFilters}>
           <svg className="icon">
             <use xlinkHref={`${sprites}${isVisibleFilters ? '#show' : '#hidden'}`} />
           </svg>
@@ -69,19 +70,19 @@ export const Filters = ({
             <CategoryBox
               key={item.id}
               category={item}
-              onCategoryClick={() => handleCategoryClick(item.id)}
+              onCategoryClick={() => selectCategory(item.id)}
               isActive={selectedCategoryIds.includes(item.id)}
             />
           ))}
         </div>
         <div className="catalog-filters-block-price">
           <p>
-            Price range: {priceRange[0]}
-            {CURRENCY_CODE.USD} - {priceRange[1]}
+            Price range: {minPrice}
+            {CURRENCY_CODE.USD} - {maxPrice}
             {CURRENCY_CODE.USD}
           </p>
           <div className="catalog-filters-block-price-slider">
-            <Slider range value={priceRange} max={PRICE_RANGE.MAX_PRICE} onChange={handleChangePriceRange} />
+            <Slider range value={priceRange} max={PRICE_RANGE.MAX_PRICE} onChange={changePriceRange} />
           </div>
         </div>
         <div className="catalog-filters-block-checkbox">
@@ -90,10 +91,10 @@ export const Filters = ({
           </Checkbox>
         </div>
         <div className="catalog-filters-block-btn">
-          <Button className="catalog-filters-btn" type="primary" onClick={handleClickFilterBtn}>
+          <Button className="catalog-filters-btn" type="primary" onClick={setFilters}>
             Filter
           </Button>
-          <Button className="catalog-filters-btn" type="primary" onClick={handleClearFilterBtn}>
+          <Button className="catalog-filters-btn" type="primary" onClick={clearFilters}>
             Clear
           </Button>
         </div>
