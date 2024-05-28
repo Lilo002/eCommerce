@@ -22,9 +22,6 @@ import './ui/_catalog.scss';
 const paramsRequest: ParamsRequestProducts = {
   limit: LIMIT_PRODUCT,
   staged: STAGED_PRODUCT,
-  sort: null,
-  filter: [],
-  priceCurrency: null,
 };
 
 const defaultParamsGetCategories: ParamsRequestCategories = {

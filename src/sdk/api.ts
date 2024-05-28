@@ -50,9 +50,9 @@ export interface UpdateCustomerDraft {
 export interface ParamsRequestProducts {
   limit: number;
   staged: boolean;
-  sort: string | null;
-  filter: string[];
-  priceCurrency: string | null;
+  sort?: string | null;
+  filter?: string[];
+  priceCurrency?: string | null;
 }
 
 export interface ParamsRequestCategories {
