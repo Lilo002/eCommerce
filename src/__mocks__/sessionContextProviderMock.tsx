@@ -3,7 +3,6 @@ import {
   Address,
   AddressDraft,
   Category,
-  ClientResponse,
   Customer,
   MyCustomerChangePassword,
   ProductCatalogData,
@@ -21,12 +20,8 @@ type SessionContextType = {
     login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
     logout: () => void;
     isLogin: boolean;
-    updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<void | Error>;
-    updatePassword: ({
-      version,
-      currentPassword,
-      newPassword,
-    }: MyCustomerChangePassword) => Promise<ClientResponse<Customer>>;
+    updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<Customer>;
+    updatePassword: ({ version, currentPassword, newPassword }: MyCustomerChangePassword) => Promise<void | Error>;
     register: (customer: Partial<Customer>) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: string) => Promise<boolean>;
     getAllProducts: () => Promise<ProductProjection[]>;
