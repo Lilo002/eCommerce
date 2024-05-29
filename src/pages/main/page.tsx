@@ -3,9 +3,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css/autoplay';
 
-import img1 from './ui/images/bg1.jpg';
-import img2 from './ui/images/bg2.jpg';
-import img3 from './ui/images/bg3.jpg';
+import img1 from './ui/images/bg1.webp';
+import img2 from './ui/images/bg2.webp';
+import img3 from './ui/images/bg3.webp';
 
 import './ui/_main.scss';
 import 'swiper/css';
