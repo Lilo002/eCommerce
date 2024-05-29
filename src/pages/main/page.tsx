@@ -10,6 +10,8 @@ import img3 from './ui/images/bg3.webp';
 import './ui/_main.scss';
 import 'swiper/css';
 
+const AUTOPLAY_DELAY = 2500;
+
 export function Main() {
   const images = [
     { src: img1, order: 1 },
@@ -22,7 +24,7 @@ export function Main() {
       <Swiper
         slidesPerView={1}
         autoplay={{
-          delay: 2500,
+          delay: AUTOPLAY_DELAY,
           disableOnInteraction: false,
         }}
         modules={[Autoplay]}
