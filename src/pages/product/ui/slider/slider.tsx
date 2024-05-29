@@ -64,7 +64,7 @@ export const ProductImage = ({ images }: { images: Image[] }) => {
       >
         {renderSlides('product-slider-img')}
       </Swiper>
-      <Modal className="modal" open={isModalOpen} footer={null} onCancel={handleCancel} width="100%">
+      <Modal className="modal-product" open={isModalOpen} footer={null} onCancel={handleCancel} width="100%">
         <Swiper
           onSwiper={handleSwiper}
           effect="flip"
@@ -75,7 +75,7 @@ export const ProductImage = ({ images }: { images: Image[] }) => {
           keyboard={{ enabled: true }}
           initialSlide={activeIndex}
         >
-          {renderSlides('modal-img')}
+          {renderSlides('modal-product-img')}
         </Swiper>
       </Modal>
     </div>

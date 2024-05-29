@@ -100,3 +100,16 @@
     width: 130px;
   }
 }
+
+.breadcrumb {
+  margin-bottom: 10px;
+  a.ant-breadcrumb-link {
+    color: $orange-color;
+    @media screen and (hover: hover) {
+      &:hover {
+        color: $black-color;
+        background-color: transparent;
+      }
+    }
+  }
+}

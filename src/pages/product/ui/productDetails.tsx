@@ -16,10 +16,10 @@ export const ProductDetails = ({ attributes }: { attributes: Details[] }) => {
 
   return (
     <div className="product-info">
-      <Detail title="Year" value={year.value} />
-      <Detail title="Difficulty" value={getRoundedNumber(difficulty.value)} />
-      <Detail title="Rating" value={getRoundedNumber(rating.value)} />
-      <Detail title="Players" value={getPlayers(minPlayers.value, maxPlayers.value)} />
+      <Detail title="Year" value={year && year.value} />
+      <Detail title="Difficulty" value={getRoundedNumber(difficulty && difficulty.value)} />
+      <Detail title="Rating" value={getRoundedNumber(rating && rating.value)} />
+      <Detail title="Players" value={getPlayers(minPlayers && minPlayers.value, maxPlayers && maxPlayers.value)} />
     </div>
   );
 };
