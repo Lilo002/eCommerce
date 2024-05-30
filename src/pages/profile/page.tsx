@@ -29,7 +29,7 @@ export function ProfilePage() {
   useEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
     if (!tokenObject) {
-      navigate(ROUTES.MAIN);
+      navigate(ROUTES.LOGIN);
     }
   }, [navigate]);
 
