@@ -6,7 +6,7 @@ export default {
   },
   moduleNameMapper: {
     '^.+\\.svg$': 'jest-svg-transformer',
-    '^.+\\.(png|jpg|jpeg|gif)$': '<rootDir>/src/__mocks__/fileMock.ts',
+    '^.+\\.(png|jpg|jpeg|webp|gif)$': '<rootDir>/src/__mocks__/fileMock.ts',
     '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
   },
 };
