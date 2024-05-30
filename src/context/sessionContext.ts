@@ -2,17 +2,16 @@ import { createContext } from 'react';
 import {
   Address,
   Category,
-  ClientResponse,
   Customer,
   MyCustomerChangePassword,
   ProductCatalogData,
   ProductProjection,
-  Update,
 } from '@commercetools/platform-sdk';
 
 import {
   AddressDraft,
   CustomerDraft,
+  CustomerUpdate,
   LoginCustomerDraft,
   ParamsRequestCategories,
   ParamsRequestProducts,
@@ -25,12 +24,8 @@ export const sessionContext = createContext<{
     login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
     logout: () => void;
     isLogin: boolean;
-    updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<void | Error>;
-    updatePassword: ({
-      version,
-      currentPassword,
-      newPassword,
-    }: MyCustomerChangePassword) => Promise<ClientResponse<Customer>>;
+    updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<Customer | Error>;
+    updatePassword: ({ version, currentPassword, newPassword }: MyCustomerChangePassword) => Promise<void | Error>;
     register: (
       { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
       setAsDefaultShippingAddress: boolean,
@@ -47,7 +42,7 @@ export const sessionContext = createContext<{
     }: ParamsRequestProducts) => Promise<ProductProjection[]>;
     findProduct: (productName: string) => Promise<ProductProjection[]>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
-    addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
+    addAddressInfo: ({ actions, version }: CustomerUpdate) => Promise<Customer>;
     removeAddress: (addressId: Address['id']) => Promise<Customer>;
     updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
     getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;

@@ -70,7 +70,7 @@ export const ProductImage = ({ images }: { images: Image[] }) => {
           effect="flip"
           slidesPerView={1}
           navigation
-          modules={[EffectFlip, Keyboard, Navigation, Pagination]}
+          modules={[Keyboard, Navigation, Pagination]}
           pagination={{ clickable: true }}
           keyboard={{ enabled: true }}
           initialSlide={activeIndex}
