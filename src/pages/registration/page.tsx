@@ -134,6 +134,7 @@ export function RegistrationPage() {
       .then(() => {
         cleanInputs();
         navigate(ROUTES.MAIN);
+        message.success('Your account has been created successfully!');
       })
       .catch(() => message.error('Customer with the given email already exists'));
   };
@@ -210,7 +211,7 @@ export function RegistrationPage() {
             rules={[{ pattern: shippingCountry.pattern, message: validation.messageForPostalCodeError }]}
             initialValue={shippingCountry.postalCode}
           >
-            <MaskedInput mask={shippingCountry.mask} value={shippingCountry.postalCode} />
+            <MaskedInput key={Math.random()} mask={shippingCountry.mask} value={shippingCountry.postalCode} />
           </Form.Item>
           <Form.Item name="shippingStreet" label="Street" rules={validation.streetRules}>
             <Input className="full-width" />

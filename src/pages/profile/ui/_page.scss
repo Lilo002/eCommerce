@@ -1,0 +1,130 @@
+@import '../../../shared/style/variables';
+
+.profile {
+  width: 100%;
+  min-height: calc(100dvh - 139px - 84px - 16px - 40px);
+  display: flex;
+  flex-direction: column;
+  font-family: $font-family;
+  font-weight: $font-weight;
+  gap: 50px;
+  padding: 20px;
+  &-title {
+    color: $black-color;
+    font-size: 20px;
+    text-align: start;
+    padding: 10px;
+  }
+  &-name {
+    font-weight: 400;
+  }
+  & input:disabled {
+    color: $black-color;
+    background: $white-color;
+    cursor: default;
+  }
+}
+
+.general {
+  max-width: 450px;
+  margin: 0 auto;
+  &-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+  }
+  &-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  &-title {
+    font-size: 20px;
+    line-height: 32px;
+  }
+}
+
+.addresses {
+  &-title {
+    font-size: 20px;
+    line-height: 32px;
+  }
+}
+
+.password-form {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.modal {
+  font-family: $font-family;
+  font-weight: $font-weight;
+  &-switch {
+    &-container {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  &-buttons {
+    display: flex;
+    gap: 20px;
+  }
+}
+
+.profile-tabs {
+  .ant-tabs-nav {
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 800px) {
+  .addresses-title,
+  .general-title {
+    font-size: 19px;
+  }
+  .addresses-table {
+    .ant-table-container {
+      font-size: 13px !important;
+      .ant-table-row td {
+        padding: 6px !important;
+      }
+      .ant-table-thead th {
+        padding: 7px !important;
+      }
+      .ant-btn {
+        padding: 7px !important;
+        font-size: 13px !important;
+      }
+      .ant-tag {
+        font-size: 13px !important;
+      }
+    }
+  }
+}
+@media (max-width: 600px) {
+  .addresses-title,
+  .general-title {
+    font-size: 17px;
+  }
+  .addresses-table {
+    .ant-table-container {
+      font-size: 12px !important;
+      .ant-table-cell {
+        white-space: nowrap !important;
+      }
+      .ant-table-row td {
+        padding: 4px !important;
+      }
+      .ant-table-thead th {
+        padding: 5px !important;
+      }
+      .ant-btn {
+        padding: 4px !important;
+        font-size: 12px !important;
+      }
+      .ant-tag {
+        font-size: 12px !important;
+      }
+    }
+  }
+}

@@ -9,3 +9,7 @@ export const ROUTES = {
   ABOUT: '/about',
   NOT_FOUND: '/*',
 };
+
+export const CURRENCY_CODE: { [key: string]: string } = {
+  USD: '$',
+};

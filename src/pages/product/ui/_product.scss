@@ -1,0 +1,115 @@
+@import '../../../shared/style/variables';
+
+.product-inner {
+  user-select: none;
+  padding: 10px;
+  background-color: $white-color;
+  font-family: $font-family;
+  max-width: $max-width;
+  min-height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout);
+  display: flex;
+  width: 100%;
+  @media screen and (max-width: 1050px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.product-slider {
+  padding: 10px;
+  width: 40%;
+  max-height: 100%;
+  height: 40%;
+  &-img {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-height: 475px;
+    padding: 30px 50px;
+    cursor: pointer;
+    @media screen and (max-width: 1050px) {
+      max-height: 340px;
+      max-width: 462px;
+      max-width: 100%;
+    }
+    @media screen and (max-width: 768px) {
+      padding: 30px 45px;
+    }
+  }
+  @media screen and (max-width: 1050px) {
+    padding: 0;
+    width: 100%;
+    max-width: 462px;
+    min-width: 300px;
+  }
+}
+
+.product {
+  width: 60%;
+  padding: 10px;
+  &-title {
+    text-transform: uppercase;
+    font-family: inherit;
+    font-size: 26px;
+    margin: 0;
+    @media screen and (max-width: 768px) {
+      font-size: 21px;
+    }
+    @media screen and (max-width: 420px) {
+      font-size: 18px;
+    }
+  }
+  &-price {
+    font-family: inherit;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+    &-current {
+      color: $orange-color;
+      font-size: 23px;
+    }
+    &-old {
+      text-decoration: line-through;
+    }
+  }
+  @media screen and (max-width: 1050px) {
+    width: 100%;
+  }
+}
+
+.product-info {
+  &-title {
+    width: 100%;
+    border-bottom: 3px solid $orange-color;
+    &-content {
+      display: inline-block;
+      color: $white-color;
+      text-transform: uppercase;
+      background-color: $black-color;
+      padding: 0 32px;
+      line-height: 32px;
+      margin: 0;
+    }
+  }
+  &-detail {
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: $font-weight;
+    width: 130px;
+  }
+}
+
+.breadcrumb {
+  margin-bottom: 10px;
+  a.ant-breadcrumb-link {
+    color: $orange-color;
+    @media screen and (hover: hover) {
+      &:hover {
+        color: $black-color;
+        background-color: transparent;
+      }
+    }
+  }
+}

@@ -8,7 +8,6 @@
 
 .content {
   min-height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout);
-  padding: 15px 0;
   display: flex;
   justify-content: center;
   align-items: center;

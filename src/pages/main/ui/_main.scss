@@ -4,18 +4,14 @@
   display: flex;
   justify-content: center;
   gap: 10px;
-}
-
-.main-btn {
-  width: 130px;
-  height: 40px;
-  font-weight: inherit;
-  color: $black-color;
-  font-weight: 900;
-  font-size: 18px;
-  background: $orange-color;
-  &:hover {
-    color: $orange-color !important;
-    background: $black-color !important;
+  width: 100%;
+  max-width: $max-width;
+  &-swiper {
+    &-img {
+      display: flex;
+      width: 100%;
+      object-fit: cover;
+      height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout - 16px);
+    }
   }
 }
