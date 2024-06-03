@@ -90,18 +90,27 @@ export const Header = () => {
       <nav className="header-menu">
         <ul className="header-menu-list">
           <li>
-            <Link className="header-menu-item" to={ROUTES.MAIN}>
-              MAIN
+            <Link className="header-menu-item" to={ROUTES.MAIN} title="Home">
+              <svg className="header-menu-item-ico">
+                <use xlinkHref={`${sprite}#home`} />
+              </svg>
+              <span className="header-menu-item-content">MAIN</span>
             </Link>
           </li>
           <li>
-            <Link className="header-menu-item" to={ROUTES.CATALOG}>
-              CATALOG
+            <Link className="header-menu-item" to={ROUTES.CATALOG} title="Catalog">
+              <svg className="header-menu-item-ico">
+                <use xlinkHref={`${sprite}#dice`} />
+              </svg>
+              <span className="header-menu-item-content">CATALOG</span>
             </Link>
           </li>
           <li>
-            <Link className="header-menu-item" to={ROUTES.ABOUT}>
-              ABOUT US
+            <Link className="header-menu-item" to={ROUTES.ABOUT} title="About us">
+              <svg className="header-menu-item-ico">
+                <use xlinkHref={`${sprite}#about-us`} />
+              </svg>
+              <span className="header-menu-item-content">ABOUT US</span>
             </Link>
           </li>
         </ul>

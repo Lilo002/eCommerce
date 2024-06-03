@@ -39,8 +39,27 @@
     &-item {
       font-size: inherit;
       color: $white-color !important;
+      display: flex;
+      align-items: center;
+      column-gap: 7px;
       &:hover {
         color: $orange-color !important;
+      }
+      &:hover &-ico {
+        fill: $orange-color;
+      }
+      &-ico {
+        width: 32px;
+        height: 32px;
+        fill: $white-color;
+        transition: fill 0.3s ease-in;
+      }
+      &-content {
+        @media screen and (max-width: 768px) {
+          & {
+            display: none;
+          }
+        }
       }
     }
   }
