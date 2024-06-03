@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProductCatalogData, ProductData } from '@commercetools/platform-sdk';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Button } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -66,6 +66,9 @@ export const ProductPage = () => {
         />
         <h2 className="product-title">{name['en-GB']}</h2>
         <ProductPrice price={price} isDiscounted={isDiscounted} />
+        <Button type="primary" className="product-cart">
+          <span className="product-cart-content">Add to Cart</span>
+        </Button>
         <div className="product-info">
           <div className="product-info-title">
             <h3 className="product-info-title-content">Description</h3>
