@@ -28,6 +28,10 @@ export const Header = () => {
     navigate(ROUTES.PROFILE);
   };
 
+  const handleBasket = () => {
+    navigate(ROUTES.BASKET);
+  };
+
   const handleLogout = () => {
     session?.logout();
     navigate(ROUTES.MAIN);
@@ -42,25 +46,42 @@ export const Header = () => {
           </Link>
         </div>
         <div className="header-inner-user">
+          <Button className="header-btn-user" type="link" onClick={handleBasket} title="Basket">
+            <svg className="header-user-ico">
+              <use xlinkHref={`${sprite}#basket`} />
+            </svg>
+          </Button>
           {session?.isLogin ? (
             <>
-              <Button className="header-btn-user" type="link" onClick={handleUser}>
+              <Button className="header-btn-user" type="link" onClick={handleUser} title="User profile">
                 <svg className="header-user-ico">
                   <use xlinkHref={`${sprite}#user`} />
                 </svg>
               </Button>
-              <Button className="header-btn" type="link" icon={<LogoutOutlined />} onClick={handleLogout}>
-                LOG OUT
+              <Button
+                className="header-btn"
+                type="link"
+                icon={<LogoutOutlined />}
+                onClick={handleLogout}
+                title="Log out"
+              >
+                <span className="header-btn-content">LOG OUT</span>
               </Button>
             </>
           ) : (
-            <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin}>
-              SIGN IN
+            <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin} title="Sign in">
+              <span className="header-btn-content">SIGN IN</span>
             </Button>
           )}
           {!session?.isLogin && (
-            <Button className="header-btn" type="link" icon={<UserOutlined />} onClick={handleRegistration}>
-              SIGN UP
+            <Button
+              className="header-btn"
+              type="link"
+              icon={<UserOutlined />}
+              onClick={handleRegistration}
+              title="Sign up"
+            >
+              <span className="header-btn-content">SIGN UP</span>
             </Button>
           )}
         </div>
