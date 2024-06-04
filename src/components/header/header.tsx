@@ -28,6 +28,10 @@ export const Header = () => {
     navigate(ROUTES.PROFILE);
   };
 
+  const handleBasket = () => {
+    navigate(ROUTES.BASKET);
+  };
+
   const handleLogout = () => {
     session?.logout();
     navigate(ROUTES.MAIN);
@@ -42,25 +46,42 @@ export const Header = () => {
           </Link>
         </div>
         <div className="header-inner-user">
+          <Button className="header-btn-user" type="link" onClick={handleBasket} title="Basket">
+            <svg className="header-user-ico">
+              <use xlinkHref={`${sprite}#basket`} />
+            </svg>
+          </Button>
           {session?.isLogin ? (
             <>
-              <Button className="header-btn-user" type="link" onClick={handleUser}>
+              <Button className="header-btn-user" type="link" onClick={handleUser} title="User profile">
                 <svg className="header-user-ico">
                   <use xlinkHref={`${sprite}#user`} />
                 </svg>
               </Button>
-              <Button className="header-btn" type="link" icon={<LogoutOutlined />} onClick={handleLogout}>
-                LOG OUT
+              <Button
+                className="header-btn"
+                type="link"
+                icon={<LogoutOutlined />}
+                onClick={handleLogout}
+                title="Log out"
+              >
+                <span className="header-btn-content">LOG OUT</span>
               </Button>
             </>
           ) : (
-            <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin}>
-              SIGN IN
+            <Button className="header-btn" type="link" icon={<LoginOutlined />} onClick={handleLogin} title="Sign in">
+              <span className="header-btn-content">SIGN IN</span>
             </Button>
           )}
           {!session?.isLogin && (
-            <Button className="header-btn" type="link" icon={<UserOutlined />} onClick={handleRegistration}>
-              SIGN UP
+            <Button
+              className="header-btn"
+              type="link"
+              icon={<UserOutlined />}
+              onClick={handleRegistration}
+              title="Sign up"
+            >
+              <span className="header-btn-content">SIGN UP</span>
             </Button>
           )}
         </div>
@@ -69,18 +90,27 @@ export const Header = () => {
       <nav className="header-menu">
         <ul className="header-menu-list">
           <li>
-            <Link className="header-menu-item" to={ROUTES.MAIN}>
-              MAIN
+            <Link className="header-menu-item" to={ROUTES.MAIN} title="Home">
+              <svg className="header-menu-item-ico">
+                <use xlinkHref={`${sprite}#home`} />
+              </svg>
+              <span className="header-menu-item-content">MAIN</span>
             </Link>
           </li>
           <li>
-            <Link className="header-menu-item" to={ROUTES.CATALOG}>
-              CATALOG
+            <Link className="header-menu-item" to={ROUTES.CATALOG} title="Catalog">
+              <svg className="header-menu-item-ico">
+                <use xlinkHref={`${sprite}#dice`} />
+              </svg>
+              <span className="header-menu-item-content">CATALOG</span>
             </Link>
           </li>
           <li>
-            <Link className="header-menu-item" to={ROUTES.ABOUT}>
-              ABOUT US
+            <Link className="header-menu-item" to={ROUTES.ABOUT} title="About us">
+              <svg className="header-menu-item-ico">
+                <use xlinkHref={`${sprite}#about-us`} />
+              </svg>
+              <span className="header-menu-item-content">ABOUT US</span>
             </Link>
           </li>
         </ul>
