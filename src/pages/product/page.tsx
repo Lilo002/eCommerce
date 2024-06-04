@@ -62,13 +62,10 @@ export const ProductPage = () => {
       const idCart = session?.cartData.id;
       const version = session?.cartData.version;
       if (!isProductInCart) {
-        session
-          .addProductToCart(productId || '', idCart, version)
-          .then((res) => {
-            handleTitle(true);
-            console.log(res);
-          })
-          .then(() => showMessage('This product has been successfully added to your cart'));
+        session.addProductToCart(productId || '', idCart, version).then(() => {
+          handleTitle(true);
+          showMessage('This product has been successfully added to your cart');
+        });
       }
       // if (isProductInCart) {
       //   session.removeProductFromCart(productId || '', idCart, version).then((res) => {
