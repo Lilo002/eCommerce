@@ -1,5 +1,6 @@
 import {
   Address,
+  Cart,
   CategoryPagedQueryResponse,
   ClientResponse,
   Customer,
@@ -342,3 +343,58 @@ export const updateAddressRequest = (
       },
     })
     .execute();
+
+export const createAnonimCart = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .post({ body: { currency: 'USD' } })
+    .execute();
+
+export const addProductToCartOnServer = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  productId: string,
+  ID: string,
+  version: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId,
+            quantity: 1,
+          },
+        ],
+      },
+    })
+    .execute();
+
+// export const removeProductFromCartOnServer = (
+//   apiRoot: ByProjectKeyRequestBuilder,
+//   productId: string,
+//   ID: string,
+//   version: number,
+// ): Promise<ClientResponse<Cart>> =>
+//   apiRoot
+//     .me()
+//     .carts()
+//     .withId({ ID })
+//     .post({
+//       body: {
+//         version,
+//         actions: [
+//           {
+//             action: 'removeLineItem',
+//             productId,
+//             quantity: 1,
+//           },
+//         ],
+//       },
+//     })
+//     .execute();

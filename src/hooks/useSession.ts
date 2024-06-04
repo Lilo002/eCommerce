@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Address,
+  Cart,
   Category,
+  ClientResponse,
   Customer,
   MyCustomerChangePassword,
-  ProductCatalogData,
+  Product,
   ProductProjection,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
@@ -12,8 +14,10 @@ import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/dec
 import {
   addAddressInfoRequest,
   addAddressRequest,
+  addProductToCartOnServer,
   AddressDraft,
   authenticateCustomer,
+  createAnonimCart,
   createCustomer,
   CustomerDraft,
   CustomerUpdate,
@@ -51,6 +55,7 @@ export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [isLogin, setLogin] = useState(false);
   const [userData, setUserData] = useState<Customer>(initialCustomer);
+  const [cartData, setCartData] = useState<Cart>();
 
   const getCustomer = (root: ByProjectKeyRequestBuilder): Promise<Customer> =>
     getCustomerDetails(root).then(({ body }) => {
@@ -200,8 +205,22 @@ export const useSession = () => {
     if (!isLogin) getProject(apiRoot);
   }, [apiRoot, isLogin]);
 
-  const getProduct = (productKey: string): Promise<ProductCatalogData> =>
-    getOneProduct(apiRoot, productKey).then(({ body }) => body.masterData);
+  const getProduct = (productKey: string): Promise<Product> =>
+    getOneProduct(apiRoot, productKey).then(({ body }) => body);
+
+  const cart = () => createAnonimCart(apiRoot).then((res: ClientResponse) => setCartData(res.body));
+
+  const addProductToCart = (idProduct: string, idCart: string, versionCart: number): Promise<Cart> =>
+    addProductToCartOnServer(apiRoot, idProduct, idCart, versionCart).then(({ body }) => {
+      setCartData(body);
+      return body;
+    });
+
+  // const removeProductFromCart = (idProduct: string, idCart: string, versionCart: number): Promise<Cart> =>
+  //   removeProductFromCartOnServer(apiRoot, idProduct, idCart, versionCart).then(({ body }) => {
+  //     setCartData(body);
+  //     return body;
+  //   });
 
   return {
     userData,
@@ -220,5 +239,9 @@ export const useSession = () => {
     removeAddress,
     updateAddress,
     getAllCategories,
+    cart,
+    cartData,
+    addProductToCart,
+    // removeProductFromCart,
   };
 };
