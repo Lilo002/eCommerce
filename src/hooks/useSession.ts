@@ -33,6 +33,7 @@ import {
   ParamsRequestCategories,
   ParamsRequestProducts,
   removeAddressRequest,
+  removeProductFromCartOnServer,
   updateAddressRequest,
   UpdateCustomerDraft,
   updateCustomerInfoRequest,
@@ -216,11 +217,11 @@ export const useSession = () => {
       return body;
     });
 
-  // const removeProductFromCart = (idProduct: string, idCart: string, versionCart: number): Promise<Cart> =>
-  //   removeProductFromCartOnServer(apiRoot, idProduct, idCart, versionCart).then(({ body }) => {
-  //     setCartData(body);
-  //     return body;
-  //   });
+  const removeProductFromCart = (lineItemId: string, idCart: string, versionCart: number): Promise<Cart> =>
+    removeProductFromCartOnServer(apiRoot, lineItemId, idCart, versionCart).then(({ body }) => {
+      setCartData(body);
+      return body;
+    });
 
   return {
     userData,
@@ -242,6 +243,6 @@ export const useSession = () => {
     cart,
     cartData,
     addProductToCart,
-    // removeProductFromCart,
+    removeProductFromCart,
   };
 };

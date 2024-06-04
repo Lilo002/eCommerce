@@ -6,6 +6,7 @@ import { Breadcrumb, Button, message } from 'antd';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
+import { findLineItemId } from './model/data';
 import { ProductDetails } from './ui/productDetails';
 import { ProductPrice } from './ui/productPrice';
 import { ProductImage } from './ui/slider/slider';
@@ -66,13 +67,19 @@ export const ProductPage = () => {
           handleTitle(true);
           showMessage('This product has been successfully added to your cart');
         });
+        return;
       }
-      // if (isProductInCart) {
-      //   session.removeProductFromCart(productId || '', idCart, version).then((res) => {
-      //     handleTitle(false);
-      //     console.log(res);
-      //   });
-      // }
+      if (isProductInCart) {
+        const lineItemId = findLineItemId(session?.cartData.lineItems, productId);
+        if (!lineItemId) {
+          return;
+        }
+        session.removeProductFromCart(lineItemId, idCart, version).then((res) => {
+          handleTitle(false);
+          showMessage('This product has been successfully removed from your cart');
+          console.log(res);
+        });
+      }
     }
   };
 

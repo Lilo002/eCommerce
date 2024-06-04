@@ -1,4 +1,4 @@
-import { TypedMoney } from '@commercetools/platform-sdk';
+import { LineItem, TypedMoney } from '@commercetools/platform-sdk';
 
 export const getPrice = (price: TypedMoney | undefined): string => {
   if (!price) {
@@ -16,3 +16,8 @@ export const getPlayers = (minPlayers: number, maxPlayers: number): string => {
 };
 
 export const getRoundedNumber = (intNumber: number): number => Math.round(intNumber * 10) / 10;
+
+export const findLineItemId = (lineItems: LineItem[], productId: string): string | undefined => {
+  const lineItem = lineItems.find((item) => item.productId === productId)?.id;
+  return lineItem;
+};

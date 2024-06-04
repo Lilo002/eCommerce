@@ -375,26 +375,26 @@ export const addProductToCartOnServer = (
     })
     .execute();
 
-// export const removeProductFromCartOnServer = (
-//   apiRoot: ByProjectKeyRequestBuilder,
-//   productId: string,
-//   ID: string,
-//   version: number,
-// ): Promise<ClientResponse<Cart>> =>
-//   apiRoot
-//     .me()
-//     .carts()
-//     .withId({ ID })
-//     .post({
-//       body: {
-//         version,
-//         actions: [
-//           {
-//             action: 'removeLineItem',
-//             productId,
-//             quantity: 1,
-//           },
-//         ],
-//       },
-//     })
-//     .execute();
+export const removeProductFromCartOnServer = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  lineItemId: string,
+  ID: string,
+  version: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId,
+            quantity: undefined,
+          },
+        ],
+      },
+    })
+    .execute();
