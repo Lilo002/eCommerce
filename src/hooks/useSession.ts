@@ -23,6 +23,7 @@ import {
   CustomerDraft,
   CustomerUpdate,
   customerUpdate,
+  decreaseProductQuantityRequest,
   deleteCartRequest,
   getCartRequest,
   getCategories,
@@ -36,7 +37,6 @@ import {
   ParamsRequestCategories,
   ParamsRequestProducts,
   removeAddressRequest,
-  removeProductFromCartRequest,
   updateAddressRequest,
   UpdateCustomerDraft,
   updateCustomerInfoRequest,
@@ -120,7 +120,7 @@ export const useSession = () => {
       const lineItem = cart.lineItems.find((item) => item.productId === productId);
       if (lineItem) {
         const { id: cartId, version } = cart;
-        return removeProductFromCartRequest(apiRoot, cartId, version, lineItem.id, quantity).then(({ body }) => {
+        return decreaseProductQuantityRequest(apiRoot, cartId, version, lineItem.id, quantity).then(({ body }) => {
           setCart(body);
           return body;
         });
