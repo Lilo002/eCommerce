@@ -1,5 +1,6 @@
 import {
   Address,
+  Cart,
   CategoryPagedQueryResponse,
   ClientResponse,
   Customer,
@@ -8,6 +9,7 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  LineItem,
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
   Product,
@@ -342,3 +344,94 @@ export const updateAddressRequest = (
       },
     })
     .execute();
+
+export const getCartRequest = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> =>
+  apiRoot.me().activeCart().get().execute();
+
+export const createCartRequest = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .post({ body: { currency: 'USD' } })
+    .execute();
+
+export const addProductToCardRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  productId: Product['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const decreaseProductQuantityRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  lineItemId: LineItem['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const updateProductQuantityRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  lineItemId: LineItem['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const deleteCartRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+): Promise<ClientResponse<Cart>> => apiRoot.me().carts().withId({ ID }).delete({ queryArgs: { version } }).execute();

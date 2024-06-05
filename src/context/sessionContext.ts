@@ -1,9 +1,11 @@
 import { createContext } from 'react';
 import {
   Address,
+  Cart,
   Category,
   Customer,
   MyCustomerChangePassword,
+  Product,
   ProductCatalogData,
   ProductProjection,
 } from '@commercetools/platform-sdk';
@@ -46,5 +48,10 @@ export const sessionContext = createContext<{
     removeAddress: (addressId: Address['id']) => Promise<Customer>;
     updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
     getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
+    cart: Cart;
+    addProductToCard: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    decreaseProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    updateProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    deleteCart: () => Promise<Cart>;
   } | null;
 }>({ session: null });
