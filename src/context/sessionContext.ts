@@ -50,7 +50,7 @@ export const sessionContext = createContext<{
     getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
     cart: Cart;
     addProductToCard: (productId: Product['id'], quantity: number) => Promise<Cart>;
-    removeProductFromCart: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    decreaseProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
     updateProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
     deleteCart: () => Promise<Cart>;
   } | null;

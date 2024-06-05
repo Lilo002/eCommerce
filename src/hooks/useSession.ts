@@ -112,7 +112,10 @@ export const useSession = () => {
     throw new Error('Product not found in the cart');
   };
 
-  const removeProductFromCart = async (productId: Product['id'], quantity: LineItem['quantity'] = 1): Promise<Cart> => {
+  const decreaseProductQuantity = async (
+    productId: Product['id'],
+    quantity: LineItem['quantity'] = 1,
+  ): Promise<Cart> => {
     if (cart && cart.lineItems) {
       const lineItem = cart.lineItems.find((item) => item.productId === productId);
       if (lineItem) {
@@ -308,7 +311,7 @@ export const useSession = () => {
     updateAddress,
     getAllCategories,
     addProductToCard,
-    removeProductFromCart,
+    decreaseProductQuantity,
     updateProductQuantity,
     cart,
     deleteCart,

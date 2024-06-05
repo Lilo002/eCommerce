@@ -380,7 +380,7 @@ export const addProductToCardRequest = (
     })
     .execute();
 
-export const removeProductFromCartRequest = (
+export const decreaseProductQuantityRequest = (
   apiRoot: ByProjectKeyRequestBuilder,
   ID: Cart['id'],
   version: Cart['version'],
