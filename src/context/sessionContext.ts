@@ -47,10 +47,10 @@ export const sessionContext = createContext<{
     removeAddress: (addressId: Address['id']) => Promise<Customer>;
     updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
     getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
-    cart: () => Promise<Cart | Error>;
-    addProductToCart: (idProduct: string, idCart: string, versionCart: number) => Promise<Cart>;
-    // removeProductFromCart: (idProduct: string, idCart: string, versionCart: number) => Promise<Cart>;
-    cartData: Cart;
-    isCart: boolean;
+    cart: Cart;
+    addProductToCard: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    decreaseProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    updateProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    deleteCart: () => Promise<Cart>;
   } | null;
 }>({ session: null });
