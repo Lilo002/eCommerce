@@ -6,7 +6,6 @@ import { Breadcrumb, Button, message } from 'antd';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
-import { findLineItemId } from './model/data';
 import { ProductDetails } from './ui/productDetails';
 import { ProductPrice } from './ui/productPrice';
 import { ProductImage } from './ui/slider/slider';
@@ -46,35 +45,36 @@ export const ProductPage = () => {
   };
 
   const addProductToCart = () => {
-    if (!session?.cartData) {
-      session?.cart();
-    }
-    if (session?.cartData) {
-      const idCart = session?.cartData.id;
-      const version = session?.cartData.version;
-      session.addProductToCart(productId || '', idCart, version).then(() => {
-        setIsProductInCart(true);
-        showMessage('This product has been successfully added to your cart');
-      });
-    }
+    // if (!session?.cartData) {
+    //   session?.cart();
+    // }
+    session?.addProductToCard(productId, 1).then(() => {
+      setIsProductInCart(true);
+      showMessage('This product has been successfully added to your cart');
+    });
   };
 
   const removeProducrFromCart = () => {
-    if (!session?.cartData) {
-      session?.cart();
-    }
-    if (session?.cartData) {
-      const idCart = session?.cartData.id;
-      const version = session?.cartData.version;
-      const lineItemId = findLineItemId(session?.cartData.lineItems, productId);
-      if (!lineItemId) {
-        return;
-      }
-      session.removeProductFromCart(lineItemId, idCart, version).then(() => {
-        setIsProductInCart(false);
-        showMessage('This product has been successfully removed from your cart');
-      });
-    }
+    // if (!session?.cartData) {
+    //   session?.cart();
+    // }
+    // if (session?.cartData) {
+    //   const idCart = session?.cartData.id;
+    //   const version = session?.cartData.version;
+    //   const lineItemId = findLineItemId(session?.cartData.lineItems, productId);
+    //   if (!lineItemId) {
+    //     return;
+    //   }
+
+    //   session.removeProductFromCart(lineItemId, idCart, version).then(() => {
+    //     setIsProductInCart(false);
+    //     showMessage('This product has been successfully removed from your cart');
+    //   });
+    // }
+    session?.decreaseProductQuantity(productId, 1).then(() => {
+      setIsProductInCart(false);
+      showMessage('This product has been successfully removed from your cart');
+    });
   };
 
   const { name, masterVariant, description } = data;

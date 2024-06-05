@@ -1,0 +1,26 @@
+.cart {
+  margin: 0 auto;
+  width: 500px;
+  &-title {
+    font-size: 28px;
+    @media (max-width: 500px) {
+      font-size: 24px;
+    }
+  }
+  &-description {
+    font-size: 16px;
+    @media (max-width: 500px) {
+      font-size: 14px;
+    }
+  }
+  &-empty {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  @media (max-width: 500px) {
+    width: 350px;
+  }
+}
