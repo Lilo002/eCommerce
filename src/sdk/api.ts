@@ -404,3 +404,28 @@ export const removeProductFromCartRequest = (
       },
     })
     .execute();
+
+export const updateProductQuantityRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  lineItemId: LineItem['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();

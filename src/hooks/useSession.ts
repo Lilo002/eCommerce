@@ -40,6 +40,7 @@ import {
   UpdateCustomerDraft,
   updateCustomerInfoRequest,
   updatePasswordRequest,
+  updateProductQuantityRequest,
 } from '../sdk/api';
 import { getAnonymousApiRoot, getCookie, getLoginApiRoot, getRefreshApiRoot } from '../sdk/client/ClientBuilder';
 
@@ -78,7 +79,7 @@ export const useSession = () => {
       return body;
     });
 
-  const addProductToCard = async (productId: Product['id'], quantity: number): Promise<Cart> => {
+  const addProductToCard = async (productId: Product['id'], quantity: number = 1): Promise<Cart> => {
     if (!cart) {
       return createCart(apiRoot)
         .then(({ id, version }) => addProductToCardRequest(apiRoot, id, version, productId, quantity))
@@ -95,7 +96,22 @@ export const useSession = () => {
     });
   };
 
-  const removeProductFromCart = (productId: Product['id'], quantity: LineItem['quantity'] = 0): Promise<Cart> => {
+  const updateProductQuantity = async (productId: Product['id'], quantity: number = 0): Promise<Cart> => {
+    if (cart && cart.lineItems) {
+      const lineItem = cart.lineItems.find((item) => item.productId === productId);
+      if (lineItem) {
+        const { id: cartId, version } = cart;
+        return updateProductQuantityRequest(apiRoot, cartId, version, lineItem.id, quantity).then(({ body }) => {
+          setCart(body);
+          return body;
+        });
+      }
+    }
+
+    throw new Error('Product not found in the cart');
+  };
+
+  const removeProductFromCart = async (productId: Product['id'], quantity: LineItem['quantity'] = 1): Promise<Cart> => {
     if (cart && cart.lineItems) {
       const lineItem = cart.lineItems.find((item) => item.productId === productId);
       if (lineItem) {
@@ -279,6 +295,7 @@ export const useSession = () => {
     getAllCategories,
     addProductToCard,
     removeProductFromCart,
+    updateProductQuantity,
     cart,
   };
 };

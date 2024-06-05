@@ -51,5 +51,6 @@ export const sessionContext = createContext<{
     cart: Cart;
     addProductToCard: (productId: Product['id'], quantity: number) => Promise<Cart>;
     removeProductFromCart: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    updateProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
   } | null;
 }>({ session: null });
