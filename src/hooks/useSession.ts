@@ -23,6 +23,7 @@ import {
   CustomerDraft,
   CustomerUpdate,
   customerUpdate,
+  deleteCartRequest,
   getCartRequest,
   getCategories,
   getCustomerByEmail,
@@ -124,6 +125,19 @@ export const useSession = () => {
     }
 
     throw new Error('Product not found in the cart');
+  };
+
+  const deleteCart = async (): Promise<Cart> => {
+    if (cart) {
+      const { id, version } = cart;
+
+      return deleteCartRequest(apiRoot, id, version).then(({ body }) => {
+        setCart(null);
+        return body;
+      });
+    }
+
+    throw new Error('Something went wrong');
   };
 
   useLayoutEffect(() => {
@@ -297,5 +311,6 @@ export const useSession = () => {
     removeProductFromCart,
     updateProductQuantity,
     cart,
+    deleteCart,
   };
 };

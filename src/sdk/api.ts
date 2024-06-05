@@ -429,3 +429,9 @@ export const updateProductQuantityRequest = (
       },
     })
     .execute();
+
+export const deleteCartRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+): Promise<ClientResponse<Cart>> => apiRoot.me().carts().withId({ ID }).delete({ queryArgs: { version } }).execute();
