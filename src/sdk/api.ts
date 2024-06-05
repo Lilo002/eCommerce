@@ -1,5 +1,6 @@
 import {
   Address,
+  Cart,
   CategoryPagedQueryResponse,
   ClientResponse,
   Customer,
@@ -8,6 +9,7 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  LineItem,
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
   Product,
@@ -337,6 +339,66 @@ export const updateAddressRequest = (
             action: 'changeAddress',
             addressId,
             address,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const getCartRequest = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> =>
+  apiRoot.me().activeCart().get().execute();
+
+export const createCartRequest = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .post({ body: { currency: 'USD' } })
+    .execute();
+
+export const addProductToCardRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  productId: Product['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const removeProductFromCartRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  lineItemId: LineItem['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId,
+            quantity,
           },
         ],
       },

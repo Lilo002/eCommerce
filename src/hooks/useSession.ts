@@ -1,9 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Address,
+  Cart,
   Category,
   Customer,
+  LineItem,
   MyCustomerChangePassword,
+  Product,
   ProductCatalogData,
   ProductProjection,
 } from '@commercetools/platform-sdk';
@@ -12,12 +15,15 @@ import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/dec
 import {
   addAddressInfoRequest,
   addAddressRequest,
+  addProductToCardRequest,
   AddressDraft,
   authenticateCustomer,
+  createCartRequest,
   createCustomer,
   CustomerDraft,
   CustomerUpdate,
   customerUpdate,
+  getCartRequest,
   getCategories,
   getCustomerByEmail,
   getCustomerDetails,
@@ -29,6 +35,7 @@ import {
   ParamsRequestCategories,
   ParamsRequestProducts,
   removeAddressRequest,
+  removeProductFromCartRequest,
   updateAddressRequest,
   UpdateCustomerDraft,
   updateCustomerInfoRequest,
@@ -51,12 +58,57 @@ export const useSession = () => {
   const [apiRoot, setApiRoot] = useState(getAnonymousApiRoot());
   const [isLogin, setLogin] = useState(false);
   const [userData, setUserData] = useState<Customer>(initialCustomer);
+  const [cart, setCart] = useState<Cart | null>(null);
 
   const getCustomer = (root: ByProjectKeyRequestBuilder): Promise<Customer> =>
     getCustomerDetails(root).then(({ body }) => {
       setUserData(body);
       return body;
     });
+
+  const getCart = (root: ByProjectKeyRequestBuilder): Promise<Cart> =>
+    getCartRequest(root).then(({ body }) => {
+      setCart(body);
+      return body;
+    });
+
+  const createCart = (root: ByProjectKeyRequestBuilder): Promise<Cart> =>
+    createCartRequest(root).then(({ body }) => {
+      setCart(body);
+      return body;
+    });
+
+  const addProductToCard = async (productId: Product['id'], quantity: number): Promise<Cart> => {
+    if (!cart) {
+      return createCart(apiRoot)
+        .then(({ id, version }) => addProductToCardRequest(apiRoot, id, version, productId, quantity))
+        .then(({ body }) => {
+          setCart(body);
+          return body;
+        });
+    }
+
+    const { id, version } = cart;
+    return addProductToCardRequest(apiRoot, id, version, productId, quantity).then(({ body }) => {
+      setCart(body);
+      return body;
+    });
+  };
+
+  const removeProductFromCart = (productId: Product['id'], quantity: LineItem['quantity'] = 0): Promise<Cart> => {
+    if (cart && cart.lineItems) {
+      const lineItem = cart.lineItems.find((item) => item.productId === productId);
+      if (lineItem) {
+        const { id: cartId, version } = cart;
+        return removeProductFromCartRequest(apiRoot, cartId, version, lineItem.id, quantity).then(({ body }) => {
+          setCart(body);
+          return body;
+        });
+      }
+    }
+
+    throw new Error('Product not found in the cart');
+  };
 
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
@@ -65,6 +117,7 @@ export const useSession = () => {
 
       const newApiRoot = getRefreshApiRoot(token);
       getCustomer(newApiRoot);
+      getCart(newApiRoot).catch(() => setCart(null));
 
       setApiRoot(newApiRoot);
       setLogin(true);
@@ -80,6 +133,7 @@ export const useSession = () => {
     authenticateCustomer(root, { email, password }).then(() => {
       const newApiRoot = getLoginApiRoot({ email, password });
       setApiRoot(newApiRoot);
+      getCart(newApiRoot).catch(() => setCart(null));
       setLogin(true);
       getCustomer(newApiRoot);
     });
@@ -111,6 +165,7 @@ export const useSession = () => {
       const newApiRoot = getLoginApiRoot({ email, password });
 
       setApiRoot(newApiRoot);
+      getCart(newApiRoot).catch(() => setCart(null));
       setLogin(true);
 
       return updateAddresses(
@@ -141,6 +196,8 @@ export const useSession = () => {
     setApiRoot(getAnonymousApiRoot());
     setLogin(false);
     setUserData(initialCustomer);
+    setCart(null);
+
     document.cookie = 'token=; Max-Age=-1;';
   };
 
@@ -220,5 +277,8 @@ export const useSession = () => {
     removeAddress,
     updateAddress,
     getAllCategories,
+    addProductToCard,
+    removeProductFromCart,
+    cart,
   };
 };
