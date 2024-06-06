@@ -6,6 +6,7 @@ import { Breadcrumb, Button, message } from 'antd';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
+import { checkProductInCart } from './model/data';
 import { ProductDetails } from './ui/productDetails';
 import { ProductPrice } from './ui/productPrice';
 import { ProductImage } from './ui/slider/slider';
@@ -19,7 +20,8 @@ export const ProductPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<ProductData | null>(null);
   const [productId, setProductId] = useState<string>('');
-  const [isProductInCart, setIsProductInCart] = useState(false);
+  const isProductInCurrentCart = checkProductInCart(session?.cart, productKey || '');
+  const [isProductInCart, setIsProductInCart] = useState(isProductInCurrentCart);
 
   useEffect(() => {
     session
@@ -27,10 +29,11 @@ export const ProductPage = () => {
       .then((res) => {
         setProductId(res.id);
         setData(res.masterData.current);
+        setIsProductInCart(isProductInCurrentCart);
         setIsLoading(false);
       })
       .catch(() => navigate(ROUTES.NOT_FOUND));
-  }, [navigate, productKey, session]);
+  }, [navigate, productKey, isProductInCurrentCart, session]);
 
   if (!data) {
     return <div>Product not found</div>;
@@ -45,32 +48,13 @@ export const ProductPage = () => {
   };
 
   const addProductToCart = () => {
-    // if (!session?.cartData) {
-    //   session?.cart();
-    // }
     session?.addProductToCard(productId, 1).then(() => {
       setIsProductInCart(true);
       showMessage('This product has been successfully added to your cart');
     });
   };
 
-  const removeProducrFromCart = () => {
-    // if (!session?.cartData) {
-    //   session?.cart();
-    // }
-    // if (session?.cartData) {
-    //   const idCart = session?.cartData.id;
-    //   const version = session?.cartData.version;
-    //   const lineItemId = findLineItemId(session?.cartData.lineItems, productId);
-    //   if (!lineItemId) {
-    //     return;
-    //   }
-
-    //   session.removeProductFromCart(lineItemId, idCart, version).then(() => {
-    //     setIsProductInCart(false);
-    //     showMessage('This product has been successfully removed from your cart');
-    //   });
-    // }
+  const removeProductFromCart = () => {
     session?.decreaseProductQuantity(productId, 1).then(() => {
       setIsProductInCart(false);
       showMessage('This product has been successfully removed from your cart');
@@ -106,12 +90,19 @@ export const ProductPage = () => {
         />
         <h2 className="product-title">{name['en-GB']}</h2>
         <ProductPrice price={price} isDiscounted={isDiscounted} />
-        <Button type="primary" className="product-cart" onClick={addProductToCart} disabled={isProductInCart}>
-          <span className="product-cart-content">Add to Cart</span>
-        </Button>
-        <Button type="primary" className="product-cart" onClick={removeProducrFromCart} disabled={!isProductInCart}>
-          <span className="product-cart-content">Remove from Cart</span>
-        </Button>
+        <div className="product-cart">
+          <Button type="primary" className="product-cart-btn" onClick={addProductToCart} disabled={isProductInCart}>
+            <span className="product-cart-content">Add to Cart</span>
+          </Button>
+          <Button
+            type="primary"
+            className="product-cart-btn"
+            onClick={removeProductFromCart}
+            disabled={!isProductInCart}
+          >
+            <span className="product-cart-content">Remove from Cart</span>
+          </Button>
+        </div>
         <div className="product-info">
           <div className="product-info-title">
             <h3 className="product-info-title-content">Description</h3>
