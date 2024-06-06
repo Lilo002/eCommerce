@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Badge, Button } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -15,6 +15,13 @@ export const Header = () => {
   const sessionData = useContext(sessionContext);
   const session = sessionData?.session;
   const navigate = useNavigate();
+  const [productCount, setProductCount] = useState(0);
+
+  useEffect(() => {
+    if (session?.cart) {
+      setProductCount(session?.cart.lineItems.length);
+    }
+  }, [session?.cart]);
 
   const handleLogin = () => {
     navigate(ROUTES.LOGIN);
@@ -47,9 +54,11 @@ export const Header = () => {
         </div>
         <div className="header-inner-user">
           <Button className="header-btn-user" type="link" onClick={handleBasket} title="Basket">
-            <svg className="header-user-ico">
-              <use xlinkHref={`${sprite}#basket`} />
-            </svg>
+            <Badge count={productCount}>
+              <svg className="header-user-ico">
+                <use xlinkHref={`${sprite}#basket`} />
+              </svg>
+            </Badge>
           </Button>
           {session?.isLogin ? (
             <>
