@@ -30,4 +30,8 @@
       </g>
     </g>
   </symbol>
+
+  <symbol fill="fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="add">
+    <path d="M12 4V20M4 12H20" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
 </svg>

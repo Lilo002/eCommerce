@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
+import { Button } from 'antd';
 
 import { CURRENCY_CODE, ROUTES } from '../../../shared/constants';
 import { formatPrices } from '../lib/formatPrices';
 import { getShortText } from '../lib/getShortText';
 import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from '../model/constants';
+
+import sprites from './icon/sprites.svg';
 
 export const ProductCard = ({ product }: { product: ProductProjection }) => {
   const productKey = product.key;
@@ -26,10 +29,19 @@ export const ProductCard = ({ product }: { product: ProductProjection }) => {
         <div className="card-body">
           <p className="card-title">{name}</p>
           <p className="card-description">{description} </p>
-          <div className="card-price">
-            {isDiscountedExists && <p className="card-price-current">{discounted + currencyCode}</p>}
+          <div className="card-footer">
+            <div className="card-price">
+              {isDiscountedExists && <p className="card-price-current">{discounted + currencyCode}</p>}
 
-            <p className={`${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>{price + currencyCode}</p>
+              <p className={`${isDiscountedExists ? 'card-price-old' : 'card-price-current'}`}>
+                {price + currencyCode}
+              </p>
+            </div>
+            <Button className="catalog-filters-btn" type="primary">
+              <svg className="icon">
+                <use xlinkHref={`${sprites}#add`} />
+              </svg>
+            </Button>
           </div>
         </div>
       </div>

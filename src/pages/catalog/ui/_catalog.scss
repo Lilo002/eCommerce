@@ -51,12 +51,18 @@
     font-size: 15px;
     font-weight: bold;
   }
-  &-price {
+  &-footer {
     position: absolute;
+    width: 87%;
     bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    justify-content: space-between;
+  }
+  &-price {
+    display: flex;
+    align-items: center;
+    gap: 3px;
     &-current {
       font-size: 23px;
       color: $orange-color;
