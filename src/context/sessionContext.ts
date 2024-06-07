@@ -7,7 +7,7 @@ import {
   MyCustomerChangePassword,
   Product,
   ProductCatalogData,
-  ProductProjection,
+  ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 
 import {
@@ -41,8 +41,8 @@ export const sessionContext = createContext<{
       sort,
       filter,
       priceCurrency,
-    }: ParamsRequestProducts) => Promise<ProductProjection[]>;
-    findProduct: (productName: string) => Promise<ProductProjection[]>;
+    }: ParamsRequestProducts) => Promise<ProductProjectionPagedQueryResponse>;
+    findProduct: (productName: string) => Promise<ProductProjectionPagedQueryResponse>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: CustomerUpdate) => Promise<Customer>;
     removeAddress: (addressId: Address['id']) => Promise<Customer>;

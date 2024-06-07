@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Category, ProductProjection } from '@commercetools/platform-sdk';
+import { Pagination } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ParamsRequestCategories, ParamsRequestProducts } from '../../sdk/api';
@@ -38,18 +39,18 @@ export function CatalogPage() {
   const { session } = useContext(sessionContext);
 
   useEffect(() => {
-    session?.getAllProducts(paramsRequest).then((items) => {
-      setProducts(items);
+    session?.getAllProducts(paramsRequest).then((data) => {
+      setProducts(data.results);
     });
 
-    session?.getAllCategories(defaultParamsGetCategories).then((items) => {
-      setCategories(items);
+    session?.getAllCategories(defaultParamsGetCategories).then((data) => {
+      setCategories(data);
     });
   }, [session]);
 
   const searchProduct = (searchTerm: string) => {
-    session?.findProduct(searchTerm).then((items) => {
-      setProducts(items);
+    session?.findProduct(searchTerm).then((data) => {
+      setProducts(data.results);
     });
   };
 
@@ -64,8 +65,8 @@ export function CatalogPage() {
       paramsRequest.sort = '';
     }
 
-    session?.getAllProducts(paramsRequest).then((items) => {
-      setProducts(items);
+    session?.getAllProducts(paramsRequest).then((data) => {
+      setProducts(data.results);
     });
   };
 
@@ -93,8 +94,8 @@ export function CatalogPage() {
       `variants.price.centAmount: range(${minPrice * FRACTION_DIGITS} to ${maxPrice * FRACTION_DIGITS})`,
     );
 
-    session?.getAllProducts(paramsRequest).then((items) => {
-      setProducts(items);
+    session?.getAllProducts(paramsRequest).then((data) => {
+      setProducts(data.results);
     });
   };
 
@@ -103,8 +104,8 @@ export function CatalogPage() {
       paramsRequest.filter = [];
       paramsRequest.priceCurrency = '';
 
-      session?.getAllProducts(paramsRequest).then((items) => {
-        setProducts(items);
+      session?.getAllProducts(paramsRequest).then((data) => {
+        setProducts(data.results);
       });
     }
     setUserCategories('');
@@ -124,6 +125,7 @@ export function CatalogPage() {
         <div className="catalog">
           <ProductsList products={products} />
         </div>
+        <Pagination className="pagination" current={1} total={50} defaultPageSize={8} />;
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import {
   MyCustomerChangePassword,
   Product,
   ProductCatalogData,
-  ProductProjection,
+  ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
@@ -216,11 +216,11 @@ export const useSession = () => {
     sort,
     filter,
     priceCurrency,
-  }: ParamsRequestProducts): Promise<ProductProjection[]> =>
-    getProducts(apiRoot, { limit, staged, sort, filter, priceCurrency }).then(({ body }) => body.results);
+  }: ParamsRequestProducts): Promise<ProductProjectionPagedQueryResponse> =>
+    getProducts(apiRoot, { limit, staged, sort, filter, priceCurrency }).then(({ body }) => body);
 
-  const findProduct = (productName: string): Promise<ProductProjection[]> =>
-    getProductByName(apiRoot, productName).then(({ body }) => body.results);
+  const findProduct = (productName: string): Promise<ProductProjectionPagedQueryResponse> =>
+    getProductByName(apiRoot, productName).then(({ body }) => body);
 
   const getAllCategories = ({ limit }: ParamsRequestCategories): Promise<Category[]> =>
     getCategories(apiRoot, { limit }).then(({ body }) => body.results);
