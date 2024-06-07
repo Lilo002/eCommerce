@@ -47,18 +47,28 @@ export const ProductPage = () => {
     message.success(text);
   };
 
+  const showErrorMessage = (text: string) => {
+    message.error(text);
+  };
+
   const addProductToCart = () => {
-    session?.addProductToCard(productId, 1).then(() => {
-      setIsProductInCart(true);
-      showMessage('This product has been successfully added to your cart');
-    });
+    session
+      ?.addProductToCard(productId, 1)
+      .then(() => {
+        setIsProductInCart(true);
+        showMessage('This product has been successfully added to your cart');
+      })
+      .catch((error: Error) => showErrorMessage(error.message));
   };
 
   const removeProductFromCart = () => {
-    session?.decreaseProductQuantity(productId, 1).then(() => {
-      setIsProductInCart(false);
-      showMessage('This product has been successfully removed from your cart');
-    });
+    session
+      ?.decreaseProductQuantity(productId, 1)
+      .then(() => {
+        setIsProductInCart(false);
+        showMessage('This product has been successfully removed from your cart');
+      })
+      .catch((error: Error) => showErrorMessage(error.message));
   };
 
   const { name, masterVariant, description } = data;
