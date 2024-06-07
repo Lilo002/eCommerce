@@ -1,4 +1,4 @@
-import { TypedMoney } from '@commercetools/platform-sdk';
+import { Cart, TypedMoney } from '@commercetools/platform-sdk';
 
 export const getPrice = (price: TypedMoney | undefined): string => {
   if (!price) {
@@ -16,3 +16,13 @@ export const getPlayers = (minPlayers: number, maxPlayers: number): string => {
 };
 
 export const getRoundedNumber = (intNumber: number): number => Math.round(intNumber * 10) / 10;
+
+export const checkProductInCart = (cart: Cart | undefined, productKey: string): boolean => {
+  if (cart) {
+    const result = cart.lineItems.find((items) => items.productKey === productKey);
+    if (result) {
+      return true;
+    }
+  }
+  return false;
+};
