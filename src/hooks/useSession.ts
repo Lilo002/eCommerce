@@ -7,7 +7,6 @@ import {
   LineItem,
   MyCustomerChangePassword,
   Product,
-  ProductCatalogData,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
@@ -290,8 +289,8 @@ export const useSession = () => {
     if (!isLogin) getProject(apiRoot);
   }, [apiRoot, isLogin]);
 
-  const getProduct = (productKey: string): Promise<ProductCatalogData> =>
-    getOneProduct(apiRoot, productKey).then(({ body }) => body.masterData);
+  const getProduct = (productKey: string): Promise<Product> =>
+    getOneProduct(apiRoot, productKey).then(({ body }) => body);
 
   return {
     userData,

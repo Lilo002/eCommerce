@@ -6,7 +6,6 @@ import {
   Customer,
   MyCustomerChangePassword,
   Product,
-  ProductCatalogData,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 
@@ -34,7 +33,7 @@ export const sessionContext = createContext<{
       setAsDefaultBillingAddress: boolean,
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
-    getProduct: (productkey: string) => Promise<ProductCatalogData>;
+    getProduct: (productkey: string) => Promise<Product>;
     getAllProducts: ({
       limit,
       staged,
