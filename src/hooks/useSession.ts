@@ -212,11 +212,12 @@ export const useSession = () => {
   const getAllProducts = ({
     limit,
     staged,
+    offset,
     sort,
     filter,
     priceCurrency,
   }: ParamsRequestProducts): Promise<ProductProjectionPagedQueryResponse> =>
-    getProducts(apiRoot, { limit, staged, sort, filter, priceCurrency }).then(({ body }) => body);
+    getProducts(apiRoot, { limit, staged, offset, sort, filter, priceCurrency }).then(({ body }) => body);
 
   const findProduct = (productName: string): Promise<ProductProjectionPagedQueryResponse> =>
     getProductByName(apiRoot, productName).then(({ body }) => body);

@@ -37,6 +37,7 @@ export const sessionContext = createContext<{
     getAllProducts: ({
       limit,
       staged,
+      offset,
       sort,
       filter,
       priceCurrency,
