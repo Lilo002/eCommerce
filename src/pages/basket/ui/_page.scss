@@ -64,7 +64,7 @@
     @media (max-width: 550px) {
       min-width: 70px;
     }
-    &-current {
+    &-one {
       font-size: 20px !important;
       width: 130px;
       align-items: center;
@@ -81,7 +81,7 @@
         width: 70px;
       }
     }
-    &-old {
+    &-sum {
       width: 110px;
       align-items: center;
       overflow: hidden;
@@ -123,6 +123,14 @@
       width: 130px !important;
       font-size: 11px;
     }
+  }
+  &-info {
+    position: relative;
+  }
+  &-price-sum {
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
   }
   &-buttons {
     display: flex;

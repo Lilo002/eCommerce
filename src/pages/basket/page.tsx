@@ -7,7 +7,7 @@ import { Button, Image, InputNumber, List, message, Modal } from 'antd';
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
 
-import { ProductPrice, TotalPrice } from './ui/productPrice';
+import { getPrice, ProductPrice, TotalPrice } from './ui/productPrice';
 
 import './ui/_page.scss';
 
@@ -86,26 +86,34 @@ export function BasketPage() {
                   quantity={product.quantity}
                   isDiscounted={!!product.price.discounted}
                 />
-                <div className="cart-buttons">
-                  <Button
-                    className="cart-button cart-button-increase"
-                    onClick={() => decreaseItemCount(product.productId)}
-                  >
-                    -
-                  </Button>
-                  <InputNumber
-                    className="cart-input-number"
-                    min={1}
-                    width={1}
-                    value={product.quantity || 1}
-                    onChange={(value) => updateQuantity(product.productId, value ?? 1)}
-                  />
-                  <Button
-                    className="cart-button cart-button-decrease"
-                    onClick={() => increaseItemCount(product.productId)}
-                  >
-                    +
-                  </Button>
+                <div className="cart-info">
+                  <div className="cart-buttons">
+                    <Button
+                      className="cart-button cart-button-increase"
+                      onClick={() => decreaseItemCount(product.productId)}
+                    >
+                      -
+                    </Button>
+                    <InputNumber
+                      className="cart-input-number"
+                      min={1}
+                      width={1}
+                      value={product.quantity || 1}
+                      onChange={(value) => updateQuantity(product.productId, value ?? 1)}
+                    />
+                    <Button
+                      className="cart-button cart-button-decrease"
+                      onClick={() => increaseItemCount(product.productId)}
+                    >
+                      +
+                    </Button>
+                  </div>
+                  <p className="cart-price-sum">
+                    {product.price.discounted
+                      ? getPrice(product.price?.discounted?.value)
+                      : getPrice(product.price?.value)}
+                    / item
+                  </p>
                 </div>
                 <Button className="cart-button" danger onClick={() => removeItemFromCart(product.productId)}>
                   <DeleteOutlined />
@@ -113,7 +121,7 @@ export function BasketPage() {
               </List.Item>
             )}
           />
-          <TotalPrice products={products} totalPrice={session.cart.totalPrice} />
+          <TotalPrice totalPrice={session.cart.totalPrice} />
           <Button className="cart-reset" type="primary" htmlType="button" onClick={showModal}>
             Clear Shopping Cart
           </Button>
