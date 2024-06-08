@@ -49,14 +49,53 @@ export function BasketPage() {
 
   return (
     <div className="cart">
-      {session?.cart && session.cart.lineItems ? (
-        <div className="cart-empty">
-          <div className="cart-empty-message">
-            <h2 className="cart-title">
-              Your shopping cart <ShoppingCartOutlined />
-            </h2>
+      {products && session && products.length ? (
+        <>
+          <List
+            dataSource={products}
+            renderItem={(product) => (
+              <List.Item key={product.productId}>
+                {product.variant?.images?.[0] && <Image className="cart-image" src={product.variant.images[0].url} />}
+                <span className="cart-name" style={{ marginLeft: 10 }}>
+                  {product.name['en-GB']}
+                </span>
+                <ProductPrice
+                  price={product.price}
+                  quantity={product.quantity}
+                  isDiscounted={!!product.price.discounted}
+                />
+                <div className="cart-buttons">
+                  <Button
+                    className="cart-button cart-button-increase"
+                    onClick={() => decreaseItemCount(product.productId)}
+                  >
+                    -
+                  </Button>
+                  <InputNumber
+                    className="cart-input-number"
+                    min={1}
+                    width={1}
+                    value={product.quantity || 1}
+                    onChange={(value) => updateQuantity(product.productId, value ?? 1)}
+                  />
+                  <Button
+                    className="cart-button cart-button-decrease"
+                    onClick={() => increaseItemCount(product.productId)}
+                  >
+                    +
+                  </Button>
           </div>
-        </div>
+                <Button className="cart-button" danger onClick={() => removeItemFromCart(product.productId)}>
+                  <DeleteOutlined />
+                </Button>
+              </List.Item>
+            )}
+          />
+          <TotalPrice products={products} totalPrice={session.cart.totalPrice} />
+          <Button className="cart-reset" type="primary" htmlType="button" onClick={showModal}>
+            Clear Shopping Cart
+          </Button>
+        </>
       ) : (
         <div className="cart-empty">
           <h2 className="cart-title">
