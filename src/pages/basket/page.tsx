@@ -134,7 +134,7 @@ export function BasketPage() {
           </Button>
         </div>
       )}
-      <Modal title="Confirm Cart Clearing" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal centered title="Confirm Cart Clearing" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <p>Are you sure you want to clear the shopping cart?</p>
       </Modal>
     </div>
