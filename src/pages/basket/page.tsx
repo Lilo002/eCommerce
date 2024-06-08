@@ -11,10 +11,33 @@ import './ui/_page.scss';
 export function BasketPage() {
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
+  const removeItemFromCart = (id: Product['id']) => {
+    session
+      ?.updateProductQuantity(id, 0)
+      .then(() => message.success('product deleted successfully'))
+      .catch((err) => message.error(err.message));
+  };
 
-  /*   const checkIsCartEmpty= () => {
-    session.cart
-  } */
+  const increaseItemCount = (id: Product['id']) => {
+    session
+      ?.addProductToCard(id, 1)
+      .then(() => message.success('product added successfully'))
+      .catch((err) => message.error(err.message));
+  };
+
+  const decreaseItemCount = (id: Product['id']) => {
+    session
+      ?.decreaseProductQuantity(id, 1)
+      .then(() => message.success('product removed successfully'))
+      .catch((err) => message.error(err.message));
+  };
+
+  const updateQuantity = (id: Product['id'], quantity: number) => {
+    session
+      ?.updateProductQuantity(id, quantity)
+      .then(() => message.success('product removed successfully'))
+      .catch((err) => message.error(err.message));
+  };
 
   const navigateCatalog = () => navigate(ROUTES.CATALOG);
 
