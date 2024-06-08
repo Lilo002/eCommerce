@@ -63,6 +63,7 @@ export const ProductCard = ({ product }: { product: ProductProjection }) => {
             </div>
             <Button
               className="catalog-filters-btn"
+              title="Add to basket"
               type="primary"
               shape="circle"
               onClick={(event) => {
