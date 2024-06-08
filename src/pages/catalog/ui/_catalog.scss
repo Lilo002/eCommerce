@@ -62,7 +62,7 @@
   &-price {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 7px;
     &-current {
       font-size: 23px;
       color: $orange-color;
@@ -204,9 +204,21 @@
 .pagination {
   margin: auto;
   position: relative;
-  margin-bottom: 0px;
+  margin-bottom: 20px;
 }
 
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  animation: rotate 0.7s linear infinite;
+}
 ::-webkit-scrollbar {
   width: 7px;
 }

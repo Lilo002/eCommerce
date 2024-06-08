@@ -12,6 +12,8 @@ export const OFFSET_PRODUCT = 0;
 
 export const CURRENT_PAGE_NUMBER = 1;
 
+export const DEFAULT_QUANTITY_PRODUCTS = 1;
+
 export const SORT_FIELDS = {
   NAME: 'name',
   PRICE: 'price',
