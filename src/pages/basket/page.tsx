@@ -1,16 +1,20 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { DeleteOutlined, HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { LineItem, Product } from '@commercetools/platform-sdk';
+import { Button, Image, InputNumber, List, message, Modal } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
+
+import { ProductPrice, TotalPrice } from './ui/productPrice';
 
 import './ui/_page.scss';
 
 export function BasketPage() {
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState<LineItem[] | null>(session?.cart?.lineItems || null);
 
   useEffect(() => {
@@ -46,6 +50,24 @@ export function BasketPage() {
   };
 
   const navigateCatalog = () => navigate(ROUTES.CATALOG);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    session
+      ?.deleteCart()
+      .then(() => {
+        setIsModalOpen(false);
+        setProducts(null);
+      })
+      .catch((err) => message.error(err.message));
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="cart">
@@ -84,7 +106,7 @@ export function BasketPage() {
                   >
                     +
                   </Button>
-          </div>
+                </div>
                 <Button className="cart-button" danger onClick={() => removeItemFromCart(product.productId)}>
                   <DeleteOutlined />
                 </Button>
@@ -112,6 +134,9 @@ export function BasketPage() {
           </Button>
         </div>
       )}
+      <Modal title="Confirm Cart Clearing" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p>Are you sure you want to clear the shopping cart?</p>
+      </Modal>
     </div>
   );
 }
