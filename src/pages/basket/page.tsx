@@ -11,6 +11,12 @@ import './ui/_page.scss';
 export function BasketPage() {
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
+  const [products, setProducts] = useState<LineItem[] | null>(session?.cart?.lineItems || null);
+
+  useEffect(() => {
+    setProducts(session?.cart?.lineItems || null);
+  }, [session, session?.cart]);
+
   const removeItemFromCart = (id: Product['id']) => {
     session
       ?.updateProductQuantity(id, 0)
