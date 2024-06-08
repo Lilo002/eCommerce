@@ -12,6 +12,7 @@ import {
   LIMIT_CATEGORY,
   OFFSET_PRODUCT,
   PRICE_CURRENCY,
+  SCROLL_TOP,
   SORT_FIELDS,
   STAGED_PRODUCT,
 } from './model/constants';
@@ -143,6 +144,8 @@ export function CatalogPage() {
     session?.getAllProducts(paramsRequest).then((data) => {
       dataProcessingGetAllProducts(data);
     });
+
+    window.scrollTo({ top: SCROLL_TOP });
   };
 
   return (
