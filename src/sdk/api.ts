@@ -52,6 +52,7 @@ export interface UpdateCustomerDraft {
 export interface ParamsRequestProducts {
   limit: number;
   staged: boolean;
+  offset: number;
   sort?: string | null;
   filter?: string[];
   priceCurrency?: string | null;
@@ -151,17 +152,19 @@ export const getOneProduct = (
 
 export const getProducts = (
   apiRoot: ByProjectKeyRequestBuilder,
-  { limit, staged, sort, filter, priceCurrency }: ParamsRequestProducts,
+  { limit, staged, offset, sort, filter, priceCurrency }: ParamsRequestProducts,
 ): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> => {
   const queryArgs: {
     limit: number;
     staged: boolean;
+    offset: number;
     sort?: string;
     'filter.query'?: string[];
     priceCurrency?: string;
   } = {
     limit,
     staged,
+    offset,
   };
 
   if (sort) {
