@@ -269,6 +269,7 @@ export function AddressesTable({
         rowKey="id"
       />
       <Modal
+        centered
         className="modal"
         open={isModalOpen || isAddModalOpen}
         title={editingAddress ? 'Edit Address' : 'Add Address'}

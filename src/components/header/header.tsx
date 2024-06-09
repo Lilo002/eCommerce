@@ -20,6 +20,8 @@ export const Header = () => {
   useEffect(() => {
     if (session?.cart) {
       setProductCount(session?.cart.lineItems.length);
+    } else {
+      setProductCount(0);
     }
   }, [session?.cart]);
 
