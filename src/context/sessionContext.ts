@@ -4,6 +4,8 @@ import {
   Cart,
   Category,
   Customer,
+  DiscountCode,
+  DiscountCodeReference,
   MyCustomerChangePassword,
   Product,
   ProductProjection,
@@ -52,5 +54,8 @@ export const sessionContext = createContext<{
     decreaseProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
     updateProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
     deleteCart: () => Promise<Cart>;
+    addPromo: (promo: string) => Promise<Cart>;
+    removePromo: (promo: DiscountCodeReference) => Promise<Cart>;
+    getPromo: (ID: DiscountCodeReference['id']) => Promise<DiscountCode>;
   } | null;
 }>({ session: null });
