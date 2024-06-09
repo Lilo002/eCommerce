@@ -69,8 +69,6 @@ export function BasketPage() {
     setIsModalOpen(false);
   };
 
-  console.log(products);
-
   return (
     <div className="cart">
       {products && session && products.length ? (
