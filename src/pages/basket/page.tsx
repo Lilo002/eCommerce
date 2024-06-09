@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DeleteOutlined, HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { DeleteOutlined, HeartOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { DiscountCodeInfo, LineItem, Product } from '@commercetools/platform-sdk';
 import { Button, Image, Input, InputNumber, List, message, Modal } from 'antd';
 
@@ -163,14 +163,14 @@ export function BasketPage() {
           />
           <div className="promo">
             <Input
+              className="promo-input"
               disabled={!!appliedPromo}
               placeholder="Enter promo code"
               value={promo}
               onChange={promoChange}
-              style={{ width: '150px', marginRight: '10px' }}
             />
-            <Button type="primary" onClick={appliedPromo ? deletePromo : applyPromo}>
-              {appliedPromo ? 'Delete' : 'Apply'}
+            <Button className="promo-btn" type="primary" onClick={appliedPromo ? deletePromo : applyPromo}>
+              {appliedPromo ? <DeleteOutlined /> : <PlusOutlined />}
             </Button>
           </div>
           <TotalPrice cart={session?.cart} />

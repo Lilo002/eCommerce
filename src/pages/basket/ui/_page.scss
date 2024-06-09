@@ -119,10 +119,14 @@
     @media (max-width: 850px) {
       width: 140px !important;
       font-size: 13px;
+      height: 30px !important;
+      line-height: 13px;
     }
     @media (max-width: 550px) {
       width: 130px !important;
       font-size: 11px;
+      height: 25px !important;
+      line-height: 11px;
     }
   }
   &-info {
@@ -190,5 +194,32 @@
 }
 
 .promo {
+  display: flex;
+  gap: 10px;
   align-self: flex-end;
+  &-input {
+    width: 140px;
+    font-size: 14px;
+    @media (max-width: 850px) {
+      width: 130px;
+      font-size: 13px;
+      height: 30px !important;
+    }
+    @media (max-width: 550px) {
+      width: 120px;
+      font-size: 11px;
+      height: 25px !important;
+    }
+  }
+  &-btn {
+    font-size: 14px;
+    @media (max-width: 850px) {
+      font-size: 13px;
+      height: 30px !important;
+    }
+    @media (max-width: 550px) {
+      font-size: 11px;
+      height: 25px !important;
+    }
+  }
 }
