@@ -1,6 +1,7 @@
 @import '../../../shared/style/variables';
 
 .main {
+  position: relative;
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -13,5 +14,44 @@
       object-fit: cover;
       height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout - 16px);
     }
+  }
+}
+
+.promo {
+  &-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    top: 0;
+    z-index: 10;
+    left: 0;
+  }
+  &-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+background: rgb(245,173,15);
+background: linear-gradient(90deg, rgba(245,173,15,1) 0%, rgba(180,134,23,1) 81%, rgba(145,107,23,1) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-shadow: 21px 21px 20px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 21px 21px 20px 4px rgba(0,0,0,0.75);
+    box-shadow: 21px 21px 20px 4px rgba(0,0,0,0.75);
+    padding: 10px;
+  }
+  &-text {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &-description {
+    font-size: 28px;
+    color: white;
   }
 }

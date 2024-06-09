@@ -32,6 +32,15 @@ export function Main() {
         {images.map((image, index) => (
           <SwiperSlide className="main-swiper" key={image.order}>
             <img className="main-swiper-img" src={image.src} alt={`Slide ${index}`} />
+            {index === 0 && (
+              <div className="promo-container">
+                <div className="promo-circle">
+                  <span className="promo-text">Promo Code:</span>
+                  <span className="promo-description">SUMMER</span>
+                  <span className="promo-description">-15%</span>
+                </div>
+              </div>
+            )}
           </SwiperSlide>
         ))}
       </Swiper>
