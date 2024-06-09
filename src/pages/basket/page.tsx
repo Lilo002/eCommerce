@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useLayoutEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { DeleteOutlined, HeartOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { DiscountCodeInfo, LineItem, Product } from '@commercetools/platform-sdk';
 import { Button, Image, Input, InputNumber, List, message, Modal } from 'antd';
@@ -12,6 +12,7 @@ import { getPrice, ProductPrice, TotalPrice } from './ui/productPrice';
 import './ui/_page.scss';
 
 export function BasketPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,7 +20,13 @@ export function BasketPage() {
   const [products, setProducts] = useState<LineItem[] | null>(session?.cart?.lineItems || null);
   const [promo, setPromo] = useState('');
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (location && location.state && location.state.promo) {
+      setPromo(location.state.promo);
+    }
+  }, [location]);
+
+  useLayoutEffect(() => {
     setProducts(session?.cart?.lineItems || null);
     if (session?.cart?.discountCodes && session?.cart?.discountCodes.length > 0) {
       const currentPromo = session?.cart?.discountCodes[0];

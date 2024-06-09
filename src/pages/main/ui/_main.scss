@@ -18,30 +18,34 @@
 }
 
 .promo {
-  &-container {
+  &-circle {
     position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
     top: 0;
     z-index: 10;
     left: 0;
-  }
-  &-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
     width: 200px;
     height: 200px;
     border-radius: 50%;
-background: rgb(245,173,15);
-background: linear-gradient(90deg, rgba(245,173,15,1) 0%, rgba(180,134,23,1) 81%, rgba(145,107,23,1) 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    -webkit-box-shadow: 21px 21px 20px 4px rgba(0,0,0,0.75);
-    -moz-box-shadow: 21px 21px 20px 4px rgba(0,0,0,0.75);
-    box-shadow: 21px 21px 20px 4px rgba(0,0,0,0.75);
+    background-color: #f47521e5;
+    -webkit-box-shadow: 21px 21px 20px 4px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 21px 21px 20px 4px rgba(0, 0, 0, 0.75);
+    box-shadow: 21px 21px 20px 4px rgba(0, 0, 0, 0.75);
     padding: 10px;
+    transition:
+      background-color 0.5s,
+      box-shadow 0.5s;
+    &:hover {
+      background-color: #ad5317e5;
+      -moz-box-shadow: 15px 15px 15px 2px rgba(0, 0, 0, 0.75);
+      box-shadow: 15px 15px 15px 2px rgba(0, 0, 0, 0.75);
+    }
   }
   &-text {
     color: white;
