@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DeleteOutlined, HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { LineItem, Product } from '@commercetools/platform-sdk';
-import { Button, Image, InputNumber, List, message, Modal } from 'antd';
+import { DiscountCodeInfo, LineItem, Product } from '@commercetools/platform-sdk';
+import { Button, Image, Input, InputNumber, List, message, Modal } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -15,10 +15,20 @@ export function BasketPage() {
   const navigate = useNavigate();
   const { session } = useContext(sessionContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [appliedPromo, setAppliedPromo] = useState<DiscountCodeInfo | null>(null);
   const [products, setProducts] = useState<LineItem[] | null>(session?.cart?.lineItems || null);
+  const [promo, setPromo] = useState('');
 
   useEffect(() => {
     setProducts(session?.cart?.lineItems || null);
+    if (session?.cart?.discountCodes && session?.cart?.discountCodes.length > 0) {
+      const currentPromo = session?.cart?.discountCodes[0];
+
+      setAppliedPromo(currentPromo);
+      session.getPromo(currentPromo.discountCode.id).then((data) => setPromo(data.code));
+    } else {
+      setAppliedPromo(null);
+    }
   }, [session, session?.cart]);
 
   const removeItemFromCart = (id: Product['id']) => {
@@ -67,6 +77,34 @@ export function BasketPage() {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const promoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPromo(e.target.value);
+  };
+
+  const applyPromo = () => {
+    if (promo) {
+      session
+        ?.addPromo(promo)
+        .then(() => {
+          message.success('Your promo code applied successfully');
+        })
+        .catch((err) => message.error(err.message));
+    }
+  };
+
+  const deletePromo = () => {
+    if (appliedPromo) {
+      session
+        ?.removePromo(appliedPromo.discountCode)
+        .then(() => {
+          message.success('Promo code removed successfully');
+          setAppliedPromo(null);
+          setPromo('');
+        })
+        .catch((err) => message.error(err.message));
+    }
   };
 
   return (
@@ -123,7 +161,19 @@ export function BasketPage() {
               </List.Item>
             )}
           />
-          <TotalPrice totalPrice={session.cart.totalPrice} />
+          <div className="promo">
+            <Input
+              disabled={!!appliedPromo}
+              placeholder="Enter promo code"
+              value={promo}
+              onChange={promoChange}
+              style={{ width: '150px', marginRight: '10px' }}
+            />
+            <Button type="primary" onClick={appliedPromo ? deletePromo : applyPromo}>
+              {appliedPromo ? 'Delete' : 'Apply'}
+            </Button>
+          </div>
+          <TotalPrice cart={session?.cart} />
           <Button className="cart-reset" type="primary" htmlType="button" onClick={showModal}>
             Clear Shopping Cart
           </Button>
