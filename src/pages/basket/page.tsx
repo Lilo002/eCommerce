@@ -69,6 +69,8 @@ export function BasketPage() {
     setIsModalOpen(false);
   };
 
+  console.log(products);
+
   return (
     <div className="cart">
       {products && session && products.length ? (
@@ -77,7 +79,9 @@ export function BasketPage() {
             dataSource={products}
             renderItem={(product) => (
               <List.Item key={product.productId}>
-                {product.variant?.images?.[0] && <Image className="cart-image" src={product.variant.images[0].url} />}
+                {product.variant?.attributes && (
+                  <Image className="cart-image" src={product.variant?.attributes[6].value} />
+                )}
                 <span className="cart-name" style={{ marginLeft: 10 }}>
                   {product.name['en-GB']}
                 </span>
