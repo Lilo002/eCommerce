@@ -1,11 +1,13 @@
 import { Cart, TypedMoney } from '@commercetools/platform-sdk';
 
+import { CURRENCY_CODE } from '../../../shared/constants';
+
 export const getPrice = (price: TypedMoney | undefined): string => {
   if (!price) {
     return '';
   }
   const { centAmount, currencyCode, fractionDigits } = price;
-  return `${(centAmount / 100).toFixed(fractionDigits)} ${currencyCode}`;
+  return `${(centAmount / 100).toFixed(fractionDigits)} ${CURRENCY_CODE[currencyCode]}`;
 };
 
 export const getPlayers = (minPlayers: number, maxPlayers: number): string => {
