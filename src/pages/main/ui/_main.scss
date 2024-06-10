@@ -1,6 +1,7 @@
 @import '../../../shared/style/variables';
 
 .main {
+  user-select: none;
   position: relative;
   display: flex;
   justify-content: center;
@@ -20,14 +21,14 @@
 .promo {
   &-circle {
     position: absolute;
-    top: 0;
+    top: 5%;
     z-index: 10;
-    left: 0;
+    left: 5%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border-radius: 50%;
+    // border-radius: 50%;
     border: none;
     cursor: pointer;
     width: 200px;
