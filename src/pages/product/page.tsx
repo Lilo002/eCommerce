@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProductData } from '@commercetools/platform-sdk';
-import { Breadcrumb, Button, message } from 'antd';
+import { Breadcrumb, Button, message, Spin } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ROUTES } from '../../shared/constants';
@@ -36,7 +36,7 @@ export const ProductPage = () => {
   }, [navigate, productKey, isProductInCurrentCart, session]);
 
   if (!data) {
-    return <div>Product not found</div>;
+    return <Spin size="large" />;
   }
 
   if (isLoading) {

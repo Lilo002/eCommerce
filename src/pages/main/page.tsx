@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { Autoplay } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css/autoplay';
+import 'swiper/css/navigation';
 
 import { ROUTES } from '../../shared/constants';
 
@@ -12,8 +12,6 @@ import img3 from './ui/images/bg3.webp';
 
 import './ui/_main.scss';
 import 'swiper/css';
-
-const AUTOPLAY_DELAY = 2500;
 
 export function Main() {
   const navigate = useNavigate();
@@ -33,22 +31,24 @@ export function Main() {
 
   return (
     <div className="main">
-      <Swiper
-        slidesPerView={1}
-        autoplay={{
-          delay: AUTOPLAY_DELAY,
-          disableOnInteraction: false,
-        }}
-        modules={[Autoplay]}
-      >
+      <Swiper navigation modules={[Navigation]}>
         {images.map((image, index) => (
           <SwiperSlide className="main-swiper" key={image.order}>
             <img className="main-swiper-img" src={image.src} alt={`Slide ${index}`} />
             {index === 0 && (
               <button type="button" className="promo-circle" onClick={() => onPromoClick('SUMMER')}>
-                <span className="promo-text">Promo Code:</span>
+                <span className="promo-text">Summer sale</span>
+                <span className="promo-text">15% off</span>
+                <span className="promo-text">Use promocode</span>
                 <span className="promo-description">SUMMER</span>
-                <span className="promo-description">-15%</span>
+              </button>
+            )}
+            {index === 2 && (
+              <button type="button" className="promo-circle" onClick={() => onPromoClick('KNIGHT')}>
+                <span className="promo-text">Medieval sale</span>
+                <span className="promo-text">15 USD off</span>
+                <span className="promo-text">Use promocode</span>
+                <span className="promo-description">KNIGHT</span>
               </button>
             )}
           </SwiperSlide>
