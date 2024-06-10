@@ -1,14 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
-import { Category, ProductProjection } from '@commercetools/platform-sdk';
+import { Category, ProductProjection, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import { Pagination } from 'antd';
 
 import { sessionContext } from '../../context/sessionContext';
 import { ParamsRequestCategories, ParamsRequestProducts } from '../../sdk/api';
 
 import {
+  CURRENT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
   FRACTION_DIGITS,
   LIMIT_CATEGORY,
-  LIMIT_PRODUCT,
+  OFFSET_PRODUCT,
   PRICE_CURRENCY,
+  SCROLL_TOP,
   SORT_FIELDS,
   STAGED_PRODUCT,
 } from './model/constants';
@@ -21,8 +25,9 @@ import { SortBar } from './ui/sortBar';
 import './ui/_catalog.scss';
 
 const paramsRequest: ParamsRequestProducts = {
-  limit: LIMIT_PRODUCT,
+  limit: DEFAULT_PAGE_SIZE,
   staged: STAGED_PRODUCT,
+  offset: OFFSET_PRODUCT,
 };
 
 const defaultParamsGetCategories: ParamsRequestCategories = {
@@ -35,22 +40,38 @@ export function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [userCategories, setUserCategories] = useState('');
+  const [totalCountProduct, setTotalCountProduct] = useState<number>(0);
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(CURRENT_PAGE_NUMBER);
   const { session } = useContext(sessionContext);
 
+  const dataProcessingGetAllProducts = (data: ProductProjectionPagedQueryResponse) => {
+    const totalCountProducts = data.total;
+
+    if (totalCountProducts) {
+      setTotalCountProduct(totalCountProducts);
+    }
+
+    setProducts(data.results);
+  };
+
   useEffect(() => {
-    session?.getAllProducts(paramsRequest).then((items) => {
-      setProducts(items);
+    session?.getAllProducts(paramsRequest).then((data) => {
+      dataProcessingGetAllProducts(data);
     });
 
-    session?.getAllCategories(defaultParamsGetCategories).then((items) => {
-      setCategories(items);
+    session?.getAllCategories(defaultParamsGetCategories).then((data) => {
+      setCategories(data);
     });
   }, [session]);
 
   const searchProduct = (searchTerm: string) => {
-    session?.findProduct(searchTerm).then((items) => {
-      setProducts(items);
+    paramsRequest.offset = OFFSET_PRODUCT;
+
+    session?.findProduct(searchTerm).then((data) => {
+      setProducts(data.results);
     });
+
+    setCurrentPageNumber(CURRENT_PAGE_NUMBER);
   };
 
   const sortProduct = (sortField: SortField, sortDirection: string | null) => {
@@ -64,8 +85,8 @@ export function CatalogPage() {
       paramsRequest.sort = '';
     }
 
-    session?.getAllProducts(paramsRequest).then((items) => {
-      setProducts(items);
+    session?.getAllProducts(paramsRequest).then((data) => {
+      dataProcessingGetAllProducts(data);
     });
   };
 
@@ -73,6 +94,7 @@ export function CatalogPage() {
     const minLength = 1;
     const [minPrice, maxPrice] = priceRange;
     paramsRequest.filter = [];
+    paramsRequest.offset = OFFSET_PRODUCT;
     paramsRequest.priceCurrency = '';
 
     if (categoriesIds.length >= minLength) {
@@ -93,8 +115,9 @@ export function CatalogPage() {
       `variants.price.centAmount: range(${minPrice * FRACTION_DIGITS} to ${maxPrice * FRACTION_DIGITS})`,
     );
 
-    session?.getAllProducts(paramsRequest).then((items) => {
-      setProducts(items);
+    setCurrentPageNumber(CURRENT_PAGE_NUMBER);
+    session?.getAllProducts(paramsRequest).then((data) => {
+      dataProcessingGetAllProducts(data);
     });
   };
 
@@ -102,12 +125,27 @@ export function CatalogPage() {
     if (paramsRequest.filter) {
       paramsRequest.filter = [];
       paramsRequest.priceCurrency = '';
+      paramsRequest.offset = OFFSET_PRODUCT;
 
-      session?.getAllProducts(paramsRequest).then((items) => {
-        setProducts(items);
+      session?.getAllProducts(paramsRequest).then((data) => {
+        dataProcessingGetAllProducts(data);
       });
     }
+
+    setCurrentPageNumber(CURRENT_PAGE_NUMBER);
     setUserCategories('');
+  };
+
+  const changePageNumber = (pageNumber: number) => {
+    setCurrentPageNumber(pageNumber);
+
+    paramsRequest.offset = DEFAULT_PAGE_SIZE * (pageNumber - 1);
+
+    session?.getAllProducts(paramsRequest).then((data) => {
+      dataProcessingGetAllProducts(data);
+    });
+
+    window.scrollTo({ top: SCROLL_TOP });
   };
 
   return (
@@ -124,6 +162,13 @@ export function CatalogPage() {
         <div className="catalog">
           <ProductsList products={products} />
         </div>
+        <Pagination
+          className="pagination"
+          current={currentPageNumber}
+          total={totalCountProduct}
+          defaultPageSize={DEFAULT_PAGE_SIZE}
+          onChange={changePageNumber}
+        />
       </div>
     </div>
   );
