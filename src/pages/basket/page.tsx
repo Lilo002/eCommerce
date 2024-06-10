@@ -155,7 +155,7 @@ export function BasketPage() {
                     {product.discountedPricePerQuantity.length > 0 ? (
                       <>
                         <span className="cart-price-sum-new">
-                          {getPrice(product.discountedPricePerQuantity[0].discountedPrice.value)} / item
+                          {getPrice(product.discountedPricePerQuantity[0].discountedPrice.value)}/ item
                         </span>
                         <span className="cart-price-sum-old">
                           {product.price.discounted
