@@ -128,11 +128,7 @@ export function BasketPage() {
                 <span className="cart-name" style={{ marginLeft: 10 }}>
                   {product.name['en-GB']}
                 </span>
-                <ProductPrice
-                  price={product.price}
-                  quantity={product.quantity}
-                  isDiscounted={!!product.price.discounted}
-                />
+                <ProductPrice product={product} />
                 <div className="cart-info">
                   <div className="cart-buttons">
                     <Button
@@ -156,10 +152,26 @@ export function BasketPage() {
                     </Button>
                   </div>
                   <p className="cart-price-sum">
-                    {product.price.discounted
-                      ? getPrice(product.price?.discounted?.value)
-                      : getPrice(product.price?.value)}
-                    / item
+                    {product.discountedPricePerQuantity.length > 0 ? (
+                      <>
+                        <span className="cart-price-sum-new">
+                          {getPrice(product.discountedPricePerQuantity[0].discountedPrice.value)}/ item
+                        </span>
+                        <span className="cart-price-sum-old">
+                          {product.price.discounted
+                            ? getPrice(product.price?.discounted?.value)
+                            : getPrice(product.price?.value)}
+                          / item
+                        </span>
+                      </>
+                    ) : (
+                      <span className="cart-price-sum-new">
+                        {product.price.discounted
+                          ? getPrice(product.price?.discounted?.value)
+                          : getPrice(product.price?.value)}{' '}
+                        / item
+                      </span>
+                    )}
                   </p>
                 </div>
                 <Button className="cart-button" danger onClick={() => removeItemFromCart(product.productId)}>
