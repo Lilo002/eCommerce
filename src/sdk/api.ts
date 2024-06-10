@@ -9,6 +9,8 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  DiscountCode,
+  DiscountCodeReference,
   LineItem,
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
@@ -438,3 +440,58 @@ export const deleteCartRequest = (
   ID: Cart['id'],
   version: Cart['version'],
 ): Promise<ClientResponse<Cart>> => apiRoot.me().carts().withId({ ID }).delete({ queryArgs: { version } }).execute();
+
+export const addPromoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  code: string,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addDiscountCode',
+            code,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const removePromoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  id: DiscountCodeReference['id'],
+  typeId: DiscountCodeReference['typeId'],
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeDiscountCode',
+            discountCode: {
+              typeId,
+              id,
+            },
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const getPromoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: DiscountCodeReference['id'],
+): Promise<ClientResponse<DiscountCode>> => apiRoot.discountCodes().withId({ ID }).get().execute();

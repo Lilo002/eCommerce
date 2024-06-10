@@ -1,6 +1,7 @@
 @import '../../../shared/style/variables';
 
 .main {
+  position: relative;
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -13,5 +14,48 @@
       object-fit: cover;
       height: calc(100dvh - $header-height - $footer-height - 2 * $padding-main-layout - 16px);
     }
+  }
+}
+
+.promo {
+  &-circle {
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #f47521e5;
+    -webkit-box-shadow: 21px 21px 20px 4px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 21px 21px 20px 4px rgba(0, 0, 0, 0.75);
+    box-shadow: 21px 21px 20px 4px rgba(0, 0, 0, 0.75);
+    padding: 10px;
+    transition:
+      background-color 0.5s,
+      box-shadow 0.5s;
+    &:hover {
+      background-color: #ad5317e5;
+      -moz-box-shadow: 15px 15px 15px 2px rgba(0, 0, 0, 0.75);
+      box-shadow: 15px 15px 15px 2px rgba(0, 0, 0, 0.75);
+    }
+  }
+  &-text {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &-description {
+    font-size: 28px;
+    color: white;
   }
 }

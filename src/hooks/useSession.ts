@@ -4,6 +4,8 @@ import {
   Cart,
   Category,
   Customer,
+  DiscountCode,
+  DiscountCodeReference,
   LineItem,
   MyCustomerChangePassword,
   Product,
@@ -15,6 +17,7 @@ import {
   addAddressInfoRequest,
   addAddressRequest,
   addProductToCardRequest,
+  addPromoRequest,
   AddressDraft,
   authenticateCustomer,
   createCartRequest,
@@ -32,10 +35,12 @@ import {
   getProductByName,
   getProducts,
   getProject,
+  getPromoRequest,
   LoginCustomerDraft,
   ParamsRequestCategories,
   ParamsRequestProducts,
   removeAddressRequest,
+  removePromoRequest,
   updateAddressRequest,
   UpdateCustomerDraft,
   updateCustomerInfoRequest,
@@ -141,6 +146,35 @@ export const useSession = () => {
 
     throw new Error('Something went wrong');
   };
+
+  const addPromo = async (promo: string): Promise<Cart> => {
+    if (promo && cart) {
+      const { id, version } = cart;
+
+      return addPromoRequest(apiRoot, id, version, promo).then(({ body }) => {
+        setCart(body);
+        return body;
+      });
+    }
+
+    throw new Error('You have to enter your promo');
+  };
+
+  const removePromo = async (promo: DiscountCodeReference): Promise<Cart> => {
+    if (promo && cart) {
+      const { id, version } = cart;
+      const { id: promoId, typeId } = promo;
+      return removePromoRequest(apiRoot, id, version, promoId, typeId).then(({ body }) => {
+        setCart(body);
+        return body;
+      });
+    }
+
+    throw new Error('There are no promo to remove');
+  };
+
+  const getPromo = async (ID: DiscountCodeReference['id']): Promise<DiscountCode> =>
+    getPromoRequest(apiRoot, ID).then(({ body }) => body);
 
   useLayoutEffect(() => {
     const tokenObject = JSON.parse(getCookie('token') as string);
@@ -315,5 +349,8 @@ export const useSession = () => {
     updateProductQuantity,
     cart,
     deleteCart,
+    addPromo,
+    removePromo,
+    getPromo,
   };
 };

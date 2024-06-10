@@ -1,6 +1,7 @@
-import { Cart, LineItem, Price, TypedMoney } from '@commercetools/platform-sdk';
+import { LineItem, Price, TypedMoney } from '@commercetools/platform-sdk';
 
 import { CURRENCY_CODE } from '../../../shared/constants';
+import { CartWithDiscount } from '../model/interface';
 
 export const getPrice = (price: TypedMoney | undefined, quantity: LineItem['quantity'] = 1): string => {
   if (!price) {
@@ -26,12 +27,12 @@ export const ProductPrice = ({
   </div>
 );
 
-export const TotalPrice = ({ totalPrice }: { totalPrice: Cart['totalPrice'] }) => {
+export const TotalPrice = ({ cart }: { cart: CartWithDiscount }) => {
   const getTotalPrice = (price: number): string => {
     if (!price) {
       return '';
     }
-    const { fractionDigits, currencyCode } = totalPrice;
+    const { fractionDigits, currencyCode } = cart.totalPrice;
 
     return `${(price / 100).toFixed(fractionDigits)} ${currencyCode}`;
   };
@@ -40,7 +41,12 @@ export const TotalPrice = ({ totalPrice }: { totalPrice: Cart['totalPrice'] }) =
     <div className="cart-price-total">
       <p className="cart-price-total-description">Total price:</p>
 
-      <p className="cart-price-total-current card-price-current">{getTotalPrice(totalPrice.centAmount)}</p>
+      <p className="cart-price-total-current card-price-current">{getTotalPrice(cart?.totalPrice.centAmount)}</p>
+      {cart.discountCodes?.length > 0 && cart.discountOnTotalPrice && (
+        <p className="cart-price-total-old card-price-old">
+          {getTotalPrice(cart.totalPrice.centAmount + cart.discountOnTotalPrice.discountedAmount.centAmount)}
+        </p>
+      )}
     </div>
   );
 };
