@@ -11,21 +11,18 @@ export const getPrice = (price: TypedMoney | undefined, quantity: LineItem['quan
   return `${((centAmount * quantity) / 100).toFixed(fractionDigits)} ${CURRENCY_CODE[currencyCode]}`;
 };
 
-export const ProductPrice = ({
-  price,
-  isDiscounted,
-  quantity,
-}: {
-  price: Price | undefined;
-  isDiscounted: boolean;
-  quantity: LineItem['quantity'];
-}) => (
-  <div className="cart-price">
-    <p className="cart-price-one card-price-current">
-      {isDiscounted ? getPrice(price?.discounted?.value, quantity) : getPrice(price?.value, quantity)}
-    </p>
-  </div>
-);
+export const ProductPrice = ({ product }: { product: LineItem }) => {
+  const { totalPrice, discountedPricePerQuantity, price, quantity } = product;
+
+  return (
+    <div className="cart-price">
+      <p className="cart-price-one card-price-current">{getPrice(totalPrice)}</p>
+      {discountedPricePerQuantity[0] && (
+        <p className="cart-price-one-old card-price-old">{getPrice(price.value, quantity)}</p>
+      )}
+    </div>
+  );
+};
 
 export const TotalPrice = ({ cart }: { cart: CartWithDiscount }) => {
   const getTotalPrice = (price: number): string => {
