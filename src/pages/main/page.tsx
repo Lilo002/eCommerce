@@ -39,9 +39,17 @@ export function Main() {
             {index === 0 && (
               <button type="button" className="promo-circle" onClick={() => onPromoClick('SUMMER')}>
                 <span className="promo-text">Summer sale</span>
-                <span className="promo-text">Promocode</span>
+                <span className="promo-text">15% off</span>
+                <span className="promo-text">Use promocode</span>
                 <span className="promo-description">SUMMER</span>
-                <span className="promo-description">-15%</span>
+              </button>
+            )}
+            {index === 2 && (
+              <button type="button" className="promo-circle" onClick={() => onPromoClick('KNIGHT')}>
+                <span className="promo-text">Medieval sale</span>
+                <span className="promo-text">15 USD off</span>
+                <span className="promo-text">Use promocode</span>
+                <span className="promo-description">KNIGHT</span>
               </button>
             )}
           </SwiperSlide>
