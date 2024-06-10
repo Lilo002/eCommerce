@@ -1,4 +1,4 @@
-import { LineItem, Price, TypedMoney } from '@commercetools/platform-sdk';
+import { LineItem, TypedMoney } from '@commercetools/platform-sdk';
 
 import { CURRENCY_CODE } from '../../../shared/constants';
 import { CartWithDiscount } from '../model/interface';
