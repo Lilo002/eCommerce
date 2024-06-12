@@ -55,6 +55,8 @@ export function CatalogPage() {
   };
 
   useEffect(() => {
+    paramsRequest.offset = OFFSET_PRODUCT;
+
     session?.getAllProducts(paramsRequest).then((data) => {
       dataProcessingGetAllProducts(data);
     });

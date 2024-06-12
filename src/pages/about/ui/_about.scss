@@ -1,0 +1,115 @@
+@import '../../../shared/style/variables';
+
+.about {
+  width: 100%;
+  margin: 10px;
+}
+
+.title {
+  text-align: center;
+  color: $orange-color;
+  font-size: 32px;
+}
+
+.about-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.card-user {
+  max-width: 430px;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 1px -1px 14px 1px rgba(0, 0, 0, 0.09);
+  transition: transform 0.3s ease;
+  padding: 10px 20px;
+
+  &-img-box {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: auto;
+
+    &-avatar {
+      width: 100%;
+    }
+  }
+
+  &-name {
+    text-align: center;
+    color: $orange-color;
+    margin-bottom: 5px;
+  }
+
+  &-role {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+
+  &-title {
+    width: 100%;
+    border-bottom: 2px solid $orange-color;
+    &-content {
+      display: inline-block;
+      color: $white-color;
+      text-transform: uppercase;
+      background-color: $black-color;
+      padding: 0 20px;
+      line-height: 20px;
+      margin: 0;
+    }
+  }
+
+  &-list {
+    padding: 0 0 0 18px;
+
+    &-item::marker {
+      color: $orange-color;
+    }
+  }
+
+  &-line {
+    border: none;
+    height: 1.1px;
+    color: $orange-color;
+    background-color: $orange-color;
+  }
+
+  &-link {
+    display: flex;
+    align-items: center;
+    width: 30%;
+    margin: 10px;
+    color: $orange-color;
+    position: relative;
+    text-decoration: none;
+    &:hover {
+      color: $orange-color;
+    }
+  }
+
+  &-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    display: block;
+    background: none repeat scroll 0 0 transparent;
+    height: 2px;
+    width: 0;
+    background: $orange-color;
+    transition:
+      width 0.7s ease 0s,
+      left 0.7s ease 0s;
+  }
+
+  &-link:hover::after {
+    width: 100%;
+    left: 0;
+  }
+}
