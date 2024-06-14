@@ -44,6 +44,7 @@
     text-overflow: ellipsis;
     white-space: wrap;
     text-align: center;
+    color: black;
     @media (max-width: 850px) {
       width: 100px !important;
       max-height: 80px;
@@ -193,25 +194,36 @@
 }
 
 .cart-price-total {
-  align-self: flex-end;
   display: flex;
   gap: 20px;
   align-items: center;
+  p {
+    margin: 0;
+  }
+  &-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 170px;
+    align-self: flex-end;
+  }
   &-description {
     font-size: 24px;
     font-weight: 700;
     @media (max-width: 550px) {
       font-size: 18px;
     }
+    &.cart-discount,
+    &.cart-subtotal {
+      font-size: 20px;
+      @media (max-width: 550px) {
+        font-size: 14px;
+      }
+    }
   }
   &-current {
     @media (max-width: 550px) {
       font-size: 18px !important;
-    }
-  }
-  &-old {
-    @media (max-width: 550px) {
-      font-size: 14px !important;
     }
   }
 }

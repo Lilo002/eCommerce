@@ -1,5 +1,5 @@
 import { useContext, useLayoutEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { DeleteOutlined, HeartOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { DiscountCodeInfo, LineItem, Product } from '@commercetools/platform-sdk';
 import { Button, Image, Input, InputNumber, List, message, Modal } from 'antd';
@@ -24,7 +24,8 @@ export function BasketPage() {
     if (location && location.state && location.state.promo) {
       setPromo(location.state.promo);
     }
-  }, [location]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useLayoutEffect(() => {
     setProducts(session?.cart?.lineItems || null);
@@ -94,7 +95,8 @@ export function BasketPage() {
     if (promo) {
       session
         ?.addPromo(promo)
-        .then(() => {
+        .then((cart) => {
+          setAppliedPromo(cart.discountCodes[0]);
           message.success('Your promo code applied successfully');
         })
         .catch((err) => message.error(err.message));
@@ -125,9 +127,12 @@ export function BasketPage() {
                 {product.variant?.attributes && (
                   <Image className="cart-image" src={product.variant?.attributes[6].value} />
                 )}
-                <span className="cart-name" style={{ marginLeft: 10 }}>
-                  {product.name['en-GB']}
-                </span>
+                <Link to={`${ROUTES.PRODUCT}/${product.productKey}`}>
+                  <span className="cart-name" style={{ marginLeft: 10 }}>
+                    {product.name['en-GB']}
+                  </span>
+                </Link>
+
                 <ProductPrice product={product} />
                 <div className="cart-info">
                   <div className="cart-buttons">
