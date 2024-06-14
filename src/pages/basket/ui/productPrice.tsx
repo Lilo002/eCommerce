@@ -47,7 +47,7 @@ export const TotalPrice = ({ cart }: { cart: CartWithDiscount }) => {
 
   return (
     <div className="cart-price-total-container cart-discount">
-      {(cart.discountCodes?.length > 0 || calculateTotalDiscount(cart.lineItems) > 0) && (
+      {cart.discountCodes?.length > 0 && (calculateTotalDiscount(cart.lineItems) > 0 || cart.discountOnTotalPrice) && (
         <div className="cart-price-total cart-discount">
           <p className="cart-price-total-description cart-subtotal">Subtotal:</p>
           <p className="card-price-old">

@@ -127,7 +127,7 @@ export function BasketPage() {
                 {product.variant?.attributes && (
                   <Image className="cart-image" src={product.variant?.attributes[6].value} />
                 )}
-                <Link to={`${ROUTES.PRODUCT}/${product.productKey}`}>
+                <Link className="cart-name" to={`${ROUTES.PRODUCT}/${product.productKey}`}>
                   <span className="cart-name" style={{ marginLeft: 10 }}>
                     {product.name['en-GB']}
                   </span>
@@ -185,22 +185,24 @@ export function BasketPage() {
               </List.Item>
             )}
           />
-          <div className="promo">
-            <Input
-              className="promo-input"
-              disabled={!!appliedPromo}
-              placeholder="Enter promo code"
-              value={promo}
-              onChange={promoChange}
-            />
-            <Button className="promo-btn" type="primary" onClick={appliedPromo ? deletePromo : applyPromo}>
-              {appliedPromo ? <DeleteOutlined /> : <PlusOutlined />}
+          <div className="cart-footer">
+            <div className="promo">
+              <Input
+                className="promo-input"
+                disabled={!!appliedPromo}
+                placeholder="Enter promo code"
+                value={promo}
+                onChange={promoChange}
+              />
+              <Button className="promo-btn" type="primary" onClick={appliedPromo ? deletePromo : applyPromo}>
+                {appliedPromo ? <DeleteOutlined /> : <PlusOutlined />}
+              </Button>
+            </div>
+            <TotalPrice cart={session?.cart} />
+            <Button className="cart-reset" type="primary" htmlType="button" onClick={showModal}>
+              Clear Shopping Cart
             </Button>
           </div>
-          <TotalPrice cart={session?.cart} />
-          <Button className="cart-reset" type="primary" htmlType="button" onClick={showModal}>
-            Clear Shopping Cart
-          </Button>
         </>
       ) : (
         <div className="cart-empty">
