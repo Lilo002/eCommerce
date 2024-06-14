@@ -3,8 +3,15 @@
   width: 800px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 10px;
   gap: 20px;
+  min-height: calc(100dvh - 153px - 84px - 16px);
+  &-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
   &-title {
     font-size: 28px;
     @media (max-width: 500px) {
@@ -45,6 +52,7 @@
     white-space: wrap;
     text-align: center;
     color: black;
+    transition: color 0.3s;
     @media (max-width: 850px) {
       width: 100px !important;
       max-height: 80px;
@@ -53,6 +61,9 @@
       width: 80px !important;
       font-size: 12px;
       max-height: 70px;
+    }
+    &:hover {
+      color: #f47721;
     }
   }
   &-price {
