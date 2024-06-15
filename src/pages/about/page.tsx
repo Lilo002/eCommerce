@@ -9,7 +9,7 @@ export function AboutPage() {
       <h2 className="title">Our heroes</h2>
       <div className="about-cards">
         {heroes.map((hero) => (
-          <CardUser hero={hero} />
+          <CardUser hero={hero} key={hero.name} />
         ))}
       </div>
     </div>

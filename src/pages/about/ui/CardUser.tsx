@@ -21,7 +21,6 @@ export const CardUser = ({ hero }: { hero: Hero }) => (
           <img className="card-user-img" alt="board game" src={hero.images.current} />
         </SwiperSlide>
       </Swiper>
-      {/* <img className="card-user-img-box-avatar" src={hero.images.hero} alt="avatar" /> */}
     </div>
     <h2 className="card-user-name">{hero.name}</h2>
     <h3 className="card-user-role">{hero.role}</h3>
@@ -37,7 +36,9 @@ export const CardUser = ({ hero }: { hero: Hero }) => (
     <div className="section-box">
       <ul className="card-user-list">
         {hero.properties.map((item) => (
-          <li className="card-user-list-item">{item}</li>
+          <li className="card-user-list-item" key={item}>
+            {item}
+          </li>
         ))}
       </ul>
     </div>
@@ -60,7 +61,9 @@ export const CardUser = ({ hero }: { hero: Hero }) => (
     <div className="section-box-large">
       <ul className="card-user-list">
         {hero.contributions.map((item) => (
-          <li className="card-user-list-item">{item}</li>
+          <li className="card-user-list-item" key={item}>
+            {item}
+          </li>
         ))}
       </ul>
     </div>
