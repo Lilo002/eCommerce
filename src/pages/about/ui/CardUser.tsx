@@ -15,10 +15,10 @@ export const CardUser = ({ hero }: { hero: Hero }) => (
     <div className="card-user-img-box">
       <Swiper effect="flip" slidesPerView={1} navigation modules={[EffectFlip, Navigation]}>
         <SwiperSlide>
-          <img className="card-user-img" alt="board game" src={hero.images.hero} />
+          <img className="card-user-img" alt={`${hero.name} as hero`} src={hero.images.hero} />
         </SwiperSlide>
         <SwiperSlide>
-          <img className="card-user-img" alt="board game" src={hero.images.current} />
+          <img className="card-user-img" alt={`${hero.name} current`} src={hero.images.current} />
         </SwiperSlide>
       </Swiper>
     </div>
