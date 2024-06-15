@@ -31,19 +31,43 @@ export const TotalPrice = ({ cart }: { cart: CartWithDiscount }) => {
     }
     const { fractionDigits, currencyCode } = cart.totalPrice;
 
-    return `${(price / 100).toFixed(fractionDigits)} ${currencyCode}`;
+    return `${(price / 100).toFixed(fractionDigits)} ${CURRENCY_CODE[currencyCode]}`;
+  };
+
+  const calculateTotalDiscount = (products: CartWithDiscount['lineItems']) => {
+    if (cart.discountOnTotalPrice) return cart.discountOnTotalPrice.discountedAmount.centAmount;
+    const totalDiscount = products.reduce((discount, product) => {
+      if (product.discountedPricePerQuantity[0]) {
+        return discount + product.price.value.centAmount * product.quantity - product.totalPrice.centAmount;
+      }
+      return discount;
+    }, 0);
+    return totalDiscount;
   };
 
   return (
-    <div className="cart-price-total">
-      <p className="cart-price-total-description">Total price:</p>
-
-      <p className="cart-price-total-current card-price-current">{getTotalPrice(cart?.totalPrice.centAmount)}</p>
-      {cart.discountCodes?.length > 0 && cart.discountOnTotalPrice && (
-        <p className="cart-price-total-old card-price-old">
-          {getTotalPrice(cart.totalPrice.centAmount + cart.discountOnTotalPrice.discountedAmount.centAmount)}
-        </p>
+    <div className="cart-price-total-container cart-discount">
+      {cart.discountCodes?.length > 0 && (calculateTotalDiscount(cart.lineItems) > 0 || cart.discountOnTotalPrice) && (
+        <div className="cart-price-total cart-discount">
+          <p className="cart-price-total-description cart-subtotal">Subtotal:</p>
+          <p className="card-price-old">
+            {cart.discountOnTotalPrice
+              ? getTotalPrice(cart.totalPrice.centAmount + cart.discountOnTotalPrice.discountedAmount.centAmount)
+              : getTotalPrice(cart.totalPrice.centAmount + calculateTotalDiscount(cart.lineItems))}
+          </p>
+        </div>
       )}
+      {cart.discountCodes?.length > 0 && calculateTotalDiscount(cart.lineItems) > 0 && (
+        <div className="cart-price-total cart-discount">
+          <p className="cart-price-total-description cart-discount">Discount:</p>
+          <p>{getTotalPrice(calculateTotalDiscount(cart.lineItems))}</p>
+        </div>
+      )}
+      <div className="cart-price-total cart-discount">
+        <p className="cart-price-total-description">Total:</p>
+
+        <p className="cart-price-total-current card-price-current">{getTotalPrice(cart?.totalPrice.centAmount)}</p>
+      </div>
     </div>
   );
 };

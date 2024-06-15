@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router-dom';
-import { Customer } from '@commercetools/platform-sdk';
+import { Cart, Customer } from '@commercetools/platform-sdk';
 import { fireEvent, render, screen } from '@testing-library/react';
 import PropTypes from 'prop-types';
 
@@ -69,6 +69,14 @@ describe('ProfilePage', () => {
     addAddress: jest.fn().mockResolvedValue(undefined),
     addAddressInfo: jest.fn().mockResolvedValue(undefined),
     getAllCategories: jest.fn().mockResolvedValue(undefined),
+    cart: {} as Cart,
+    addProductToCard: jest.fn().mockResolvedValue(undefined),
+    decreaseProductQuantity: jest.fn().mockResolvedValue(undefined),
+    updateProductQuantity: jest.fn().mockResolvedValue(undefined),
+    deleteCart: jest.fn().mockResolvedValue(undefined),
+    addPromo: jest.fn().mockResolvedValue(undefined),
+    removePromo: jest.fn().mockResolvedValue(undefined),
+    getPromo: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(() => {

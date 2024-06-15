@@ -2,95 +2,156 @@ import React, { ReactNode } from 'react';
 import {
   Address,
   AddressDraft,
+  Cart,
   Category,
   Customer,
+  CustomerDraft,
+  CustomerUpdate,
+  DiscountCode,
+  DiscountCodeReference,
   MyCustomerChangePassword,
-  ProductCatalogData,
-  ProductProjection,
-  Update,
+  Product,
+  ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 
 import { sessionContext } from '../context/sessionContext';
-import { LoginCustomerDraft, ParamsRequestCategories, UpdateCustomerDraft } from '../sdk/api';
+import { LoginCustomerDraft, ParamsRequestCategories, ParamsRequestProducts, UpdateCustomerDraft } from '../sdk/api';
 
 type SessionContextType = {
   session: {
-    getProduct: (productId: string) => Promise<ProductCatalogData>;
     userData: Customer;
     login: ({ email, password }: LoginCustomerDraft) => Promise<void | Error>;
     logout: () => void;
     isLogin: boolean;
-    updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<Customer>;
+    updateCustomerInfo: ({ email, firstName, lastName, dateOfBirth }: UpdateCustomerDraft) => Promise<Customer | Error>;
     updatePassword: ({ version, currentPassword, newPassword }: MyCustomerChangePassword) => Promise<void | Error>;
-    register: (customer: Partial<Customer>) => Promise<void | Error>;
-    checkCustomerExistsByEmail: (email: string) => Promise<boolean>;
-    getAllProducts: () => Promise<ProductProjection[]>;
+    register: (
+      { email, password, firstName, lastName, dateOfBirth, addresses }: CustomerDraft,
+      setAsDefaultShippingAddress: boolean,
+      setAsDefaultBillingAddress: boolean,
+    ) => Promise<void | Error>;
+    checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
+    getProduct: (productkey: string) => Promise<Product>;
+    getAllProducts: ({
+      limit,
+      staged,
+      offset,
+      sort,
+      filter,
+      priceCurrency,
+    }: ParamsRequestProducts) => Promise<ProductProjectionPagedQueryResponse>;
+    findProduct: (productName: string) => Promise<ProductProjectionPagedQueryResponse>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
-    addAddressInfo: ({ actions, version }: Update) => Promise<Customer>;
-    removeAddress: (addressId: string | undefined) => Promise<Customer>;
-    updateAddress: (addressId: string | undefined, address: Address) => Promise<Customer>;
-    findProduct: (productName: string) => Promise<ProductProjection[]>;
+    addAddressInfo: ({ actions, version }: CustomerUpdate) => Promise<Customer>;
+    removeAddress: (addressId: Address['id']) => Promise<Customer>;
+    updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
     getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
+    cart: Cart;
+    addProductToCard: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    decreaseProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    updateProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    deleteCart: () => Promise<Cart>;
+    addPromo: (promo: string) => Promise<Cart>;
+    removePromo: (promo: DiscountCodeReference) => Promise<Cart>;
+    getPromo: (ID: DiscountCodeReference['id']) => Promise<DiscountCode>;
   };
 };
 
-const mockProductData: ProductCatalogData = {
-  published: true,
-  current: {
-    name: { 'en-GB': 'Mock Product' },
-    description: { 'en-GB': 'Mock Description' },
-    slug: { 'en-GB': 'mock-product' },
-    categories: [],
-    categoryOrderHints: {},
-    metaTitle: { 'en-GB': 'Mock Meta Title' },
-    metaDescription: { 'en-GB': 'Mock Meta Description' },
-    metaKeywords: { 'en-GB': 'Mock Meta Keywords' },
-    masterVariant: {
-      id: 1,
-      sku: 'mock-sku',
-      key: 'mock-key',
-      prices: [
-        {
-          id: 'price-1',
-          value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 1000, fractionDigits: 2 },
-          country: 'US',
-        },
-      ],
-      images: [],
-      attributes: [],
-      assets: [],
-    },
-    variants: [],
-    searchKeywords: {},
+const mockProductData: Product = {
+  key: 'mock-product-key',
+  version: 1,
+  createdAt: '2023-06-01T12:00:00.000Z',
+  lastModifiedAt: '2023-06-01T12:00:00.000Z',
+  productType: {
+    id: 'product-type-id',
+    typeId: 'product-type',
   },
-  staged: {
-    name: { 'en-GB': 'Mock Product' },
-    description: { 'en-GB': 'Mock Description' },
-    slug: { 'en-GB': 'mock-product' },
-    categories: [],
-    categoryOrderHints: {},
-    metaTitle: { 'en-GB': 'Mock Meta Title' },
-    metaDescription: { 'en-GB': 'Mock Meta Description' },
-    metaKeywords: { 'en-GB': 'Mock Meta Keywords' },
-    masterVariant: {
-      id: 1,
-      sku: 'mock-sku',
-      key: 'mock-key',
-      prices: [
-        {
-          id: 'price-1',
-          value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 1000, fractionDigits: 2 },
-          country: 'US',
-        },
-      ],
-      images: [],
-      attributes: [],
-      assets: [],
+  masterData: {
+    current: {
+      name: { 'en-GB': 'Mock Product' },
+      description: { 'en-GB': 'Mock Description' },
+      slug: { 'en-GB': 'mock-product' },
+      categories: [],
+      categoryOrderHints: {},
+      metaTitle: { 'en-GB': 'Mock Meta Title' },
+      metaDescription: { 'en-GB': 'Mock Meta Description' },
+      metaKeywords: { 'en-GB': 'Mock Meta Keywords' },
+      masterVariant: {
+        id: 1,
+        sku: 'mock-sku',
+        key: 'mock-key',
+        prices: [
+          {
+            id: 'price-1',
+            value: {
+              type: 'centPrecision',
+              currencyCode: 'USD',
+              centAmount: 1000,
+              fractionDigits: 2,
+            },
+            country: 'US',
+          },
+        ],
+        images: [],
+        attributes: [],
+        assets: [],
+      },
+      variants: [],
+      searchKeywords: {},
     },
-    variants: [],
-    searchKeywords: {},
+    staged: {
+      name: { 'en-GB': 'Mock Product' },
+      description: { 'en-GB': 'Mock Description' },
+      slug: { 'en-GB': 'mock-product' },
+      categories: [],
+      categoryOrderHints: {},
+      metaTitle: { 'en-GB': 'Mock Meta Title' },
+      metaDescription: { 'en-GB': 'Mock Meta Description' },
+      metaKeywords: { 'en-GB': 'Mock Meta Keywords' },
+      masterVariant: {
+        id: 1,
+        sku: 'mock-sku',
+        key: 'mock-key',
+        prices: [
+          {
+            id: 'price-1',
+            value: {
+              type: 'centPrecision',
+              currencyCode: 'USD',
+              centAmount: 1000,
+              fractionDigits: 2,
+            },
+            country: 'US',
+          },
+        ],
+        images: [],
+        attributes: [],
+        assets: [],
+      },
+      variants: [],
+      searchKeywords: {},
+    },
+    published: false,
+    hasStagedChanges: false,
   },
-  hasStagedChanges: false,
+  taxCategory: {
+    id: 'tax-category-id',
+    typeId: 'tax-category',
+  },
+  reviewRatingStatistics: {
+    averageRating: 4.5,
+    highestRating: 5,
+    lowestRating: 1,
+    count: 100,
+    ratingsDistribution: [
+      { rating: 5, count: 80 },
+      { rating: 4, count: 15 },
+      { rating: 3, count: 3 },
+      { rating: 2, count: 1 },
+      { rating: 1, count: 1 },
+    ],
+  },
+  id: '',
 };
 
 const mockCustomer: Customer = {
@@ -113,9 +174,6 @@ interface SessionContextProviderMockProps {
 export const SessionContextProviderMock: React.FC<SessionContextProviderMockProps> = ({ children }) => {
   const mockContextValue: SessionContextType = {
     session: {
-      getProduct: jest.fn((productId: string) =>
-        productId === '1' ? Promise.resolve(mockProductData) : Promise.reject(new Error('Product not found')),
-      ),
       userData: mockCustomer,
       login: jest.fn(),
       logout: jest.fn(() => {}),
@@ -131,6 +189,42 @@ export const SessionContextProviderMock: React.FC<SessionContextProviderMockProp
       updateAddress: jest.fn(),
       findProduct: jest.fn(),
       getAllCategories: jest.fn(),
+      getProduct: jest.fn((productkey: string) =>
+        productkey === '1' ? Promise.resolve(mockProductData) : Promise.reject(new Error('Product not found')),
+      ),
+      cart: {
+        id: '',
+        version: 0,
+        lineItems: [],
+        customLineItems: [],
+        totalPrice: {
+          type: 'centPrecision',
+          currencyCode: 'USD',
+          centAmount: 0,
+          fractionDigits: 2,
+        },
+        taxMode: '',
+        taxRoundingMode: '',
+        taxCalculationMode: '',
+        inventoryMode: '',
+        cartState: '',
+        shippingMode: '',
+        shipping: [],
+        itemShippingAddresses: [],
+        discountCodes: [],
+        directDiscounts: [],
+        refusedGifts: [],
+        origin: '',
+        createdAt: '',
+        lastModifiedAt: '',
+      },
+      addProductToCard: jest.fn(),
+      decreaseProductQuantity: jest.fn(),
+      updateProductQuantity: jest.fn(),
+      deleteCart: jest.fn(),
+      addPromo: jest.fn(),
+      removePromo: jest.fn(),
+      getPromo: jest.fn(),
     },
   };
 
