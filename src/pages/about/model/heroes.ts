@@ -1,6 +1,18 @@
+import DimaCurrent from '../ui/images/Dima/Current.png';
+import DimaHero from '../ui/images/Dima/Hero.jpg';
+import LisaCurrent from '../ui/images/Lisa/Current.jpg';
+import LisaHero from '../ui/images/Lisa/Hero.jpg';
+import LubaCurrent from '../ui/images/Luba/Current.jpg';
+import LubaHero from '../ui/images/Luba/Hero.jpg';
+
 interface Github {
   title: string;
   link: string;
+}
+
+interface Images {
+  current: string;
+  hero: string;
 }
 
 interface InitialProperties {
@@ -20,6 +32,7 @@ export interface Hero {
   initial: InitialProperties;
   contributions: string[];
   github: Github;
+  images: Images;
 }
 
 const Lisa = {
@@ -47,13 +60,17 @@ const Lisa = {
     title: '@Lilo002',
     link: 'https://github.com/Lilo002',
   },
+  images: {
+    current: LisaCurrent,
+    hero: LisaHero,
+  },
 };
 
 const Dima = {
   name: 'Markovich Dmitry',
   role: 'Frontend Developer',
   summary:
-    'Dima is a member of the Night Developer race. Members of this race are no different from ordinary people during the day. In the evening, they sit closer to computers, their eyes turn red and their need for caffeine increases dramatically.',
+    'Dima is a member of the Night Developer race. Representatives of this race are no different from ordinary people during the day. In the evening, they sit closer to computers, their eyes turn red and their need for caffeine increases dramatically.',
   properties: [
     '+5 to the action of the team during night time',
     'The probability of a commit after 22.00 is increased by 50%',
@@ -77,6 +94,10 @@ const Dima = {
   github: {
     title: '@CrazyTapok',
     link: 'https://github.com/CrazyTapok',
+  },
+  images: {
+    current: DimaCurrent,
+    hero: DimaHero,
   },
 };
 
@@ -107,6 +128,10 @@ const Luba = {
   github: {
     title: '@Zarembochka',
     link: 'https://github.com/Zarembochka',
+  },
+  images: {
+    current: LubaCurrent,
+    hero: LubaHero,
   },
 };
 

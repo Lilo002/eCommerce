@@ -1,12 +1,27 @@
+import { EffectFlip, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css/effect-flip';
+import 'swiper/css/navigation';
+
 import { Hero } from '../model/heroes';
 
 import sprites from './icon/sprites.svg';
-import avatarMD from './images/markovich.png';
+
+import 'swiper/css';
 
 export const CardUser = ({ hero }: { hero: Hero }) => (
   <div className="card-user">
     <div className="card-user-img-box">
-      <img className="card-user-img-box-avatar" src={avatarMD} alt="avatar" />
+      <Swiper effect="flip" slidesPerView={1} navigation modules={[EffectFlip, Navigation]}>
+        <SwiperSlide>
+          <img className="card-user-img" alt="board game" src={hero.images.hero} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img className="card-user-img" alt="board game" src={hero.images.current} />
+        </SwiperSlide>
+      </Swiper>
+      {/* <img className="card-user-img-box-avatar" src={hero.images.hero} alt="avatar" /> */}
     </div>
     <h2 className="card-user-name">{hero.name}</h2>
     <h3 className="card-user-role">{hero.role}</h3>
