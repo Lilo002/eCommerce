@@ -26,7 +26,7 @@ export const SearchBar = ({ onSearch }: { onSearch: (searchTerm: string) => void
       </Form.Item>
 
       <Form.Item>
-        <Button className="login-btn" type="primary" htmlType="submit">
+        <Button className="search-btn" type="primary" htmlType="submit">
           Search
         </Button>
       </Form.Item>

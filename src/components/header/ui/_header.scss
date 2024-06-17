@@ -42,6 +42,7 @@
       display: flex;
       align-items: center;
       column-gap: 7px;
+      transition: color 0.3s ease-in;
       &:hover {
         color: $orange-color !important;
       }

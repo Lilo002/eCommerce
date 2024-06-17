@@ -111,9 +111,6 @@
       display: flex;
       gap: 2px;
       background-color: $orange-color;
-      &:hover {
-        background-color: $orange-color-hover-btn !important;
-      }
     }
   }
 
@@ -149,11 +146,14 @@
   border: 2px solid $orange-color;
   border-radius: 6px;
   box-shadow: 0 2px 0 rgba(255, 175, 25, 0.1);
+  transition-property: color, background-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
   @media screen and (hover: hover) {
     &:hover {
       cursor: pointer;
       color: $white-color;
-      background-color: $orange-color-hover-btn !important;
+      background-color: $orange-color !important;
     }
   }
 }
