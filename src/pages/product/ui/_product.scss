@@ -93,6 +93,9 @@
           min-width: 165px;
         }
       }
+      &:disabled {
+        cursor: default;
+      }
     }
     &-content {
       font-size: 18px;
