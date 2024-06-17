@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -16,9 +16,9 @@ import 'swiper/css';
 export function Main() {
   const navigate = useNavigate();
   const images = [
-    { src: img1, order: 1 },
-    { src: img2, order: 2 },
-    { src: img3, order: 3 },
+    { src: img1, order: 1, id: '396790' },
+    { src: img2, order: 2, id: '403441' },
+    { src: img3, order: 3, id: '321608' },
   ];
 
   const onPromoClick = (promo: string) => {
@@ -34,7 +34,9 @@ export function Main() {
       <Swiper navigation modules={[Navigation]}>
         {images.map((image, index) => (
           <SwiperSlide className="main-swiper" key={image.order}>
-            <img className="main-swiper-img" src={image.src} alt={`Slide ${index}`} />
+            <Link to={`${ROUTES.PRODUCT}/${image.id}`}>
+              <img className="main-swiper-img" src={image.src} alt={`Slide ${index}`} />
+            </Link>
             {index === 0 && (
               <button type="button" className="promo-circle" onClick={() => onPromoClick('SUMMER')}>
                 <span className="promo-text">Summer sale</span>
