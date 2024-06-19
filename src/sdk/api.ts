@@ -1,5 +1,6 @@
 import {
   Address,
+  Cart,
   CategoryPagedQueryResponse,
   ClientResponse,
   Customer,
@@ -8,6 +9,9 @@ import {
   CustomerSetDefaultBillingAddressAction,
   CustomerSetDefaultShippingAddressAction,
   CustomerSignInResult,
+  DiscountCode,
+  DiscountCodeReference,
+  LineItem,
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
   Product,
@@ -50,6 +54,7 @@ export interface UpdateCustomerDraft {
 export interface ParamsRequestProducts {
   limit: number;
   staged: boolean;
+  offset: number;
   sort?: string | null;
   filter?: string[];
   priceCurrency?: string | null;
@@ -149,17 +154,19 @@ export const getOneProduct = (
 
 export const getProducts = (
   apiRoot: ByProjectKeyRequestBuilder,
-  { limit, staged, sort, filter, priceCurrency }: ParamsRequestProducts,
+  { limit, staged, offset, sort, filter, priceCurrency }: ParamsRequestProducts,
 ): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> => {
   const queryArgs: {
     limit: number;
     staged: boolean;
+    offset: number;
     sort?: string;
     'filter.query'?: string[];
     priceCurrency?: string;
   } = {
     limit,
     staged,
+    offset,
   };
 
   if (sort) {
@@ -342,3 +349,149 @@ export const updateAddressRequest = (
       },
     })
     .execute();
+
+export const getCartRequest = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> =>
+  apiRoot.me().activeCart().get().execute();
+
+export const createCartRequest = (apiRoot: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .post({ body: { currency: 'USD' } })
+    .execute();
+
+export const addProductToCardRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  productId: Product['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const decreaseProductQuantityRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  lineItemId: LineItem['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const updateProductQuantityRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  lineItemId: LineItem['id'],
+  quantity: number,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const deleteCartRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+): Promise<ClientResponse<Cart>> => apiRoot.me().carts().withId({ ID }).delete({ queryArgs: { version } }).execute();
+
+export const addPromoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  code: string,
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'addDiscountCode',
+            code,
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const removePromoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: Cart['id'],
+  version: Cart['version'],
+  id: DiscountCodeReference['id'],
+  typeId: DiscountCodeReference['typeId'],
+): Promise<ClientResponse<Cart>> =>
+  apiRoot
+    .me()
+    .carts()
+    .withId({ ID })
+    .post({
+      body: {
+        version,
+        actions: [
+          {
+            action: 'removeDiscountCode',
+            discountCode: {
+              typeId,
+              id,
+            },
+          },
+        ],
+      },
+    })
+    .execute();
+
+export const getPromoRequest = (
+  apiRoot: ByProjectKeyRequestBuilder,
+  ID: DiscountCodeReference['id'],
+): Promise<ClientResponse<DiscountCode>> => apiRoot.discountCodes().withId({ ID }).get().execute();

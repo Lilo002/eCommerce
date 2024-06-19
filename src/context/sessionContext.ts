@@ -1,11 +1,14 @@
 import { createContext } from 'react';
 import {
   Address,
+  Cart,
   Category,
   Customer,
+  DiscountCode,
+  DiscountCodeReference,
   MyCustomerChangePassword,
-  ProductCatalogData,
-  ProductProjection,
+  Product,
+  ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 
 import {
@@ -32,19 +35,28 @@ export const sessionContext = createContext<{
       setAsDefaultBillingAddress: boolean,
     ) => Promise<void | Error>;
     checkCustomerExistsByEmail: (email: LoginCustomerDraft['email']) => Promise<boolean>;
-    getProduct: (productkey: string) => Promise<ProductCatalogData>;
+    getProduct: (productkey: string) => Promise<Product>;
     getAllProducts: ({
       limit,
       staged,
+      offset,
       sort,
       filter,
       priceCurrency,
-    }: ParamsRequestProducts) => Promise<ProductProjection[]>;
-    findProduct: (productName: string) => Promise<ProductProjection[]>;
+    }: ParamsRequestProducts) => Promise<ProductProjectionPagedQueryResponse>;
+    findProduct: (productName: string) => Promise<ProductProjectionPagedQueryResponse>;
     addAddress: ({ streetName, postalCode, city, country }: AddressDraft) => Promise<Customer>;
     addAddressInfo: ({ actions, version }: CustomerUpdate) => Promise<Customer>;
     removeAddress: (addressId: Address['id']) => Promise<Customer>;
     updateAddress: (addressId: Address['id'], address: AddressDraft) => Promise<Customer>;
     getAllCategories: ({ limit }: ParamsRequestCategories) => Promise<Category[]>;
+    cart: Cart;
+    addProductToCard: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    decreaseProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    updateProductQuantity: (productId: Product['id'], quantity: number) => Promise<Cart>;
+    deleteCart: () => Promise<Cart>;
+    addPromo: (promo: string) => Promise<Cart>;
+    removePromo: (promo: DiscountCodeReference) => Promise<Cart>;
+    getPromo: (ID: DiscountCodeReference['id']) => Promise<DiscountCode>;
   } | null;
 }>({ session: null });

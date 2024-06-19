@@ -18,6 +18,7 @@
       display: flex;
       gap: 10px;
       align-items: center;
+      font-size: 32px;
     }
   }
   &-user-ico {
@@ -38,8 +39,28 @@
     &-item {
       font-size: inherit;
       color: $white-color !important;
+      display: flex;
+      align-items: center;
+      column-gap: 7px;
+      transition: color 0.3s ease-in;
       &:hover {
         color: $orange-color !important;
+      }
+      &:hover &-ico {
+        fill: $orange-color;
+      }
+      &-ico {
+        width: 32px;
+        height: 32px;
+        fill: $white-color;
+        transition: fill 0.3s ease-in;
+      }
+      &-content {
+        @media screen and (max-width: 768px) {
+          & {
+            display: none;
+          }
+        }
       }
     }
   }
@@ -47,6 +68,7 @@
     padding: 0;
     stroke: $black-color;
     transition: stroke 0.3s ease-in-out;
+    margin-right: 8px;
     &:hover {
       stroke: $orange-color;
     }
@@ -54,15 +76,25 @@
   .header-btn {
     font-weight: inherit;
     color: $black-color;
-    font-size: 18px;
+    padding: 0;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1 !important;
     &:hover {
       color: $orange-color !important;
     }
-    @media screen and (max-width: 450px) {
-      & {
-        padding: 4px;
-        font-size: 15px;
+    &-content {
+      font-size: 24px;
+      @media screen and (max-width: 768px) {
+        & {
+          display: none;
+        }
       }
     }
+  }
+  & .ant-badge-count {
+    background-color: $orange-color !important;
   }
 }
